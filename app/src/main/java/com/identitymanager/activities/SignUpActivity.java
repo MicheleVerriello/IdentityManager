@@ -1,4 +1,4 @@
-package com.identitymanager;
+package com.identitymanager.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.identitymanager.R;
 
 import java.util.HashMap;
 import java.util.Map;
