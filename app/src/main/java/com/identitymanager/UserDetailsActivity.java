@@ -1,4 +1,6 @@
 package com.identitymanager;
 
-public class UserDetailsActivity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class UserDetailsActivity extends AppCompatActivity {
 }
