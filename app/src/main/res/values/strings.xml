@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">IdentityManager</string>
+    <string name="login">LOGIN</string>
+</resources>
