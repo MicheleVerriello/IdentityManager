@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d(LOGIN, document.getId() + " => " + document.getData().get(PASSWORD_KEY));
 
                         if (document.getData().get(USERNAME_KEY).equals(login_username_value_text) && document.getData().get(PASSWORD_KEY).equals(login_password_value_text)) {
-                            this.goToMainActivity();
+                            this.goToDashboardFragment();
                             return;
                         }
                     }
@@ -55,8 +55,9 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    public void goToMainActivity() {
+    public void goToDashboardFragment() {
         Intent switchActivityIntent = new Intent(this, MainActivity.class);
+        switchActivityIntent.putExtra("fragment", 1);
         startActivity(switchActivityIntent);
     }
 

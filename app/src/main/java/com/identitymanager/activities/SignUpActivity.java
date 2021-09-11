@@ -68,7 +68,7 @@ public class SignUpActivity extends AppCompatActivity {
                     .addOnSuccessListener(documentReference -> {
                         Log.d(SIGN_UP, "DocumentSnapshot added with ID: " + documentReference.getId());
                         Toast.makeText(getApplicationContext(), "User created", Toast.LENGTH_SHORT).show();
-                        this.goToUserDetailsActivity();
+                        this.goToUserDetailsFragment();
                     })
                     .addOnFailureListener(e -> {
                         Log.w(SIGN_UP, "Error adding document", e);
@@ -95,9 +95,9 @@ public class SignUpActivity extends AppCompatActivity {
         startActivity(switchActivityIntent);
     }
 
-    public void goToUserDetailsActivity() {
-        Intent switchActivityIntent = new Intent(this, UserDetailsActivity.class);
+    public void goToUserDetailsFragment() {
+        Intent switchActivityIntent = new Intent(this, MainActivity.class);
+        switchActivityIntent.putExtra("fragment", 3);
         startActivity(switchActivityIntent);
     }
-
 }

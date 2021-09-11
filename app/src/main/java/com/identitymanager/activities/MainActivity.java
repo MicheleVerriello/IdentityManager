@@ -15,10 +15,29 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Bundle bundle = getIntent().getExtras();
+        int idFragment = bundle.getInt("fragment");
+
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
+        Fragment fragment = null;
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new DashboardActivity()).commit();
+        switch (idFragment) {
+            case 2:
+                fragment = new NewAccountActivity();
+                break;
+            case 3:
+                fragment = new ProfileActivity();
+                break;
+            case 4:
+                fragment = new SettingsActivity();
+                break;
+            default:
+                fragment = new DashboardActivity();
+                break;
+        }
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
     }
 
     private  BottomNavigationView.OnNavigationItemSelectedListener navListener =
