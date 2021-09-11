@@ -37,19 +37,17 @@ public class LoginActivity extends AppCompatActivity {
         .get()
         .addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
+                if(task.getResult() != null) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Log.d(LOGIN, document.getId() + " => " + document.getData().get(USERNAME_KEY));
+                        Log.d(LOGIN, document.getId() + " => " + document.getData().get(PASSWORD_KEY));
 
-                short userExists = 0;
-
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    Log.d(LOGIN, document.getId() + " => " + document.getData().get(USERNAME_KEY));
-                    Log.d(LOGIN, document.getId() + " => " + document.getData().get(PASSWORD_KEY));
-
-                    if(document.getData().get(USERNAME_KEY).equals(login_username_value_text) && document.getData().get(PASSWORD_KEY).equals(login_password_value_text)) {
-                        this.goToDashboardActivity();
-                        return;
+                        if (document.getData().get(USERNAME_KEY).equals(login_username_value_text) && document.getData().get(PASSWORD_KEY).equals(login_password_value_text)) {
+                            this.goToDashboardActivity();
+                            return;
+                        }
                     }
                 }
-
                 Toast.makeText(getApplicationContext(), "Error on login", Toast.LENGTH_SHORT).show();
             } else {
                 Log.w(LOGIN, "Error getting documents.", task.getException());

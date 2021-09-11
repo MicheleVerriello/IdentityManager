@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.identitymanager.R;
 
 import java.util.HashMap;
@@ -47,21 +49,39 @@ public class SignUpActivity extends AppCompatActivity {
             user.put(USERNAME_KEY, sign_up_username_value_text);
             user.put(PASSWORD_KEY, sign_up_password_value_text);
 
-        // Add a new document with a generated ID
-        db.collection("users")
-                .add(user)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
+            db.collection("users")
+            .get()
+            .addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        if (document.getData().get(USERNAME_KEY).equals(sign_up_username_value_text)) {
+                            Toast.makeText(getApplicationContext(), "User already exists ", Toast.LENGTH_SHORT).show();
+                            this.goToLoginActivity();
+                            return;
+                        }
+                    }
+
+                    // Add a new document with a generated ID
+                    db.collection("users")
+                    .add(user)
+                    .addOnSuccessListener(documentReference -> {
                         Log.d(SIGN_UP, "DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(), "User created", Toast.LENGTH_SHORT).show();
+                        this.goToUserDetailsActivity();
+                    })
+                    .addOnFailureListener(e -> {
                         Log.w(SIGN_UP, "Error adding document", e);
-                    }
-                });
+                        Toast.makeText(getApplicationContext(), "Unable to create user", Toast.LENGTH_SHORT).show();
+                    });
+                } else {
+                    Log.w(SIGN_UP, "Error getting documents.", task.getException());
+                }
+            });
+        } else if (sign_up_username_value_text.isEmpty() || sign_up_password_value_text.isEmpty() || sign_up_confirm_password_value_text.isEmpty()) {
+            Toast.makeText(getApplicationContext(), "All fields should be filled", Toast.LENGTH_SHORT).show();
+        } else if (!sign_up_password_value_text.equals(sign_up_confirm_password_value_text)) {
+            Toast.makeText(getApplicationContext(), "Password and ConfirmPassword must be equals", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -69,4 +89,15 @@ public class SignUpActivity extends AppCompatActivity {
         Intent switchActivityIntent = new Intent(this, LoginActivity.class);
         startActivity(switchActivityIntent);
     }
+
+    public void goToLoginActivity() {
+        Intent switchActivityIntent = new Intent(this, LoginActivity.class);
+        startActivity(switchActivityIntent);
+    }
+
+    public void goToUserDetailsActivity() {
+        Intent switchActivityIntent = new Intent(this, UserDetailsActivity.class);
+        startActivity(switchActivityIntent);
+    }
+
 }
