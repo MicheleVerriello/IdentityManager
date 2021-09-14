@@ -1,10 +1,12 @@
 package com.identitymanager.activities;
 
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -51,29 +53,32 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
     }
 
-    private  NavigationBarView.OnItemSelectedListener navListener =
-            new NavigationBarView.OnItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                   Fragment selectedFragment = null;
+    private  NavigationBarView.OnItemSelectedListener navListener = new NavigationBarView.OnItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            Fragment selectedFragment = null;
 
-                    switch (item.getItemId()) {
-                        case R.id.nav_dashboard:
-                            selectedFragment = new DashboardActivity();
-                            break;
-                        case R.id.nav_newAccount:
-                            selectedFragment = new NewAccountActivity();
-                            break;
-                        case R.id.nav_profile:
-                            selectedFragment = new ProfileActivity();
-                            break;
-                        case R.id.nav_settings:
-                            selectedFragment = new SettingsActivity();
-                            break;
-                    }
+            switch (item.getItemId()) {
+                 case R.id.nav_dashboard:
+                     selectedFragment = new DashboardActivity();
+                     break;
+                 case R.id.nav_newAccount:
+                     selectedFragment = new NewAccountActivity();
+                     break;
+                 case R.id.nav_profile:
+                     selectedFragment = new ProfileActivity();
+                     break;
+                 case R.id.nav_settings:
+                     selectedFragment = new SettingsActivity();
+                     break;
+            }
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
 
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
-                    return true;
-                }
-            };
+            return true;
+        }
+    };
+
+    public void darkModeColours () {
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(getApplicationContext(), R.color.purple_500)));
     }
+}
