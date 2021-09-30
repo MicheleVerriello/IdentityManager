@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">IdentityManager</string>
+    <string name="login">LOGIN</string>
+    <string name="change_language">Cambia Lingua</string>
+    <string name="change_language_description">Imposta la tua lingua preferita</string>
+    <string name="english_button">Inglese</string>
+    <string name="italian_button">Italiano</string>
+    <string name="dark_mode">Modalità Scura</string>
+    <string name="dark_mode_description">Visualizza il testo chiaro su sfondo nero invece del tradizionale testo nero su sfondo bianco</string>
+    <string name="dashboard_title">Dashboard</string>
+    <string name="new_account_title">Nuovo account</string>
+    <string name="profile_title">Profilo</string>
+    <string name="settings_title">Impostazioni</string>
+</resources>

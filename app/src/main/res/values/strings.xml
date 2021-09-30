@@ -1,5 +1,14 @@
 <resources>
     <string name="app_name">IdentityManager</string>
     <string name="login">LOGIN</string>
+    <string name="change_language">Change Language</string>
+    <string name="change_language_description">Sets your preferred language</string>
+    <string name="english_button">English</string>
+    <string name="italian_button">Italian</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="dark_mode_description">Displays light text on a black background instead of the traditional black text on white background</string>
     <string name="dashboard_title">Dashboard</string>
+    <string name="new_account_title">New account</string>
+    <string name="profile_title">Profile</string>
+    <string name="settings_title">Settings</string>
 </resources>
