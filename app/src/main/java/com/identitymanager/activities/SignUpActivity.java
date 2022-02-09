@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -68,7 +69,7 @@ public class SignUpActivity extends AppCompatActivity {
                     .addOnSuccessListener(documentReference -> {
                         Log.d(SIGN_UP, "DocumentSnapshot added with ID: " + documentReference.getId());
                         Toast.makeText(getApplicationContext(), "User created", Toast.LENGTH_SHORT).show();
-                        this.goToUserDetailsFragment();
+                        this.goToUserDetailsActivity();
                     })
                     .addOnFailureListener(e -> {
                         Log.w(SIGN_UP, "Error adding document", e);
@@ -96,7 +97,6 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public void goToUserDetailsActivity() {
-
         EditText sign_up_username_value = (EditText) findViewById(R.id.sign_up_username_value);
         String sign_up_username_value_text = sign_up_username_value.getText().toString();
 
@@ -105,4 +105,10 @@ public class SignUpActivity extends AppCompatActivity {
         switchActivityIntent.putExtra("flagVisibility", 0);
         startActivity(switchActivityIntent);
     }
+
+//    public void goToUserDetailsFragment() {
+//
+//        Fragment fragment = new UserDetailsActivity();
+//        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+//    }
 }

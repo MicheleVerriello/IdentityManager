@@ -21,7 +21,6 @@
         <activity android:name=".activities.SignUpActivity"></activity>
         <activity android:name=".activities.MainActivity"></activity>
         <activity android:name=".activities.UserDetailsActivity"></activity>
-        <activity android:name=".activities.DashboardActivity"></activity>
     </application>
 
 </manifest>
