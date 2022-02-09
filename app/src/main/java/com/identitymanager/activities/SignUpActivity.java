@@ -96,7 +96,15 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public void goToUserDetailsActivity() {
-        Intent switchActivityIntent = new Intent(this, UserDetailsActivity.class);
+
+
+
+        EditText sign_up_username_value = (EditText) findViewById(R.id.sign_up_username_value);
+        String sign_up_username_value_text = sign_up_username_value.getText().toString();
+
+       Intent switchActivityIntent = new Intent(this, UserDetailsActivity.class);
+        switchActivityIntent.putExtra("username", sign_up_username_value_text);
+        switchActivityIntent.putExtra("flagVisibility", 0);
         startActivity(switchActivityIntent);
     }
 
