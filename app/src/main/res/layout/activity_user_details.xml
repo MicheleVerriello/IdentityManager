@@ -19,7 +19,8 @@
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.184" />
+        app:layout_constraintVertical_bias="0.184"
+        tools:ignore="DuplicateClickableBoundsCheck" />
     <TextView
         android:id="@+id/user_details_username"
         android:layout_width="316dp"
@@ -48,7 +49,8 @@
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.275" />
+        app:layout_constraintVertical_bias="0.275"
+        tools:ignore="DuplicateClickableBoundsCheck,DuplicateClickableBoundsCheck" />
 
     <TextView
         android:id="@+id/user_details_first_name"
@@ -78,7 +80,8 @@
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.365" />
+        app:layout_constraintVertical_bias="0.365"
+        tools:ignore="DuplicateClickableBoundsCheck,DuplicateSpeakableTextCheck" />
 
     <TextView
         android:id="@+id/user_details_last_name"
@@ -108,7 +111,8 @@
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.454" />
+        app:layout_constraintVertical_bias="0.454"
+        tools:ignore="DuplicateClickableBoundsCheck" />
 
     <TextView
         android:id="@+id/user_details_phone"
@@ -138,7 +142,8 @@
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.545" />
+        app:layout_constraintVertical_bias="0.545"
+        tools:ignore="DuplicateClickableBoundsCheck" />
 
     <TextView
         android:id="@+id/user_details_country"
@@ -175,7 +180,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
-        android:onClick="savechanges_userdetails"
+        android:onClick="saveChangesUserDetails"
         android:text="save changes"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

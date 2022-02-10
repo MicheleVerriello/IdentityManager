@@ -1,4 +1,4 @@
-package com.identitymanager.activities;
+package com.identitymanager.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,7 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.identitymanager.R;
 
-public class NewAccountActivity extends Fragment {
+public class NewAccountFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

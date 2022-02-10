@@ -1,4 +1,4 @@
-package com.identitymanager.activities;
+package com.identitymanager.fragments;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -15,10 +15,11 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 
+import com.identitymanager.activities.MainActivity;
 import com.identitymanager.shared.LanguageManager;
 import com.identitymanager.R;
 
-public class SettingsActivity extends Fragment {
+public class SettingsFragment extends Fragment {
 
     SharedPreferences.Editor editor;
     SharedPreferences.Editor editorRestart;

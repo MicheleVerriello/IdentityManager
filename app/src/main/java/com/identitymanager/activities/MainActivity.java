@@ -16,6 +16,10 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.identitymanager.R;
+import com.identitymanager.fragments.DashboardFragment;
+import com.identitymanager.fragments.NewAccountFragment;
+import com.identitymanager.fragments.ProfileFragment;
+import com.identitymanager.fragments.SettingsFragment;
 import com.identitymanager.shared.LanguageManager;
 
 public class MainActivity extends AppCompatActivity {
@@ -47,12 +51,12 @@ public class MainActivity extends AppCompatActivity {
 
         switch (idFragment) {
             case 2:
-                fragment = new NewAccountActivity();
+                fragment = new NewAccountFragment();
                 view = bottomNav.findViewById(R.id.nav_newAccount);
                 view.performClick();
                 break;
             case 3:
-                fragment = new ProfileActivity();
+                fragment = new ProfileFragment();
                 view = bottomNav.findViewById(R.id.nav_profile);
                 view.performClick();
                 break;
@@ -61,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                 view.performClick();
                 break;
             default:
-                fragment = new DashboardActivity();
+                fragment = new DashboardFragment();
                 view = bottomNav.findViewById(R.id.nav_dashboard);
                 view.performClick();
 
@@ -95,16 +99,16 @@ public class MainActivity extends AppCompatActivity {
 
             switch (item.getItemId()) {
                  case R.id.nav_dashboard:
-                     selectedFragment = new DashboardActivity();
+                     selectedFragment = new DashboardFragment();
                      break;
                  case R.id.nav_newAccount:
-                     selectedFragment = new NewAccountActivity();
+                     selectedFragment = new NewAccountFragment();
                      break;
                  case R.id.nav_profile:
-                     selectedFragment = new ProfileActivity();
+                     selectedFragment = new ProfileFragment();
                      break;
                  case R.id.nav_settings:
-                     selectedFragment = new SettingsActivity();
+                     selectedFragment = new SettingsFragment();
                      break;
             }
 

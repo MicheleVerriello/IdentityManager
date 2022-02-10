@@ -7,16 +7,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.identitymanager.R;
+import com.identitymanager.fragments.UserDetailsFragment;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -100,7 +96,7 @@ public class SignUpActivity extends AppCompatActivity {
         EditText sign_up_username_value = (EditText) findViewById(R.id.sign_up_username_value);
         String sign_up_username_value_text = sign_up_username_value.getText().toString();
 
-        Intent switchActivityIntent = new Intent(this, UserDetailsActivity.class);
+        Intent switchActivityIntent = new Intent(this, UserDetailsFragment.class);
         switchActivityIntent.putExtra("username", sign_up_username_value_text);
         switchActivityIntent.putExtra("flagVisibility", 0);
         startActivity(switchActivityIntent);
