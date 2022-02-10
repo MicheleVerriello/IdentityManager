@@ -41,7 +41,7 @@ public class UserDetailsFragment extends Fragment {
     private String username;
 
     public UserDetailsFragment() {
-        super(R.layout.activity_user_details);
+        super(R.layout.fragment_user_details);
     }
 
     @Override

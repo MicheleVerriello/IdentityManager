@@ -17,7 +17,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.identitymanager.R;
 import com.identitymanager.fragments.DashboardFragment;
-import com.identitymanager.fragments.NewAccountFragment;
+import com.identitymanager.fragments.StatisticsFragment;
 import com.identitymanager.fragments.ProfileFragment;
 import com.identitymanager.fragments.SettingsFragment;
 import com.identitymanager.shared.LanguageManager;
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
         switch (idFragment) {
             case 2:
-                fragment = new NewAccountFragment();
+                fragment = new StatisticsFragment();
                 view = bottomNav.findViewById(R.id.nav_newAccount);
                 view.performClick();
                 break;
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                      selectedFragment = new DashboardFragment();
                      break;
                  case R.id.nav_newAccount:
-                     selectedFragment = new NewAccountFragment();
+                     selectedFragment = new StatisticsFragment();
                      break;
                  case R.id.nav_profile:
                      selectedFragment = new ProfileFragment();
