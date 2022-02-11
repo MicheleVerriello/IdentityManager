@@ -12,7 +12,7 @@ import android.widget.Toast;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.identitymanager.R;
-
+import com.identitymanager.shared.SecurityMethods;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -34,17 +34,14 @@ public class LoginActivity extends AppCompatActivity {
         EditText login_password_value = findViewById(R.id.login_password_value);
         String login_username_value_text = login_username_value.getText().toString();
         String login_password_value_text = login_password_value.getText().toString();
-
+        String hashedPassword = SecurityMethods.hashString(login_password_value_text);
         db.collection("users")
         .get()
         .addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 if(task.getResult() != null) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        Log.d(LOGIN, document.getId() + " => " + document.getData().get(USERNAME_KEY));
-                        Log.d(LOGIN, document.getId() + " => " + document.getData().get(PASSWORD_KEY));
-
-                        if (document.getData().get(USERNAME_KEY).equals(login_username_value_text) && document.getData().get(PASSWORD_KEY).equals(login_password_value_text)) {
+                        if (document.getData().get(USERNAME_KEY).equals(login_username_value_text) && document.getData().get(PASSWORD_KEY).equals(hashedPassword)) {
                             this.goToDashboardFragment();
                             return;
                         }

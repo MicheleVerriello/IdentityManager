@@ -13,6 +13,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.identitymanager.R;
 import com.identitymanager.fragments.UserDetailsFragment;
+import com.identitymanager.shared.SecurityMethods;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,7 +45,7 @@ public class SignUpActivity extends AppCompatActivity {
         if (!sign_up_username_value_text.isEmpty() && !sign_up_password_value_text.isEmpty() && sign_up_password_value_text.equals(sign_up_confirm_password_value_text)) {
             Map<String, Object> user = new HashMap<>();
             user.put(USERNAME_KEY, sign_up_username_value_text);
-            user.put(PASSWORD_KEY, sign_up_password_value_text);
+            user.put(PASSWORD_KEY, SecurityMethods.hashString(sign_up_password_value_text));
 
             db.collection("users")
             .get()
@@ -65,7 +66,7 @@ public class SignUpActivity extends AppCompatActivity {
                     .addOnSuccessListener(documentReference -> {
                         Log.d(SIGN_UP, "DocumentSnapshot added with ID: " + documentReference.getId());
                         Toast.makeText(getApplicationContext(), "User created", Toast.LENGTH_SHORT).show();
-                        this.goToUserDetailsActivity();
+                        this.goToLoginActivity();
                     })
                     .addOnFailureListener(e -> {
                         Log.w(SIGN_UP, "Error adding document", e);
