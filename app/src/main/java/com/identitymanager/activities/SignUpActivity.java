@@ -34,9 +34,9 @@ public class SignUpActivity extends AppCompatActivity {
 
     public void signup(View view) {
 
-        EditText sign_up_username_value = (EditText) findViewById(R.id.sign_up_username_value);
-        EditText sign_up_password_value = (EditText) findViewById(R.id.sign_up_password_value);
-        EditText sign_up_confirm_password_value = (EditText) findViewById(R.id.sign_up_confirm_password_value);
+        EditText sign_up_username_value = findViewById(R.id.sign_up_username_value);
+        EditText sign_up_password_value = findViewById(R.id.sign_up_password_value);
+        EditText sign_up_confirm_password_value = findViewById(R.id.sign_up_confirm_password_value);
         String sign_up_username_value_text = sign_up_username_value.getText().toString();
         String sign_up_password_value_text = sign_up_password_value.getText().toString();
         String sign_up_confirm_password_value_text = sign_up_confirm_password_value.getText().toString();
