@@ -18,7 +18,7 @@ import com.google.android.material.navigation.NavigationBarView;
 import com.identitymanager.R;
 import com.identitymanager.fragments.DashboardFragment;
 import com.identitymanager.fragments.StatisticsFragment;
-import com.identitymanager.fragments.ProfileFragment;
+import com.identitymanager.fragments.NewAccountFragment;
 import com.identitymanager.fragments.SettingsFragment;
 import com.identitymanager.shared.LanguageManager;
 
@@ -34,6 +34,11 @@ public class MainActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         int idFragment = bundle.getInt("fragment");
+        String idUserLoggedIn = null;
+        if(idFragment == 1) {
+            idUserLoggedIn = bundle.getString("userDocumentId");
+        }
+
         int idLoad = bundle.getInt("load", 0);
 
         SharedPreferences sharedLanguage = getSharedPreferences("language", 0);
@@ -56,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 view.performClick();
                 break;
             case 3:
-                fragment = new ProfileFragment();
+                fragment = new NewAccountFragment();
                 view = bottomNav.findViewById(R.id.nav_profile);
                 view.performClick();
                 break;
@@ -69,19 +74,23 @@ public class MainActivity extends AppCompatActivity {
                 view = bottomNav.findViewById(R.id.nav_dashboard);
                 view.performClick();
 
+                getIntent().putExtra("userDocumentId", idUserLoggedIn);
+
                 if (idLoad == 0) {
                     identifyModePreference(theme);
                     getIntent().putExtra("load", 1);
                     recreate();
                 }
-                if (theme == 2) {
-                    darkModeActionBar();
-                }
-                if (idLoad == 1) {
+                else if (idLoad == 1) {
                     identifyLanguagePreference(refresh);
                     getIntent().putExtra("load", 2);
                     recreate();
                 }
+
+                if (theme == 2) {
+                    darkModeActionBar();
+                }
+
                 break;
         }
 
@@ -105,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                      selectedFragment = new StatisticsFragment();
                      break;
                  case R.id.nav_profile:
-                     selectedFragment = new ProfileFragment();
+                     selectedFragment = new NewAccountFragment();
                      break;
                  case R.id.nav_settings:
                      selectedFragment = new SettingsFragment();

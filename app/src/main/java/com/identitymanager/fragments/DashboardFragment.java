@@ -10,6 +10,9 @@ import androidx.fragment.app.Fragment;
 import com.identitymanager.R;
 
 public class DashboardFragment extends Fragment {
+
+    //prendere l' userDocumentId e passarlo poi al fragment di NewAccountFragment al click del bottone +
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_dashboard, container, false);

@@ -17,9 +17,10 @@ import com.identitymanager.shared.SecurityMethods;
 
 public class LoginActivity extends AppCompatActivity {
 
-    public static final String USERNAME_KEY = "username";
-    public static final String PASSWORD_KEY = "password";
-    public static final String LOGIN = "login"; //for logs
+    private static final String USERNAME_KEY = "username";
+    private static final String PASSWORD_KEY = "password";
+    private static final String LOGIN = "login"; //for logs
+    private String userId;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -42,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
                 if(task.getResult() != null) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         if (document.getData().get(USERNAME_KEY).equals(login_username_value_text) && document.getData().get(PASSWORD_KEY).equals(hashedPassword)) {
+                            this.userId = document.getId();
                             this.goToDashboardFragment();
                             return;
                         }
@@ -57,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
     public void goToDashboardFragment() {
         Intent switchActivityIntent = new Intent(this, MainActivity.class);
         switchActivityIntent.putExtra("fragment", 1);
+        switchActivityIntent.putExtra("userDocumentId", this.userId);
         startActivity(switchActivityIntent);
     }
 
