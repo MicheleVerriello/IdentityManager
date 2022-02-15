@@ -20,6 +20,7 @@ import com.identitymanager.fragments.DashboardFragment;
 import com.identitymanager.fragments.StatisticsFragment;
 import com.identitymanager.fragments.NewAccountFragment;
 import com.identitymanager.fragments.SettingsFragment;
+import com.identitymanager.fragments.UserDetailsFragment;
 import com.identitymanager.shared.LanguageManager;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,9 +36,7 @@ public class MainActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         int idFragment = bundle.getInt("fragment");
         String idUserLoggedIn = null;
-        if(idFragment == 1) {
-            idUserLoggedIn = bundle.getString("userDocumentId");
-        }
+        idUserLoggedIn = bundle.getString("userDocumentId");
 
         int idLoad = bundle.getInt("load", 0);
 
@@ -61,8 +60,8 @@ public class MainActivity extends AppCompatActivity {
                 view.performClick();
                 break;
             case 3:
-                fragment = new NewAccountFragment();
-                view = bottomNav.findViewById(R.id.nav_profile);
+                fragment = new UserDetailsFragment();
+                view = bottomNav.findViewById(R.id.nav_user_details);
                 view.performClick();
                 break;
             case 4:
@@ -113,8 +112,8 @@ public class MainActivity extends AppCompatActivity {
                  case R.id.nav_newAccount:
                      selectedFragment = new StatisticsFragment();
                      break;
-                 case R.id.nav_profile:
-                     selectedFragment = new NewAccountFragment();
+                 case R.id.nav_user_details:
+                     selectedFragment = new UserDetailsFragment();
                      break;
                  case R.id.nav_settings:
                      selectedFragment = new SettingsFragment();

@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 public class UserDetailsFragment extends Fragment {
 
+    private static final String USER_DOCUMENT_ID_KEY = "userDocumentId";
     private static final String USERNAME_KEY = "username";
     private static final String FIRSTNAME_KEY = "firstname";
     private static final String LASTNAME_KEY = "lastname";
