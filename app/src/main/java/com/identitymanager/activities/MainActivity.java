@@ -20,6 +20,7 @@ import com.identitymanager.fragments.DashboardFragment;
 import com.identitymanager.fragments.StatisticsFragment;
 import com.identitymanager.fragments.NewAccountFragment;
 import com.identitymanager.fragments.SettingsFragment;
+import com.identitymanager.fragments.UserDetailsFragment;
 import com.identitymanager.shared.LanguageManager;
 
 public class MainActivity extends AppCompatActivity {
@@ -114,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                      selectedFragment = new StatisticsFragment();
                      break;
                  case R.id.nav_profile:
-                     selectedFragment = new NewAccountFragment();
+                     selectedFragment = new UserDetailsFragment();
                      break;
                  case R.id.nav_settings:
                      selectedFragment = new SettingsFragment();

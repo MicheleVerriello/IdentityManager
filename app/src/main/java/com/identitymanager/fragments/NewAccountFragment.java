@@ -3,38 +3,61 @@ package com.identitymanager.fragments;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import com.identitymanager.R;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.identitymanager.R;
+import com.identitymanager.shared.SecurityMethods;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
 
 public class NewAccountFragment extends Fragment {
 
-    //prendere l' id dello user
-    //verra' poi creata l' interfaccia
-    //particolare attenzione alle categorie
-    //dropdown con la lista delle categorie che ci sono gia' nel db
-    //una volta selezionata la categoria nell' oggetto dell' account andra' solo il documentId della categoria
-    //ovviamente sara' l' utente a digitare i campi username, password, mail
+    public static final String SAVE = "save";
+    public static final String ID_KEY = "id";
+    public static final String NAME_ACCOUNT_KEY = "name account";
+    public static final String USERNAME_KEY = "username";
+    public static final String EMAIL_KEY = "email";
+    public static final String PASSWORD_KEY = "password";
+    public static final String STRENGTH_KEY = "password strength";
+    public static final String AUTHENTICATION_KEY = "2FA";
+    public static final String CATEGORY_KEY = "category";
+    public static final String TIME_KEY = "last updated";
+
+    String strengthPassword;
+    String authentication;
+    String categorySelected;
+
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View settView = inflater.inflate(R.layout.fragment_new_account, container, false);
 
+        // Getting the userDocumentId
         Bundle bundle = getActivity().getIntent().getExtras();
         String idUserLoggedIn = bundle.getString("userDocumentId");
 
@@ -43,6 +66,7 @@ public class NewAccountFragment extends Fragment {
         EditText email = settView.findViewById(R.id.editTextEmail);
         EditText password = settView.findViewById(R.id.editTextPassword);
 
+        // Methods for checking each field
         setupAccountName(settView, account_name);
         setupUsername(settView, username);
         setupEmail(settView, email);
@@ -50,81 +74,36 @@ public class NewAccountFragment extends Fragment {
         setupSuggest(settView, password);
         setup2FA(settView);
         setupCategory(settView);
-        setupSave(settView, idUserLoggedIn);
+
+        // Method to confirm the entry in the database
+        setupSave(settView, account_name, username, email, password, idUserLoggedIn);
 
         return settView;
     }
 
-    public int check(int valid) {
-        int check = 1;
-        check = valid;
+    public boolean setupAccountName(View settView, EditText account_name) {
+        String accountNameInput = account_name.getText().toString();
 
-        return check;
+        if (!accountNameInput.isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public void setupAccountName(View settView, EditText account_name) {
-        Pattern ACCOUNT_NAME_PATTERN = Pattern.compile("^" +
-                "(?=.*[a-zA-Z])" +           //any letter
-                "(?=\\S+$)" +                //no white spaces
-                ".{4,16}" +                  //between 4 and 16 characters
-                "$");
+    public boolean setupUsername(View settView, EditText username) {
+        String usernameInput = username.getText().toString();
 
-        account_name.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s.length() < 4) {
-                    account_name.setError("Account name too short");
-                } else if (s.length() > 16) {
-                    account_name.setError("Account name too long");
-                } else if (!ACCOUNT_NAME_PATTERN.matcher(s).matches()) {
-                    account_name.setError("No white spaces allowed");
-                }
-            }
-        });
+        if (!usernameInput.isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public void setupUsername(View settView, EditText username) {
-        Pattern USERNAME_PATTERN = Pattern.compile("^" +
-                "(?=.*[a-zA-Z])" +           //any letter
-                "(?=\\S+$)" +                //no white spaces
-                ".{4,16}" +                  //between 4 and 16 characters
-                "$");
+    public boolean setupEmail(View settView, EditText email) {
+        String emailInput = email.getText().toString();
 
-        username.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s.length() < 4) {
-                    username.setError("Username too short");
-                } else if (s.length() > 16) {
-                    username.setError("Username too long");
-                } else if (!USERNAME_PATTERN.matcher(s).matches()) {
-                    username.setError("No white spaces allowed");
-                }
-            }
-        });
-    }
-
-    public void setupEmail(View settView, EditText email) {
         Pattern EMAIL_PATTERN = Pattern.compile("^" +
                 "(?=.*[a-zA-Z])" +           //any letter
                 "(?=.*[@])" +                //at least 1 use of @
@@ -150,6 +129,12 @@ public class NewAccountFragment extends Fragment {
                 }
             }
         });
+
+        if (!emailInput.isEmpty() && EMAIL_PATTERN.matcher(emailInput).matches()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void setupSuggest(View settView, EditText password) {
@@ -158,7 +143,8 @@ public class NewAccountFragment extends Fragment {
         suggest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                password.setText(generatePassword(8));
+                int i = ThreadLocalRandom.current().nextInt(8, 14);
+                password.setText(generatePassword(i));
             }
         });
     }
@@ -186,12 +172,23 @@ public class NewAccountFragment extends Fragment {
         return sb.toString();
     }
 
-    public void setupPassword(View settView, EditText password) {
-        Pattern PASSWORD_PATTERN_MEDIUM = Pattern.compile("^" +
+    public boolean setupPassword(View settView, EditText password) {
+        String passwordInput = password.getText().toString();
+        TextView strength = settView.findViewById(R.id.textViewStrenght);
+        TextView error = settView.findViewById(R.id.textPasswordError);
+
+        Pattern PASSWORD_PATTERN_MEDIUM_1 = Pattern.compile("^" +
                 "(?=.*[0-9])" +            //at least 1 digit
                 "(?=.*[a-zA-Z])" +         //any letter
                 "(?=\\S+$)" +              //no white spaces
-                ".{5,24}" +                //between 5 and 24 characters
+                ".{6,24}" +                //between 6 and 24 characters
+                "$");
+
+        Pattern PASSWORD_PATTERN_MEDIUM_2 = Pattern.compile("^" +
+                "(?=.*[a-zA-Z])" +         //any letter
+                "(?=.*[@#$%^&+=_.?!])" +   //at least 1 special character
+                "(?=\\S+$)" +              //no white spaces
+                ".{6,24}" +                //between 6 and 24 characters
                 "$");
 
         Pattern PASSWORD_PATTERN_STRONG = Pattern.compile("^" +
@@ -204,10 +201,8 @@ public class NewAccountFragment extends Fragment {
 
         Pattern PASSWORD_SPACES = Pattern.compile("^" +
                 "(?=\\S+$)" +                //no white spaces
-                ".{1,24}" +                  //between 8 and 24 characters
+                ".{1,24}" +                  //between 1 and 24 characters
                 "$");
-
-        TextView Strenght = settView.findViewById(R.id.textViewStrenght);
 
         password.addTextChangedListener(new TextWatcher() {
             @Override
@@ -222,48 +217,66 @@ public class NewAccountFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (PASSWORD_PATTERN_MEDIUM.matcher(s).matches()) {
-                    Strenght.setText("MEDIUM");
-                    Strenght.setTextColor(Color.parseColor("#FFA500"));
+                if (PASSWORD_PATTERN_MEDIUM_1.matcher(s).matches() || PASSWORD_PATTERN_MEDIUM_2.matcher(s).matches()) {
+                    error.setText(" ");
+                    strength.setText("MEDIUM");
+                    strength.setTextColor(Color.parseColor("#FFA500"));
+                    strengthPassword = "medium";
                 }
                 if (PASSWORD_PATTERN_STRONG.matcher(s).matches()) {
-                    Strenght.setText("STRONG");
-                    Strenght.setTextColor(Color.GREEN);
+                    error.setText(" ");
+                    strength.setText("STRONG");
+                    strength.setTextColor(Color.GREEN);
+                    strengthPassword = "strong";
                 }
-                if (!PASSWORD_PATTERN_MEDIUM.matcher(s).matches() && !PASSWORD_PATTERN_STRONG.matcher(s).matches()) {
-                    Strenght.setText("WEAK");
-                    Strenght.setTextColor(Color.RED);
+                if (!PASSWORD_PATTERN_MEDIUM_1.matcher(s).matches() && !PASSWORD_PATTERN_MEDIUM_2.matcher(s).matches() && !PASSWORD_PATTERN_STRONG.matcher(s).matches()) {
+                    error.setText(" ");
+                    strength.setText("WEAK");
+                    strength.setTextColor(Color.RED);
+                    strengthPassword = "weak";
                 }
                 if (!PASSWORD_SPACES.matcher(s).matches()) {
-                    password.setError("No white spaces allowed");
-                    Strenght.setText("ERROR");
-                    Strenght.setTextColor(Color.RED);
+                    error.setText("No white spaces allowed");
+                    strength.setText("ERROR");
+                    strength.setTextColor(Color.RED);
                 }
                 if (password.length() > 24) {
-                    password.setError("Password too long");
-                    Strenght.setText("ERROR");
-                    Strenght.setTextColor(Color.RED);
+                    error.setText("Password too long");
+                    strength.setText("ERROR");
+                    strength.setTextColor(Color.RED);
                 }
             }
         });
+
+        if (!passwordInput.isEmpty() && PASSWORD_SPACES.matcher(passwordInput).matches()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public void setup2FA(View settView) {
+    public boolean setup2FA(View settView) {
         RadioGroup radioGroup2FA = settView.findViewById(R.id.radioGroup2FA);
 
         radioGroup2FA.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 if (i == R.id.radioButton2FA1) {
-                    //Caso YES
+                    authentication = "Yes";
                 } else {
-                    //Caso NO
+                    authentication = "No";
                 }
             }
         });
+
+        if (radioGroup2FA.getCheckedRadioButtonId() == -1) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
-    public void setupCategory(View settView) {
+    public boolean setupCategory(View settView) {
         String[] items = {"Social", "Music", "Entertainment", "Sport", "Film"};
         AutoCompleteTextView auto_completeTxt;
         ArrayAdapter<String> adapterItems;
@@ -271,14 +284,105 @@ public class NewAccountFragment extends Fragment {
         auto_completeTxt = settView.findViewById(R.id.autoCompleteTxt);
         adapterItems = new ArrayAdapter<String>(getContext(), R.layout.category_list, items);
         auto_completeTxt.setAdapter(adapterItems);
+
+        auto_completeTxt.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                categorySelected = adapterView.getItemAtPosition(i).toString();
+            }
+        });
+
+        if (TextUtils.isEmpty(auto_completeTxt.getText())) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
-    public void setupSave(View settView, String idUserLoggedIn) {
+    public void setupSave(View settView, EditText account_name, EditText username, EditText email, EditText password, String idUserLoggedIn) {
         Button save = settView.findViewById(R.id.buttonSave);
 
-        //Se tutti i campi sono validi (utilizzare un flag ogni volta che c'è un errore di controllo) si va avanti
-        //Verificare l'idUserLoggedIn
-        //Verificare che non esista un account con lo stesso nome
-        //Salvare l'account creato creando un collegamento con il database (2FA, Category)
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Check == 1 -> no errors detected
+                // Check == 0 -> errors detected
+                int check = 1;
+
+                if (!setupAccountName(settView, account_name)) {
+                    check = 0;
+                }
+
+                if (!setupUsername(settView, username)) {
+                    check = 0;
+                }
+
+                if (!setupEmail(settView, email)) {
+                    check = 0;
+                }
+
+                if (!setupPassword(settView, password)) {
+                    check = 0;
+                }
+
+                if (!setup2FA(settView)) {
+                    check = 0;
+                }
+
+                if (!setupCategory(settView)) {
+                    check = 0;
+                }
+
+                // Connection with the database
+                if (check == 1) {
+                    String account_name_text = account_name.getText().toString();
+                    String username_text = username.getText().toString();
+                    String email_text = email.getText().toString();
+                    String password_text = password.getText().toString();
+
+                    Date last_updated = new Date(System.currentTimeMillis());
+
+                    Map<String, Object> account = new HashMap<>();
+                    account.put(ID_KEY, idUserLoggedIn);
+                    account.put(NAME_ACCOUNT_KEY, account_name_text);
+                    account.put(USERNAME_KEY, username_text);
+                    account.put(EMAIL_KEY, email_text);
+                    account.put(PASSWORD_KEY, SecurityMethods.hashString(password_text));
+                    account.put(STRENGTH_KEY, strengthPassword);
+                    account.put(AUTHENTICATION_KEY, authentication);
+                    account.put(CATEGORY_KEY, categorySelected);
+                    account.put(TIME_KEY, last_updated);
+
+                    db.collection("accounts")
+                            .get()
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        if (document.getData().get(NAME_ACCOUNT_KEY).equals(account_name_text)) {
+                                            Toast.makeText(getContext(), "Name account already exists ", Toast.LENGTH_SHORT).show();
+                                            return;
+                                        }
+                                    }
+
+                                // Add a new document with a generated ID
+                                db.collection("accounts")
+                                        .add(account)
+                                        .addOnSuccessListener(documentReference -> {
+                                            Log.d(SAVE, "DocumentSnapshot added with ID: " + documentReference.getId());
+                                            Toast.makeText(getContext(), "User created", Toast.LENGTH_SHORT).show();
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Log.w(SAVE, "Error adding document", e);
+                                            Toast.makeText(getContext(), "Unable to create user", Toast.LENGTH_SHORT).show();
+                                        });
+                                } else {
+                                    Log.w(SAVE, "Error getting documents", task.getException());
+                                }
+                            });
+                } else {
+                    Toast.makeText(getContext(), "Error, fill in the fields correctly", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 }

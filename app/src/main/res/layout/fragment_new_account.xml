@@ -79,6 +79,7 @@
         android:visibility="visible"
         tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
+
     <TextView
         android:id="@+id/textViewEmail"
         android:layout_width="wrap_content"
@@ -88,7 +89,7 @@
         android:layout_marginStart="28dp"
         android:layout_marginTop="272dp"
         android:layout_marginEnd="239dp"
-        android:layout_marginBottom="368dp"
+        android:layout_marginBottom="377dp"
         android:text="Email"
         android:textSize="20sp"
         android:textStyle="bold" />
@@ -102,7 +103,7 @@
         android:layout_marginStart="182dp"
         android:layout_marginTop="261dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginBottom="359dp"
+        android:layout_marginBottom="370dp"
         android:background="@drawable/custom_input"
         android:ems="10"
         android:inputType="textEmailAddress"
@@ -116,38 +117,57 @@
         android:layout_alignParentStart="false"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="28dp"
-        android:layout_marginBottom="288dp"
+        android:layout_marginBottom="292dp"
         android:text="Password"
         android:textSize="20sp"
         android:textStyle="bold" />
 
-
-    <EditText
-        android:id="@+id/editTextPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="41dp"
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="208dp"
+        android:layout_height="52dp"
         android:layout_alignParentStart="false"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="182dp"
-        android:layout_marginTop="345dp"
+        android:layout_marginTop="261dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="280dp"
-        android:background="@drawable/custom_input"
-        android:ems="10"
-        android:inputType="textPassword"
-        android:visibility="visible"
-        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+        android:hint="Enter your password"
+        app:boxStrokeWidth="0dp"
+        app:boxStrokeWidthFocused="0dp"
+        app:passwordToggleEnabled="true">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_input"
+            android:ems="5"
+            android:inputType="textPassword"
+            android:visibility="visible"
+            tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/textPasswordError"
+        android:layout_width="208dp"
+        android:layout_height="28dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="18dp"
+        android:layout_marginBottom="327dp"
+        android:textColor="#FF0000"
+        android:textSize="16sp"
+        android:textStyle="normal" />
 
     <TextView
         android:id="@+id/textViewStrenght"
-        android:layout_width="66dp"
-        android:layout_height="39dp"
-        android:layout_alignParentStart="false"
+        android:layout_width="92dp"
+        android:layout_height="36dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="290dp"
-        android:layout_marginEnd="18dp"
-        android:layout_marginBottom="232dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="240dp"
         android:textSize="16sp"
         android:textStyle="normal" />
 
@@ -159,7 +179,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginStart="182dp"
         android:layout_marginTop="398dp"
-        android:layout_marginBottom="226dp"
+        android:layout_marginBottom="228dp"
         android:text="Suggest"
         android:textSize="10dp"
         tools:ignore="TouchTargetSizeCheck" />
@@ -230,7 +250,8 @@
             android:id="@+id/autoCompleteTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="none"></AutoCompleteTextView>
+            android:inputType="none">
+        </AutoCompleteTextView>
 
     </com.google.android.material.textfield.TextInputLayout>
 
