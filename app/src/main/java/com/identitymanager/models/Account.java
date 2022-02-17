@@ -4,11 +4,13 @@ public class Account {
 
     String id;
     String fkIdUser;
+    String accountName;
     String accountUsername;
     String accountEmail;
     String accountPassword;
-    String accountLastUpdateDate;
+    String fkId2FA;
     String fkIdCategory;
+    String accountLastUpdateDate;
 
     public String getId() {
         return id;
@@ -26,13 +28,15 @@ public class Account {
         this.fkIdUser = fkIdUser;
     }
 
+    public String getAccountName() { return accountName; }
+
+    public void setAccountName(String accountName) { this.accountName = accountName; }
+
     public String getAccountUsername() {
         return accountUsername;
     }
 
-    public void setAccountUsername(String accountUsername) {
-        this.accountUsername = accountUsername;
-    }
+    public void setAccountUsername(String accountUsername) { this.accountUsername = accountUsername; }
 
     public String getAccountEmail() {
         return accountEmail;
@@ -46,17 +50,11 @@ public class Account {
         return accountPassword;
     }
 
-    public void setAccountPassword(String accountPassword) {
-        this.accountPassword = accountPassword;
-    }
+    public void setAccountPassword(String accountPassword) { this.accountPassword = accountPassword; }
 
-    public String getAccountLastUpdateDate() {
-        return accountLastUpdateDate;
-    }
+    public String getFkId2FA() { return fkId2FA; }
 
-    public void setAccountLastUpdateDate(String accountLastUpdateDate) {
-        this.accountLastUpdateDate = accountLastUpdateDate;
-    }
+    public void setFkId2FA(String fkId2FA) { this.fkId2FA = fkId2FA; }
 
     public String getFkIdCategory() {
         return fkIdCategory;
@@ -65,4 +63,10 @@ public class Account {
     public void setFkIdCategory(String fkIdCategory) {
         this.fkIdCategory = fkIdCategory;
     }
+
+    public String getAccountLastUpdateDate() {
+        return accountLastUpdateDate;
+    }
+
+    public void setAccountLastUpdateDate(String accountLastUpdateDate) { this.accountLastUpdateDate = accountLastUpdateDate; }
 }

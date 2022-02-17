@@ -34,10 +34,7 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Fragment fragment = new NewAccountFragment();
-                BottomNavigationView bottomNav = getActivity().findViewById(R.id.bottom_navigation);
 
-                v = bottomNav.findViewById(R.id.nav_profile);
-                v.performClick();
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
             }
         });
