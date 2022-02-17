@@ -97,8 +97,6 @@ public class UserDetailsFragment extends Fragment {
         user_details.put(COUNTRY_KEY, user_details_country_value_text);
         user_details.put(BIRTH, user_details_birth_value_text);
 
-
-
         db.collection("users")
                 .get()
                 .addOnCompleteListener(task -> {
@@ -173,7 +171,6 @@ public class UserDetailsFragment extends Fragment {
 
         if ( flagVisibility ==  1) {
 
-
             user_details_username_value.setVisibility(View.INVISIBLE);
             user_details_first_name_value.setVisibility(View.INVISIBLE);
             user_details_last_name_value.setVisibility(View.INVISIBLE);
@@ -188,10 +185,7 @@ public class UserDetailsFragment extends Fragment {
             user_details_phone.setVisibility(View.VISIBLE);
             user_details_country.setVisibility(View.VISIBLE);
             btn2.setVisibility(View.VISIBLE);
-
-
         } else {
-
 
             user_details_username.setVisibility(View.INVISIBLE);
             user_details_first_name.setVisibility(View.INVISIBLE);
@@ -208,11 +202,7 @@ public class UserDetailsFragment extends Fragment {
             user_details_country_value.setVisibility(View.VISIBLE);
             user_details_birth_value.setVisibility(View.VISIBLE);
             btn.setVisibility(View.VISIBLE);
-
-
         }
-
-
     }
 
 
@@ -261,8 +251,6 @@ public class UserDetailsFragment extends Fragment {
 
                             }
                         }
-
-
                     } else {
                         Log.w(SAVE_CHANGES, "Error getting documents.", task.getException());
                     }
