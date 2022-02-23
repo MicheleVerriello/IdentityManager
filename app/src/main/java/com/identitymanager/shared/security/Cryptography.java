@@ -1,10 +1,10 @@
-package com.identitymanager.shared;
+package com.identitymanager.shared.security;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class SecurityMethods {
+public class Cryptography {
 
 
     /**

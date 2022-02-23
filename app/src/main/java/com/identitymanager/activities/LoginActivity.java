@@ -12,7 +12,7 @@ import android.widget.Toast;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.identitymanager.R;
-import com.identitymanager.shared.SecurityMethods;
+import com.identitymanager.shared.security.Cryptography;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -35,13 +35,15 @@ public class LoginActivity extends AppCompatActivity {
         EditText login_password_value = findViewById(R.id.login_password_value);
         String login_username_value_text = login_username_value.getText().toString();
         String login_password_value_text = login_password_value.getText().toString();
-        String hashedPassword = SecurityMethods.hashString(login_password_value_text);
-        db.collection("users")
+        String hashedPassword = Cryptography.hashString(login_password_value_text);
+
+
+        db.collection("users") //get all the users
         .get()
         .addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 if(task.getResult() != null) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) { //check if the username and password exist into the db
                         if (document.getData().get(USERNAME_KEY).equals(login_username_value_text) && document.getData().get(PASSWORD_KEY).equals(hashedPassword)) {
                             this.userId = document.getId();
                             this.goToDashboardFragment();

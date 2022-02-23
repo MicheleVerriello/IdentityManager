@@ -57,19 +57,13 @@ public class UserDetailsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View settView = inflater.inflate(R.layout.fragment_settings, container, false);
+        View settView = inflater.inflate(R.layout.fragment_user_details, container, false);
+        Bundle bundle = getActivity().getIntent().getExtras();
+        String idUserLoggedIn = bundle.getString("userDocumentId");
         showUser(settView);
         setView(settView);
 
         return settView;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        username = requireArguments().getString(USERNAME_KEY);
-        Log.d(SAVE_CHANGES, "username "+ username);
-        flagVisibility = requireArguments().getInt(FLAG_VISIBILITY_KEY);
-        Log.d(SAVE_CHANGES, "flag "+ flagVisibility);
     }
 
 
@@ -80,14 +74,12 @@ public class UserDetailsFragment extends Fragment {
         EditText user_details_last_name_value = view.findViewById(R.id.user_details_last_name_value);
         EditText user_details_phone_value = view.findViewById(R.id.user_details_phone_value);
         EditText user_details_country_value = view.findViewById(R.id.user_details_country_value);
-        DatePicker user_details_birth_value = view.findViewById(R.id.user_details_birth_value);
 
         String user_details_username_value_text = user_details_username_value.getText().toString();
         String user_details_first_name_value_text = user_details_first_name_value.getText().toString();
         String user_details_last_name_value_text = user_details_last_name_value.getText().toString();
         String user_details_phone_value_text = user_details_phone_value.getText().toString();
         String user_details_country_value_text = user_details_country_value.getText().toString();
-        String user_details_birth_value_text = user_details_birth_value.getDayOfMonth()+"."+ (user_details_birth_value.getMonth() + 1)+"."+user_details_birth_value.getYear();
 
         Map<String, Object> user_details = new HashMap<>();
         user_details.put(USERNAME_KEY, user_details_username_value_text);
@@ -95,7 +87,6 @@ public class UserDetailsFragment extends Fragment {
         user_details.put(LASTNAME_KEY, user_details_last_name_value_text);
         user_details.put(PHONE_KEY, user_details_phone_value_text);
         user_details.put(COUNTRY_KEY, user_details_country_value_text);
-        user_details.put(BIRTH, user_details_birth_value_text);
 
         db.collection("users")
                 .get()
@@ -155,7 +146,6 @@ public class UserDetailsFragment extends Fragment {
         EditText user_details_last_name_value = view.findViewById(R.id.user_details_last_name_value);
         EditText user_details_phone_value = view.findViewById(R.id.user_details_phone_value);
         EditText user_details_country_value = view.findViewById(R.id.user_details_country_value);
-        DatePicker user_details_birth_value = view.findViewById(R.id.user_details_birth_value);
 
 
         Button btn = view.findViewById(R.id.save_user_details_button);
@@ -176,7 +166,6 @@ public class UserDetailsFragment extends Fragment {
             user_details_last_name_value.setVisibility(View.INVISIBLE);
             user_details_phone_value.setVisibility(View.INVISIBLE);
             user_details_country_value.setVisibility(View.INVISIBLE);
-            user_details_birth_value.setVisibility(View.INVISIBLE);
             btn.setVisibility(View.INVISIBLE);
 
             user_details_username.setVisibility(View.VISIBLE);
@@ -200,7 +189,6 @@ public class UserDetailsFragment extends Fragment {
             user_details_last_name_value.setVisibility(View.VISIBLE);
             user_details_phone_value.setVisibility(View.VISIBLE);
             user_details_country_value.setVisibility(View.VISIBLE);
-            user_details_birth_value.setVisibility(View.VISIBLE);
             btn.setVisibility(View.VISIBLE);
         }
     }
@@ -214,8 +202,6 @@ public class UserDetailsFragment extends Fragment {
         EditText user_details_last_name_value = view.findViewById(R.id.user_details_last_name_value);
         EditText user_details_phone_value = view.findViewById(R.id.user_details_phone_value);
         EditText user_details_country_value = view.findViewById(R.id.user_details_country_value);
-        DatePicker user_details_birth_value = view.findViewById(R.id.user_details_birth_value);
-        user_details_birth_value.updateDate(1990,1,1);
 
         TextView user_details_username = view.findViewById(R.id.user_details_username);
         TextView user_details_first_name = view.findViewById(R.id.user_details_first_name);
@@ -246,7 +232,6 @@ public class UserDetailsFragment extends Fragment {
                                 user_details_country_value.setText((String) document.getData().get(COUNTRY_KEY));
 
                                 String[] date = ((String) document.getData().get(COUNTRY_KEY)).split(".");
-                                user_details_birth_value.updateDate(Integer.parseInt(date[2]), Integer.parseInt(date[1]), Integer.parseInt(date[0]));
                                 //user_details_birth_value.setText( (String)document.getData().get(BIRTH));
 
                             }

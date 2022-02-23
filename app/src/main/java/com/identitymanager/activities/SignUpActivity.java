@@ -12,8 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.identitymanager.R;
-import com.identitymanager.fragments.UserDetailsFragment;
-import com.identitymanager.shared.SecurityMethods;
+import com.identitymanager.shared.security.Cryptography;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +21,12 @@ public class SignUpActivity extends AppCompatActivity {
 
     public static final String USERNAME_KEY = "username";
     public static final String PASSWORD_KEY = "password";
+    public static final String BIRTH_DATE_KEY = "birthDate";
+    public static final String EMAIL_KEY = "email";
+    public static final String PHONE_KEY = "phone";
+    public static final String COUNTRY_KEY = "country";
+    public static final String NAME_KEY = "name";
+    public static final String SURNAME_KEY = "surname";
     public static final String SIGN_UP = "sign_up"; //for logs
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -41,24 +46,31 @@ public class SignUpActivity extends AppCompatActivity {
         String sign_up_password_value_text = sign_up_password_value.getText().toString();
         String sign_up_confirm_password_value_text = sign_up_confirm_password_value.getText().toString();
 
-
         if (!sign_up_username_value_text.isEmpty() && !sign_up_password_value_text.isEmpty() && sign_up_password_value_text.equals(sign_up_confirm_password_value_text)) {
-            Map<String, Object> user = new HashMap<>();
-            user.put(USERNAME_KEY, sign_up_username_value_text);
-            user.put(PASSWORD_KEY, SecurityMethods.hashString(sign_up_password_value_text));
 
             db.collection("users")
             .get()
             .addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
 
-                    for (QueryDocumentSnapshot document : task.getResult()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) { //check if the username already exists
                         if (document.getData().get(USERNAME_KEY).equals(sign_up_username_value_text)) {
-                            Toast.makeText(getApplicationContext(), "User already exists ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Username already exists ", Toast.LENGTH_SHORT).show();
                             this.goToLoginActivity();
                             return;
                         }
                     }
+
+                    //If the user not exists, create him
+                    Map<String, Object> user = new HashMap<>();
+                    user.put(USERNAME_KEY, sign_up_username_value_text);
+                    user.put(PASSWORD_KEY, Cryptography.hashString(sign_up_password_value_text));
+                    user.put(EMAIL_KEY, "");
+                    user.put(SURNAME_KEY, "");
+                    user.put(NAME_KEY, "");
+                    user.put(COUNTRY_KEY, "");
+                    user.put(PHONE_KEY, "");
+                    user.put(BIRTH_DATE_KEY, "");
 
                     // Add a new document with a generated ID
                     db.collection("users")
@@ -92,20 +104,4 @@ public class SignUpActivity extends AppCompatActivity {
         Intent switchActivityIntent = new Intent(this, LoginActivity.class);
         startActivity(switchActivityIntent);
     }
-
-    public void goToUserDetailsActivity() {
-        EditText sign_up_username_value = (EditText) findViewById(R.id.sign_up_username_value);
-        String sign_up_username_value_text = sign_up_username_value.getText().toString();
-
-        Intent switchActivityIntent = new Intent(this, UserDetailsFragment.class);
-        switchActivityIntent.putExtra("username", sign_up_username_value_text);
-        switchActivityIntent.putExtra("flagVisibility", 0);
-        startActivity(switchActivityIntent);
-    }
-
-//    public void goToUserDetailsFragment() {
-//
-//        Fragment fragment = new UserDetailsActivity();
-//        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
-//    }
 }

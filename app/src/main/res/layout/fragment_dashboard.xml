@@ -31,10 +31,10 @@
             android:layout_marginTop="580dp"
             android:backgroundTint="#FF6200EE"
             android:clickable="true"
-            app:tint="@null"
             app:fabCustomSize="64dp"
             app:maxImageSize="32dp"
-            app:srcCompat="@drawable/ic_baseline_add_circle_outline_24" />
+            app:srcCompat="@drawable/ic_baseline_add_circle_outline_24"
+            app:tint="@null" />
     </androidx.core.widget.NestedScrollView>
 
 </RelativeLayout>

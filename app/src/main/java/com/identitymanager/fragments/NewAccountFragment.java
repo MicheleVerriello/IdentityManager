@@ -25,7 +25,7 @@ import androidx.fragment.app.Fragment;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.identitymanager.R;
-import com.identitymanager.shared.SecurityMethods;
+import com.identitymanager.shared.security.Cryptography;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -347,7 +347,7 @@ public class NewAccountFragment extends Fragment {
                     account.put(NAME_ACCOUNT_KEY, account_name_text);
                     account.put(USERNAME_KEY, username_text);
                     account.put(EMAIL_KEY, email_text);
-                    account.put(PASSWORD_KEY, SecurityMethods.hashString(password_text));
+                    account.put(PASSWORD_KEY, Cryptography.hashString(password_text));
                     account.put(STRENGTH_KEY, strengthPassword);
                     account.put(AUTHENTICATION_KEY, authentication);
                     account.put(CATEGORY_KEY, categorySelected);

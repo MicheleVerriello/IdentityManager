@@ -233,18 +233,4 @@
         app:layout_constraintVertical_bias="0.041" />
 
 
-    <DatePicker
-        android:id="@+id/user_details_birth_value"
-        android:layout_width="314dp"
-        android:layout_height="226dp"
-        android:layout_marginTop="432dp"
-        android:datePickerMode="spinner"
-        android:startYear="1940"
-        android:endYear="2010"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

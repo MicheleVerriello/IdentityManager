@@ -2,15 +2,15 @@ package com.identitymanager.models;
 
 public class Account {
 
-    String id;
-    String fkIdUser;
-    String accountName;
-    String accountUsername;
-    String accountEmail;
-    String accountPassword;
-    String fkId2FA;
-    String fkIdCategory;
-    String accountLastUpdateDate;
+    private String id;
+    private String fkIdUser;
+    private String accountName;
+    private String accountUsername;
+    private String accountEmail;
+    private String accountPassword;
+    private boolean twoFactorAuthentication;
+    private String fkIdCategory;
+    private String accountLastUpdateDate;
 
     public String getId() {
         return id;
@@ -52,9 +52,9 @@ public class Account {
 
     public void setAccountPassword(String accountPassword) { this.accountPassword = accountPassword; }
 
-    public String getFkId2FA() { return fkId2FA; }
+    public boolean getFkId2FA() { return twoFactorAuthentication; }
 
-    public void setFkId2FA(String fkId2FA) { this.fkId2FA = fkId2FA; }
+    public void setFkId2FA(boolean fkId2FA) { this.twoFactorAuthentication = fkId2FA; }
 
     public String getFkIdCategory() {
         return fkIdCategory;

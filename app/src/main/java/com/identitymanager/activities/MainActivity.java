@@ -21,12 +21,14 @@ import com.identitymanager.fragments.StatisticsFragment;
 import com.identitymanager.fragments.NewAccountFragment;
 import com.identitymanager.fragments.SettingsFragment;
 import com.identitymanager.fragments.UserDetailsFragment;
+import com.identitymanager.fragments.UserDetailsViewFragment;
 import com.identitymanager.shared.LanguageManager;
 
 public class MainActivity extends AppCompatActivity {
 
     SharedPreferences.Editor editorLanguage;
     SharedPreferences.Editor editorTheme;
+    String idUserLoggedIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         int idFragment = bundle.getInt("fragment");
-        String idUserLoggedIn = null;
         idUserLoggedIn = bundle.getString("userDocumentId");
 
         int idLoad = bundle.getInt("load", 0);
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 view.performClick();
                 break;
             case 3:
-                fragment = new UserDetailsFragment();
+                fragment = new UserDetailsViewFragment();
                 view = bottomNav.findViewById(R.id.nav_user_details);
                 view.performClick();
                 break;
@@ -72,8 +73,6 @@ public class MainActivity extends AppCompatActivity {
                 fragment = new DashboardFragment();
                 view = bottomNav.findViewById(R.id.nav_dashboard);
                 view.performClick();
-
-                getIntent().putExtra("userDocumentId", idUserLoggedIn);
 
                 if (idLoad == 0) {
                     identifyModePreference(theme);
@@ -94,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (idFragment != 4) {
+            getIntent().putExtra("userDocumentId", idUserLoggedIn);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
         }
     }
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                      selectedFragment = new StatisticsFragment();
                      break;
                  case R.id.nav_user_details:
-                     selectedFragment = new UserDetailsFragment();
+                     selectedFragment = new UserDetailsViewFragment();
                      break;
                  case R.id.nav_settings:
                      selectedFragment = new SettingsFragment();
