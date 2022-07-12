@@ -5,19 +5,32 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 
+import com.identitymanager.activities.ExpandableListDataPump;
+import com.identitymanager.activities.CustomExpandableListAdapter;
 import com.identitymanager.activities.MainActivity;
 import com.identitymanager.shared.LanguageManager;
 import com.identitymanager.R;
+import android.widget.ExpandableListAdapter;
+import android.widget.ExpandableListView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 
 public class SettingsFragment extends Fragment {
 
@@ -25,9 +38,17 @@ public class SettingsFragment extends Fragment {
     SharedPreferences.Editor editorRestart;
     SharedPreferences.Editor editorMode;
 
+    // New Trusted
+    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog dialog;
+    private EditText editTextNickname_newTrusted, editTextEmail_newTrusted;
+    private Button buttonAdd_newTrusted, buttonCancel_newTrusted;
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Nullable
@@ -37,6 +58,8 @@ public class SettingsFragment extends Fragment {
 
         changeLanguage(settView);
         darkMode(settView);
+        trust(settView);
+        setup_newTrusted(settView);
 
         return settView;
     }
@@ -142,5 +165,102 @@ public class SettingsFragment extends Fragment {
         getActivity().getIntent().putExtra("fragment", 4);
         getActivity().getIntent().putExtra("change_value", 0);
         getActivity().recreate();
+    }
+
+
+
+
+    public void trust(View settView){
+
+        ExpandableListView expandableListView;
+        ExpandableListAdapter expandableListAdapter;
+        List<String> expandableListTitle;
+        HashMap<String, List<String>> expandableListDetail;
+
+
+        expandableListView = (ExpandableListView) settView.findViewById(R.id.youTrust);
+        expandableListDetail = ExpandableListDataPump.getData();
+        expandableListTitle = new ArrayList<String>(expandableListDetail.keySet());
+        expandableListAdapter = new CustomExpandableListAdapter(getActivity(), expandableListTitle, expandableListDetail);
+        expandableListView.setAdapter(expandableListAdapter);
+        expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                Toast.makeText(getActivity().getApplicationContext(),
+                        expandableListTitle.get(groupPosition) + " List Expanded.",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        expandableListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+
+            @Override
+            public void onGroupCollapse(int groupPosition) {
+                Toast.makeText(getActivity().getApplicationContext(),
+                        expandableListTitle.get(groupPosition) + " List Collapsed.",
+                        Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v,
+                                        int groupPosition, int childPosition, long id) {
+                Toast.makeText(
+                        getActivity().getApplicationContext(),
+                        expandableListTitle.get(groupPosition)
+                                + " -> "
+                                + expandableListDetail.get(
+                                expandableListTitle.get(groupPosition)).get(
+                                childPosition), Toast.LENGTH_SHORT
+                ).show();
+                return false;
+            }
+        });
+    }
+
+    public void createNewTrustedDialog(){
+        dialogBuilder = new AlertDialog.Builder(getActivity());
+        final View newTrusted_popupView = getLayoutInflater().inflate(R.layout.new_trusted_popup, null);
+        editTextNickname_newTrusted = (EditText) newTrusted_popupView.findViewById(R.id.editTextNickname_newTrusted);
+        editTextEmail_newTrusted = (EditText) newTrusted_popupView.findViewById(R.id.editTextEmail_newTrusted);
+
+        buttonAdd_newTrusted = (Button) newTrusted_popupView.findViewById(R.id.buttonAdd_newTrusted);
+        buttonCancel_newTrusted = (Button) newTrusted_popupView.findViewById(R.id.buttonCancel_newTrusted);
+
+        dialogBuilder.setView(newTrusted_popupView);
+        dialog = dialogBuilder.create();
+        dialog.show();
+
+        buttonAdd_newTrusted.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //salva su database
+            }
+        });
+
+        buttonCancel_newTrusted.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //salva su database
+            }
+        });
+
+
+    }
+
+    public void setup_newTrusted(View settView){
+
+        Button newTrusted = settView.findViewById(R.id.button_newTrusted);
+
+        newTrusted.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createNewTrustedDialog();
+            }
+        });
+
     }
 }
