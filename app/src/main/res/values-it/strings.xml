@@ -12,4 +12,5 @@
     <string name="statistics_title">Statistiche</string>
     <string name="profile_title">Profilo</string>
     <string name="settings_title">Impostazioni</string>
+    <string name="fab_button">Fab button</string>
 </resources>

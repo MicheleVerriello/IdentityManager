@@ -1,8 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ListView
+        android:id="@+id/accounts_list"
+        android:layout_width="match_parent"
+        android:layout_height="678dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="0dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="330dp"
+        android:layout_marginTop="580dp"
+        android:backgroundTint="#FF6200EE"
+        android:clickable="true"
+        android:contentDescription="@string/fab_button"
+        app:fabCustomSize="64dp"
+        app:maxImageSize="32dp"
+        app:srcCompat="@drawable/ic_baseline_add_circle_outline_24"
+        app:tint="@null"
+        tools:ignore="SpeakableTextPresentCheck,RedundantDescriptionCheck" />
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -17,24 +40,5 @@
         </com.google.android.material.appbar.MaterialToolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/add_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="330dp"
-            android:layout_marginTop="580dp"
-            android:backgroundTint="#FF6200EE"
-            android:clickable="true"
-            app:fabCustomSize="64dp"
-            app:maxImageSize="32dp"
-            app:srcCompat="@drawable/ic_baseline_add_circle_outline_24"
-            app:tint="@null" />
-    </androidx.core.widget.NestedScrollView>
 
 </RelativeLayout>

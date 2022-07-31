@@ -25,7 +25,7 @@ import androidx.fragment.app.Fragment;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.identitymanager.R;
-import com.identitymanager.shared.security.Cryptography;
+import com.identitymanager.utilities.security.Cryptography;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -38,14 +38,14 @@ public class NewAccountFragment extends Fragment {
 
     public static final String SAVE = "save";
     public static final String ID_KEY = "id";
-    public static final String NAME_ACCOUNT_KEY = "name account";
+    public static final String NAME_ACCOUNT_KEY = "accountName";
     public static final String USERNAME_KEY = "username";
     public static final String EMAIL_KEY = "email";
     public static final String PASSWORD_KEY = "password";
-    public static final String STRENGTH_KEY = "password strength";
-    public static final String AUTHENTICATION_KEY = "2FA";
+    public static final String STRENGTH_KEY = "passwordStrength";
+    public static final String AUTHENTICATION_KEY = "2fa";
     public static final String CATEGORY_KEY = "category";
-    public static final String TIME_KEY = "last updated";
+    public static final String TIME_KEY = "lastUpdate";
 
     String strengthPassword;
     String authentication;
@@ -369,7 +369,7 @@ public class NewAccountFragment extends Fragment {
                                         .add(account)
                                         .addOnSuccessListener(documentReference -> {
                                             Log.d(SAVE, "DocumentSnapshot added with ID: " + documentReference.getId());
-                                            Toast.makeText(getContext(), "User created", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getContext(), "Account added", Toast.LENGTH_SHORT).show();
                                         })
                                         .addOnFailureListener(e -> {
                                             Log.w(SAVE, "Error adding document", e);

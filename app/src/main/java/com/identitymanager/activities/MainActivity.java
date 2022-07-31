@@ -18,11 +18,9 @@ import com.google.android.material.navigation.NavigationBarView;
 import com.identitymanager.R;
 import com.identitymanager.fragments.DashboardFragment;
 import com.identitymanager.fragments.StatisticsFragment;
-import com.identitymanager.fragments.NewAccountFragment;
 import com.identitymanager.fragments.SettingsFragment;
-import com.identitymanager.fragments.UserDetailsFragment;
 import com.identitymanager.fragments.UserDetailsViewFragment;
-import com.identitymanager.shared.LanguageManager;
+import com.identitymanager.utilities.language.LanguageManager;
 
 public class MainActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.identitymanager.shared.interfaces.callbacks;
+package com.identitymanager.database.firestore.callbacks;
 
 import com.identitymanager.models.User;
 

@@ -1,4 +1,4 @@
-package com.identitymanager.shared.security;
+package com.identitymanager.utilities.security;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;

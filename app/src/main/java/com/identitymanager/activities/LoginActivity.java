@@ -12,7 +12,7 @@ import android.widget.Toast;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.identitymanager.R;
-import com.identitymanager.shared.security.Cryptography;
+import com.identitymanager.utilities.security.Cryptography;
 
 
 public class LoginActivity extends AppCompatActivity {

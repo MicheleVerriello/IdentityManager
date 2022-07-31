@@ -21,7 +21,7 @@ import androidx.fragment.app.Fragment;
 import com.identitymanager.activities.ExpandableListDataPump;
 import com.identitymanager.activities.CustomExpandableListAdapter;
 import com.identitymanager.activities.MainActivity;
-import com.identitymanager.shared.LanguageManager;
+import com.identitymanager.utilities.language.LanguageManager;
 import com.identitymanager.R;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;

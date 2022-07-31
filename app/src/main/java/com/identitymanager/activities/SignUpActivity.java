@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.identitymanager.R;
-import com.identitymanager.shared.security.Cryptography;
+import com.identitymanager.utilities.security.Cryptography;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -59,7 +59,7 @@ public class UserDetailsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View settView = inflater.inflate(R.layout.fragment_user_details, container, false);
         Bundle bundle = getActivity().getIntent().getExtras();
-        String idUserLoggedIn = bundle.getString("userDocumentId");
+        String idUserLoggedIn = bundle.getString(USER_DOCUMENT_ID_KEY);
         showUser(settView);
         setView(settView);
 

@@ -1,4 +1,4 @@
-package com.identitymanager.shared;
+package com.identitymanager.utilities.language;
 
 import android.content.Context;
 import android.content.res.Configuration;
