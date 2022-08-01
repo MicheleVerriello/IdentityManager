@@ -20,7 +20,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.identitymanager.R;
-import com.identitymanager.models.User;
+import com.identitymanager.models.data.User;
 import java.util.HashMap;
 import java.util.Map;
 

@@ -20,7 +20,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.identitymanager.R;
-import com.identitymanager.models.Account;
+import com.identitymanager.models.data.Account;
 
 import java.util.ArrayList;
 import java.util.List;

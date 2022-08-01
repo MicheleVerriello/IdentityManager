@@ -25,10 +25,13 @@ import androidx.fragment.app.Fragment;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.identitymanager.R;
+import com.identitymanager.models.data.Category;
 import com.identitymanager.utilities.security.Cryptography;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -384,5 +387,26 @@ public class NewAccountFragment extends Fragment {
                 }
             }
         });
+    }
+
+
+    private List<Category> getAllCategories() {
+
+        List<Category> categories = new ArrayList<>();
+
+        db.collection("categories")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            categories.add(document.toObject(Category.class));
+                            Log.d("QUERY OK", document.getId() + " => " + document.getData());
+                        }
+                    } else {
+                        Log.d("QUERY", "Error getting documents: ", task.getException());
+                    }
+                });
+
+        return categories;
     }
 }

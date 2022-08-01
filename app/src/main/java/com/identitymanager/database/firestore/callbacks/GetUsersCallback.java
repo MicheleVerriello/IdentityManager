@@ -1,6 +1,6 @@
 package com.identitymanager.database.firestore.callbacks;
 
-import com.identitymanager.models.User;
+import com.identitymanager.models.data.User;
 
 import java.util.List;
 

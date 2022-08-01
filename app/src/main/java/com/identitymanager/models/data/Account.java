@@ -1,4 +1,4 @@
-package com.identitymanager.models;
+package com.identitymanager.models.data;
 
 public class Account {
 

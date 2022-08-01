@@ -6,7 +6,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.identitymanager.models.Account;
+import com.identitymanager.models.data.Account;
 import com.identitymanager.database.firestore.callbacks.GetAccountsCallback;
 import com.identitymanager.utilities.LogTags.LogTags;
 

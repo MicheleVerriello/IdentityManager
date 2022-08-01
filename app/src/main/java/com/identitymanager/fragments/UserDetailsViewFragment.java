@@ -2,7 +2,6 @@ package com.identitymanager.fragments;
 
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -12,13 +11,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.shape.MaterialShapeDrawable;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.identitymanager.R;
-import com.identitymanager.models.User;
+import com.identitymanager.models.data.User;
 
 public class UserDetailsViewFragment extends Fragment {
 
