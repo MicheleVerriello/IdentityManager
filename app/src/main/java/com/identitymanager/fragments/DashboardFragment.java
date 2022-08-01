@@ -39,13 +39,12 @@ public class DashboardFragment extends Fragment {
         ListView accountsListView = settView.findViewById(R.id.accounts_list);
 
         List<Account> accounts = new ArrayList<>();
-        List<String> accountsString = new ArrayList<>();
+        //List<String> accountsString = new ArrayList<>();
         Bundle bundle = getActivity().getIntent().getExtras();
         String idUserLoggedIn = bundle.getString("userDocumentId");
         DocumentReference userDocRef = db.collection("users").document(idUserLoggedIn);
 
 
-        Log.d("INFO", "Getting documents");
         db.collection("accounts")
                 .whereEqualTo("user", userDocRef)
                 .get()
@@ -63,14 +62,14 @@ public class DashboardFragment extends Fragment {
                     }
                 });
 
-        for (Account account: accounts) {
-            accountsString.add(account.getAccountName());
-        }
+//        for (Account account: accounts) {
+//            accountsString.add(account.getAccountName());
+//        }
 
-        ArrayAdapter<String> listViewAdapter = new ArrayAdapter<>(
+        ArrayAdapter<Account> listViewAdapter = new ArrayAdapter<>(
                 getActivity(),
                 android.R.layout.simple_list_item_1,
-                accountsString
+                accounts
         );
 
         accountsListView.setAdapter(listViewAdapter);

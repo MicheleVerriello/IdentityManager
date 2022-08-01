@@ -125,7 +125,6 @@ public class UserDetailsFragment extends Fragment {
         flagVisibility = 1;
         showUser(view);
         setView(view);
-
     }
 
 
