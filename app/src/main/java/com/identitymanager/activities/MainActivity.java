@@ -13,6 +13,8 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -22,6 +24,9 @@ import com.identitymanager.fragments.StatisticsFragment;
 import com.identitymanager.fragments.SettingsFragment;
 import com.identitymanager.fragments.UserDetailsViewFragment;
 import com.identitymanager.utilities.language.LanguageManager;
+import com.identitymanager.workers.NotificationWorker;
+
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,6 +40,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        final PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(NotificationWorker.class, 1, TimeUnit.DAYS).build();
+        WorkManager workManager = WorkManager.getInstance();
+        workManager.enqueue(periodicWorkRequest);
 
         Bundle bundle = getIntent().getExtras();
         int idFragment = bundle.getInt("fragment");
