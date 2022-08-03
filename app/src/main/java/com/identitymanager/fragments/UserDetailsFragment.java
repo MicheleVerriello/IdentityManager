@@ -24,6 +24,7 @@ import androidx.fragment.app.Fragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.identitymanager.utilities.notifications.PushNotification;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -62,6 +63,9 @@ public class UserDetailsFragment extends Fragment {
         String idUserLoggedIn = bundle.getString(USER_DOCUMENT_ID_KEY);
         showUser(settView);
         setView(settView);
+
+        PushNotification pushNotification = new PushNotification(getContext());
+        pushNotification.sendNotification("This is a try");
 
         return settView;
     }

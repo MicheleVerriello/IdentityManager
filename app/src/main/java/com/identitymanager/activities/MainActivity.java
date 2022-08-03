@@ -10,6 +10,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -27,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences.Editor editorLanguage;
     SharedPreferences.Editor editorTheme;
     String idUserLoggedIn;
+    private final String CHANNEL_ID = "identityManagerNotification";
+    private final String NOTIFICATION_CONTENT_TITLE = "Password need a change";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

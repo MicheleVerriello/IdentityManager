@@ -9,7 +9,7 @@ public class User {
     private String username;
     private String name;
     private String surname;
-    private Date birthDate;
+    private String birthDate;
     private String email;
     private String phone;
     private String country;
@@ -30,9 +30,9 @@ public class User {
 
     public void setSurname(String surname) { this.surname = surname; }
 
-    public Date getBirthDate() { return birthDate; }
+    public String getBirthDate() { return birthDate; }
 
-    public void setBirthDate(Date birthDate) { this.birthDate = birthDate; }
+    public void setBirthDate(String birthDate) { this.birthDate = birthDate; }
 
     public String getEmail() { return email; }
 
