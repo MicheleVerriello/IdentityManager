@@ -1,16 +1,23 @@
 package com.identitymanager.models.data;
 
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.IgnoreExtraProperties;
+
+@IgnoreExtraProperties
 public class Account {
 
     private String id;
     private String fkIdUser;
     private String accountName;
-    private String accountUsername;
-    private String accountEmail;
-    private String accountPassword;
-    private boolean twoFactorAuthentication;
-    private String fkIdCategory;
-    private String accountLastUpdateDate;
+    private String username;
+    private String email;
+    private String password;
+    private String passwordStrength;
+    private String twoFactorAuthentication;
+    private String category;
+    private Timestamp lastUpdate;
+
+    public Account() {}
 
     public String getId() {
         return id;
@@ -20,9 +27,7 @@ public class Account {
         this.id = id;
     }
 
-    public String getFkIdUser() {
-        return fkIdUser;
-    }
+    public String getFkIdUser() { return fkIdUser; }
 
     public void setFkIdUser(String fkIdUser) {
         this.fkIdUser = fkIdUser;
@@ -32,41 +37,31 @@ public class Account {
 
     public void setAccountName(String accountName) { this.accountName = accountName; }
 
-    public String getAccountUsername() {
-        return accountUsername;
-    }
+    public String getUsername() { return username; }
 
-    public void setAccountUsername(String accountUsername) { this.accountUsername = accountUsername; }
+    public void setUsername(String username) { this.username = username; }
 
-    public String getAccountEmail() {
-        return accountEmail;
-    }
+    public String getEmail() { return email; }
 
-    public void setAccountEmail(String accountEmail) {
-        this.accountEmail = accountEmail;
-    }
+    public void setEmail(String Email) { this.email = Email; }
 
-    public String getAccountPassword() {
-        return accountPassword;
-    }
+    public String getPassword() { return password; }
 
-    public void setAccountPassword(String accountPassword) { this.accountPassword = accountPassword; }
+    public void setPassword(String password) { this.password = password; }
 
-    public boolean getFkId2FA() { return twoFactorAuthentication; }
+    public String getPasswordStrength() { return passwordStrength; }
 
-    public void setFkId2FA(boolean fkId2FA) { this.twoFactorAuthentication = fkId2FA; }
+    public void setPasswordStrength(String passwordStrength) { this.passwordStrength = passwordStrength; }
 
-    public String getFkIdCategory() {
-        return fkIdCategory;
-    }
+    public String getTwoFactorAuthentication() { return twoFactorAuthentication; }
 
-    public void setFkIdCategory(String fkIdCategory) {
-        this.fkIdCategory = fkIdCategory;
-    }
+    public void setTwoFactorAuthentication(String twoFactorAuthentication) { this.twoFactorAuthentication = twoFactorAuthentication; }
 
-    public String getAccountLastUpdateDate() {
-        return accountLastUpdateDate;
-    }
+    public String getcategory() { return category; }
 
-    public void setAccountLastUpdateDate(String accountLastUpdateDate) { this.accountLastUpdateDate = accountLastUpdateDate; }
+    public void setcategory(String category) { this.category = category; }
+
+    public String getLastUpdate() { return lastUpdate.toDate().toString(); }
+
+    public void setLastUpdate(Timestamp lastUpdate) { this.lastUpdate = lastUpdate; }
 }

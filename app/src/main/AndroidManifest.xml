@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.IdentityManager">
         <activity
+            android:name=".fragments.AccountListFragment"
+            android:exported="false" />
+        <activity
             android:name=".activities.InstagramToChangePasswordsActivity"
             android:exported="true" />
         <activity
@@ -36,8 +39,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.SignUpActivity"/>
-        <activity android:name=".activities.MainActivity"/>
+        <activity android:name=".activities.SignUpActivity" />
+        <activity android:name=".activities.MainActivity" />
     </application>
 
 </manifest>
