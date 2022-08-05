@@ -1,5 +1,6 @@
 package com.identitymanager.activities;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
@@ -13,6 +14,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
@@ -23,6 +25,7 @@ import com.identitymanager.fragments.DashboardFragment;
 import com.identitymanager.fragments.StatisticsFragment;
 import com.identitymanager.fragments.SettingsFragment;
 import com.identitymanager.fragments.UserDetailsViewFragment;
+import com.identitymanager.services.NotificationService;
 import com.identitymanager.utilities.language.LanguageManager;
 import com.identitymanager.workers.NotificationWorker;
 
@@ -41,9 +44,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(NotificationWorker.class, 1, TimeUnit.DAYS).build();
-        WorkManager workManager = WorkManager.getInstance();
-        workManager.enqueue(periodicWorkRequest);
+        startNotificationServiceViaWorker();
+
 
         Bundle bundle = getIntent().getExtras();
         int idFragment = bundle.getInt("fragment");
@@ -192,5 +194,32 @@ public class MainActivity extends AppCompatActivity {
     public void setDarkTheme() {
         editorTheme.putInt("theme", 2);
         editorTheme.commit();
+    }
+
+    public void startService() {
+        if (!NotificationService.isServiceRunning) {
+            Intent notificationServiceIntent = new Intent(this, NotificationService.class);
+            ContextCompat.startForegroundService(this, notificationServiceIntent);
+        }
+    }
+
+    public void stopService() {
+        if (NotificationService.isServiceRunning) {
+            Intent serviceIntent = new Intent(this, NotificationService.class);
+            stopService(serviceIntent);
+        }
+    }
+
+    public void startNotificationServiceViaWorker() {
+        String UNIQUE_WORK_NAME = "StartNotificationServiceViaWorker";
+        WorkManager workManager = WorkManager.getInstance();
+
+        // As per Documentation: The minimum repeat interval that can be defined is 15 minutes
+        // (same as the JobScheduler API), but in practice 15 doesn't work. Using 16 here
+        PeriodicWorkRequest request = new PeriodicWorkRequest.Builder(NotificationWorker.class,16, TimeUnit.MINUTES).build();
+
+        // to schedule a unique work, no matter how many times app is opened i.e. startServiceViaWorker gets called
+        // do check for AutoStart permission
+        workManager.enqueueUniquePeriodicWork(UNIQUE_WORK_NAME, ExistingPeriodicWorkPolicy.KEEP, request);
     }
 }

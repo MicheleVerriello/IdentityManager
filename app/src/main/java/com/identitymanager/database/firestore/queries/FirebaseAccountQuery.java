@@ -4,10 +4,15 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.identitymanager.models.data.Account;
 import com.identitymanager.database.firestore.callbacks.GetAccountsCallback;
 import com.identitymanager.utilities.LogTags.LogTags;
@@ -130,5 +135,29 @@ public class FirebaseAccountQuery {
                     }
                 });
 
+    }
+
+    public static List<Account> getAccountsByUserId(FirebaseFirestore db, String userId) {
+
+        List<Account> accounts = new ArrayList<>();
+
+        DocumentReference userDocRef = db.collection("users").document(userId);
+
+        db.collection(ACCOUNTS_COLLECTION_PATH)
+                .whereEqualTo("user", userDocRef)
+                .get()
+                .addOnCompleteListener(task ->  {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                //accounts.add(document.toObject(Account.class));
+                                Log.d("QUERY OK", document.getId() + " => " + document.getData());
+                            }
+                        } else {
+                            Log.d("QUERY", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+        return accounts;
     }
 }
