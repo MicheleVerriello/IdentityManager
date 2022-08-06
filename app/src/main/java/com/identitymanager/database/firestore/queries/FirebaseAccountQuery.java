@@ -187,6 +187,26 @@ public class FirebaseAccountQuery extends Fragment {
                     }
                 });
     }
+
+    public static List<Account> getAccountsByUserId(FirebaseFirestore db, String userId) {
+
+        List<Account> accounts = new ArrayList<>();
+
+        DocumentReference userDocRef = db.collection("users").document(userId);
+
+        db.collection(ACCOUNTS_COLLECTION_PATH)
+                .whereEqualTo("user", userDocRef)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            accounts.add(document.toObject(Account.class));
+                        }
+                    }
+                });
+
+        return accounts;
+    }
 }
 
 
