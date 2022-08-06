@@ -155,7 +155,6 @@ public class FirebaseAccountQuery {
                         } else {
                             Log.d("QUERY", "Error getting documents: ", task.getException());
                         }
-                    }
                 });
 
         return accounts;
