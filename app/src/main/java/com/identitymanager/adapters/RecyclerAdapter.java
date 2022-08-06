@@ -40,6 +40,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
         Account account = list.get(position);
 
         holder.accountName.setText(account.getAccountName());
+        holder.category.setText(account.getcategory());
         holder.email.setText(account.getEmail());
         holder.username.setText(account.getUsername());
         holder.password.setText(AES.decrypt(account.getPassword(), account.getFkIdUser()));
@@ -54,13 +55,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
 
     public static class RecyclerHolder extends RecyclerView.ViewHolder {
 
-        TextView accountName, email, username, password, passwordStrength;
+        TextView accountName, category, email, username, password, passwordStrength;
 
         public RecyclerHolder(@NonNull View itemView) {
             super(itemView);
 
             accountName = itemView.findViewById(R.id.account_name);
             email = itemView.findViewById(R.id.account_email);
+            category = itemView.findViewById(R.id.account_category);
             username = itemView.findViewById(R.id.account_username);
             password = itemView.findViewById(R.id.account_password);
             passwordStrength = itemView.findViewById(R.id.account_password_strength);

@@ -1,27 +1,32 @@
 package com.identitymanager.fragments;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.identitymanager.R;
-import com.identitymanager.database.firestore.queries.FirebaseAccountQuery;
+import com.identitymanager.adapters.RecyclerAdapter;
+import com.identitymanager.models.data.Account;
 
 import java.util.ArrayList;
 
 public class DashboardFragment extends Fragment {
 
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseFirestore db;
+    RecyclerView recyclerView;
+    RecyclerAdapter recyclerAdapter;
+    ArrayList<Account> list;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -34,16 +39,17 @@ public class DashboardFragment extends Fragment {
         Bundle bundle = getActivity().getIntent().getExtras();
         String idUserLoggedIn = bundle.getString("userDocumentId");
 
-        ListView accountsListView = settView.findViewById(R.id.accounts_list);
-        ArrayList<String> accounts = new ArrayList<>();
+        recyclerView = settView.findViewById(R.id.accounts_list);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        ArrayAdapter<String> adapterAccounts = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, accounts);
-        accountsListView.setAdapter(adapterAccounts);
+        db = FirebaseFirestore.getInstance();
+        list = new ArrayList<Account>();
+        recyclerAdapter = new RecyclerAdapter(getContext(), list);
+        recyclerView.setAdapter(recyclerAdapter);
 
-        FirebaseAccountQuery.listAccountCategory(db, idUserLoggedIn, accounts, adapterAccounts);
-
+        EventChangeListener(idUserLoggedIn);
         clickButton(settView);
-        clickCategory(accountsListView);
 
         return settView;
     }
@@ -62,23 +68,25 @@ public class DashboardFragment extends Fragment {
         });
     }
 
-    private void clickCategory(ListView accountsListView) {
+    private void EventChangeListener(String idUserLoggedIn) {
 
-        accountsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Fragment fragment = new AccountListFragment();
-
-                //Select the category chosen by the user
-                String categoryValue = (String) accountsListView.getItemAtPosition(i);
-
-                //Save the category chosen by the user
-                Bundle bundleCategory = new Bundle();
-                bundleCategory.putString("category", categoryValue);
-                fragment.setArguments(bundleCategory);
-
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
-            }
-        });
+        db.collection("accounts") //get all account details
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        if (task.getResult() != null) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Account account = document.toObject(Account.class);
+                                if ((account.getFkIdUser().equals(idUserLoggedIn))) {
+                                    list.add(account);
+                                    recyclerAdapter.notifyDataSetChanged();
+                                }
+                                Log.d("QUERY OK", document.getId() + " => " + document.getData());
+                            }
+                        } else {
+                            Log.d("QUERY", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
     }
 }
