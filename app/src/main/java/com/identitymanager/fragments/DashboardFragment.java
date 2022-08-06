@@ -1,9 +1,9 @@
 package com.identitymanager.fragments;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -12,18 +12,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.identitymanager.R;
-import com.identitymanager.models.data.Account;
+import com.identitymanager.database.firestore.queries.FirebaseAccountQuery;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class DashboardFragment extends Fragment {
 
@@ -34,52 +28,27 @@ public class DashboardFragment extends Fragment {
 
         View settView = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
-        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
 
-        ListView accountsListView = settView.findViewById(R.id.accounts_list);
-
-        List<Account> accounts = new ArrayList<>();
-        //List<String> accountsString = new ArrayList<>();
+        //Get the user ID
         Bundle bundle = getActivity().getIntent().getExtras();
         String idUserLoggedIn = bundle.getString("userDocumentId");
-        DocumentReference userDocRef = db.collection("users").document(idUserLoggedIn);
 
+        ListView accountsListView = settView.findViewById(R.id.accounts_list);
+        ArrayList<String> accounts = new ArrayList<>();
 
-        db.collection("accounts")
-                .whereEqualTo("user", userDocRef)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                accounts.add(document.toObject(Account.class));
-                                Log.d("QUERY OK", document.getId() + " => " + document.getData());
-                            }
-                        } else {
-                            Log.d("QUERY", "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
+        ArrayAdapter<String> adapterAccounts = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, accounts);
+        accountsListView.setAdapter(adapterAccounts);
 
-//        for (Account account: accounts) {
-//            accountsString.add(account.getAccountName());
-//        }
+        FirebaseAccountQuery.listAccountCategory(db, idUserLoggedIn, accounts, adapterAccounts);
 
-        ArrayAdapter<Account> listViewAdapter = new ArrayAdapter<>(
-                getActivity(),
-                android.R.layout.simple_list_item_1,
-                accounts
-        );
-
-        accountsListView.setAdapter(listViewAdapter);
-
-        clickbutton(settView);
+        clickButton(settView);
+        clickCategory(accountsListView);
 
         return settView;
     }
 
-    private void clickbutton(View settView) {
+    private void clickButton(View settView) {
         FloatingActionButton fab;
         fab = settView.findViewById(R.id.add_button);
 
@@ -93,5 +62,23 @@ public class DashboardFragment extends Fragment {
         });
     }
 
+    private void clickCategory(ListView accountsListView) {
 
+        accountsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Fragment fragment = new AccountListFragment();
+
+                //Select the category chosen by the user
+                String categoryValue = (String) accountsListView.getItemAtPosition(i);
+
+                //Save the category chosen by the user
+                Bundle bundleCategory = new Bundle();
+                bundleCategory.putString("category", categoryValue);
+                fragment.setArguments(bundleCategory);
+
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+            }
+        });
+    }
 }

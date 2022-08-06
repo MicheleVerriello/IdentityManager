@@ -25,6 +25,9 @@
             android:exported="true"></service>
 
         <activity
+            android:name=".fragments.AccountListFragment"
+            android:exported="false" />
+        <activity
             android:name=".activities.InstagramToChangePasswordsActivity"
             android:exported="true" />
         <activity

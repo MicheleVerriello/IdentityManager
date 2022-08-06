@@ -9,8 +9,11 @@
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/drawable/ic_baseline_dashboard_24.xml" value="0.3828125" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/drawable/ic_baseline_person_add_24.xml" value="0.3828125" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/drawable/ic_baseline_settings_24.xml" value="0.3828125" />
+        <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/activity_account_list_fragment.xml" value="0.29347826086956524" />
+        <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/activity_accountslist.xml" value="0.29347826086956524" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/activity_add_user.xml" value="0.2749094202898551" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/activity_dashboard.xml" value="0.33" />
+        <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/activity_facebook_weak_passwords.xml" value="0.17831813576494426" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/activity_login.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/activity_new_account.xml" value="0.2884963768115942" />
@@ -18,10 +21,15 @@
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/activity_settings.xml" value="0.2749094202898551" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/activity_sign_up.xml" value="0.33" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/activity_user_details.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/category_list.xml" value="0.18854166666666666" />
+        <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/fragment_account_entry.xml" value="0.29347826086956524" />
+        <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/fragment_accounts_list.xml" value="0.29347826086956524" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/fragment_dashboard.xml" value="0.25" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/fragment_new_account.xml" value="0.33" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/fragment_settings.xml" value="0.23233695652173914" />
+        <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/fragment_view_accounts.xml" value="0.29347826086956524" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/list_items.xml" value="0.23233695652173914" />
+        <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/recycler_item.xml" value="0.29347826086956524" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/menu/bottom_navigation.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/menu/top_app_bar.xml" value="0.28055555555555556" />
         <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.26233698039434994" />

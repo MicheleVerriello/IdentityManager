@@ -1,18 +1,16 @@
 package com.identitymanager.database.firestore.queries;
 
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.identitymanager.models.data.Account;
 import com.identitymanager.database.firestore.callbacks.GetAccountsCallback;
 import com.identitymanager.utilities.LogTags.LogTags;
@@ -26,9 +24,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class FirebaseAccountQuery {
+public class FirebaseAccountQuery extends Fragment {
 
     static final String ACCOUNTS_COLLECTION_PATH = "accounts";
+    static Account account;
 
     public static void getAccountsByUserId(String userId, FirebaseFirestore db, GetAccountsCallback getAccountsCallback) {
 
@@ -86,7 +85,7 @@ public class FirebaseAccountQuery {
         final String EMAIL_KEY = "email";
         final String PASSWORD_KEY = "password";
         final String STRENGTH_KEY = "passwordStrength";
-        final String AUTHENTICATION_KEY = "2fa";
+        final String AUTHENTICATION_KEY = "twoFactorAuthentication";
         final String CATEGORY_KEY = "category";
         final String TIME_KEY = "lastUpdate";
 
@@ -137,26 +136,57 @@ public class FirebaseAccountQuery {
 
     }
 
-    public static List<Account> getAccountsByUserId(FirebaseFirestore db, String userId) {
+    public static void listAccountCategory(FirebaseFirestore db, String idUserLoggedIn, ArrayList<String> accounts, ArrayAdapter<String> adapterAccounts) {
 
-        List<Account> accounts = new ArrayList<>();
+        ArrayList<String> categoryCopy = new ArrayList<>();
 
-        DocumentReference userDocRef = db.collection("users").document(userId);
-
-        db.collection(ACCOUNTS_COLLECTION_PATH)
-                .whereEqualTo("user", userDocRef)
+        db.collection(ACCOUNTS_COLLECTION_PATH) //get all the category of an ID
                 .get()
-                .addOnCompleteListener(task ->  {
-                        if (task.isSuccessful()) {
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        if (task.getResult() != null) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                //accounts.add(document.toObject(Account.class));
+                                account = document.toObject(Account.class);
+                                if (account.getId().equals(idUserLoggedIn) && (!categoryCopy.contains(account.getcategory()))) {
+                                    accounts.add(account.getcategory());
+                                    categoryCopy.add(account.getcategory());
+                                    adapterAccounts.notifyDataSetChanged();
+                                }
                                 Log.d("QUERY OK", document.getId() + " => " + document.getData());
                             }
                         } else {
                             Log.d("QUERY", "Error getting documents: ", task.getException());
                         }
+                    }
                 });
+    }
 
-        return accounts;
+    public static void listAccountsDetails1(FirebaseFirestore db, String idUserLoggedIn, String categoryValue, ArrayList<String> accountsDetails, ArrayAdapter<String> adapterAccountsDetails) {
+
+        db.collection(ACCOUNTS_COLLECTION_PATH) //get all account details
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        if (task.getResult() != null) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                account = document.toObject(Account.class);
+                                if ((account.getId().equals(idUserLoggedIn)) && (account.getcategory().equals(categoryValue))) {
+                                    accountsDetails.add(account.getAccountName());
+                                    accountsDetails.add(account.getEmail());
+                                    accountsDetails.add(account.getUsername());
+                                    accountsDetails.add(account.getPassword());
+                                    accountsDetails.add(account.getPasswordStrength());
+                                    accountsDetails.add(account.getLastUpdate());
+                                    adapterAccountsDetails.notifyDataSetChanged();
+                                }
+                                Log.d("QUERY OK", document.getId() + " => " + document.getData());
+                            }
+                        } else {
+                            Log.d("QUERY", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
     }
 }
+
+
