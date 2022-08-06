@@ -1,8 +1,8 @@
 package com.identitymanager.database.firestore.queries;
 
+import android.content.Context;
 import android.util.Log;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -14,12 +14,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.identitymanager.models.data.Account;
 import com.identitymanager.database.firestore.callbacks.GetAccountsCallback;
 import com.identitymanager.utilities.LogTags.LogTags;
-import com.identitymanager.utilities.security.Cryptography;
-import com.identitymanager.utilities.security.PasswordStrength;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
@@ -74,63 +70,33 @@ public class FirebaseAccountQuery extends Fragment {
         return account.get();
     }
 
-    public static void createAccount(FirebaseFirestore db, EditText account_name, EditText username, EditText email, EditText password,
-                                     PasswordStrength strengthPassword, String authentication, String categorySelected,
-                                     String idUserLoggedIn) {
+    public static void createAccount(FirebaseFirestore db, Map<String, Object> accountToInsert, Context context) {
 
-        final String SAVE = "save";
-        final String ID_KEY = "id";
-        final String NAME_ACCOUNT_KEY = "accountName";
-        final String USERNAME_KEY = "username";
-        final String EMAIL_KEY = "email";
-        final String PASSWORD_KEY = "password";
-        final String STRENGTH_KEY = "passwordStrength";
-        final String AUTHENTICATION_KEY = "twoFactorAuthentication";
-        final String CATEGORY_KEY = "category";
-        final String TIME_KEY = "lastUpdate";
-
-        String account_name_text = account_name.getText().toString();
-        String username_text = username.getText().toString();
-        String email_text = email.getText().toString();
-        String password_text = password.getText().toString();
-
-        Date last_updated = new Date(System.currentTimeMillis());
-
-        Map<String, Object> account = new HashMap<>();
-        account.put(ID_KEY, idUserLoggedIn);
-        account.put(NAME_ACCOUNT_KEY, account_name_text);
-        account.put(USERNAME_KEY, username_text);
-        account.put(EMAIL_KEY, email_text);
-        account.put(PASSWORD_KEY, Cryptography.hashString(password_text));
-        account.put(STRENGTH_KEY, strengthPassword);
-        account.put(AUTHENTICATION_KEY, authentication);
-        account.put(CATEGORY_KEY, categorySelected);
-        account.put(TIME_KEY, last_updated);
 
         db.collection("accounts")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            if (document.getData().get(NAME_ACCOUNT_KEY).equals(account_name_text)) {
-                                Toast.makeText(account_name.getContext(), "Name account already exists ", Toast.LENGTH_SHORT).show();
+                            if (document.getData().get("accountName").equals(accountToInsert.get("accountName"))) {
+                                Toast.makeText(context, "Name account already exists ", Toast.LENGTH_SHORT).show();
                                 return;
                             }
                         }
 
                         // Add a new document with a generated ID
                         db.collection("accounts")
-                                .add(account)
+                                .add(accountToInsert)
                                 .addOnSuccessListener(documentReference -> {
-                                    Log.d(SAVE, "DocumentSnapshot added with ID: " + documentReference.getId());
-                                    Toast.makeText(account_name.getContext(), "Account added", Toast.LENGTH_SHORT).show();
+                                    Log.d("SAVE", "DocumentSnapshot added with ID: " + documentReference.getId());
+                                    Toast.makeText(context, "Account added", Toast.LENGTH_SHORT).show();
                                 })
                                 .addOnFailureListener(e -> {
-                                    Log.w(SAVE, "Error adding document", e);
-                                    Toast.makeText(account_name.getContext(), "Unable to create user", Toast.LENGTH_SHORT).show();
+                                    Log.w("SAVE", "Error adding document", e);
+                                    Toast.makeText(context, "Unable to create user", Toast.LENGTH_SHORT).show();
                                 });
                     } else {
-                        Log.w(SAVE, "Error getting documents", task.getException());
+                        Log.w("SAVE", "Error getting documents", task.getException());
                     }
                 });
 
@@ -141,69 +107,41 @@ public class FirebaseAccountQuery extends Fragment {
         ArrayList<String> categoryCopy = new ArrayList<>();
 
         db.collection(ACCOUNTS_COLLECTION_PATH) //get all the category of an ID
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        if (task.getResult() != null) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                account = document.toObject(Account.class);
-                                if (account.getId().equals(idUserLoggedIn) && (!categoryCopy.contains(account.getcategory()))) {
-                                    accounts.add(account.getcategory());
-                                    categoryCopy.add(account.getcategory());
-                                    adapterAccounts.notifyDataSetChanged();
-                                }
-                                Log.d("QUERY OK", document.getId() + " => " + document.getData());
+            .get()
+            .addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    if (task.getResult() != null) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            account = document.toObject(Account.class);
+                            if (account.getFkIdUser().equals(idUserLoggedIn) && (!categoryCopy.contains(account.getcategory()))) {
+                                accounts.add(account.getcategory());
+                                categoryCopy.add(account.getcategory());
+                                adapterAccounts.notifyDataSetChanged();
                             }
-                        } else {
-                            Log.d("QUERY", "Error getting documents: ", task.getException());
+                            Log.d("QUERY OK", document.getId() + " => " + document.getData());
                         }
+                    } else {
+                        Log.d("QUERY", "Error getting documents: ", task.getException());
                     }
-                });
-    }
-
-    public static void listAccountsDetails1(FirebaseFirestore db, String idUserLoggedIn, String categoryValue, ArrayList<String> accountsDetails, ArrayAdapter<String> adapterAccountsDetails) {
-
-        db.collection(ACCOUNTS_COLLECTION_PATH) //get all account details
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        if (task.getResult() != null) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                account = document.toObject(Account.class);
-                                if ((account.getId().equals(idUserLoggedIn)) && (account.getcategory().equals(categoryValue))) {
-                                    accountsDetails.add(account.getAccountName());
-                                    accountsDetails.add(account.getEmail());
-                                    accountsDetails.add(account.getUsername());
-                                    accountsDetails.add(account.getPassword());
-                                    accountsDetails.add(account.getPasswordStrength());
-                                    accountsDetails.add(account.getLastUpdate());
-                                    adapterAccountsDetails.notifyDataSetChanged();
-                                }
-                                Log.d("QUERY OK", document.getId() + " => " + document.getData());
-                            }
-                        } else {
-                            Log.d("QUERY", "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
+                }
+            });
     }
 
     public static List<Account> getAccountsByUserId(FirebaseFirestore db, String userId) {
 
         List<Account> accounts = new ArrayList<>();
 
-        DocumentReference userDocRef = db.collection("users").document(userId);
 
         db.collection(ACCOUNTS_COLLECTION_PATH)
-                .whereEqualTo("user", userDocRef)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            accounts.add(document.toObject(Account.class));
-                        }
+            .whereEqualTo("fkIdUser", userId)
+            .get()
+            .addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        accounts.add(document.toObject(Account.class));
                     }
-                });
+                }
+            });
 
         return accounts;
     }

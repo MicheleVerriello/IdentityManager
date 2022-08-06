@@ -1,18 +1,12 @@
 package com.identitymanager.workers;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.identitymanager.database.firestore.queries.FirebaseAccountQuery;
 import com.identitymanager.models.data.Account;
 import com.identitymanager.utilities.notifications.PushNotification;
@@ -23,7 +17,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
+import java.util.Date;
 import java.util.List;
 
 public class NotificationWorker extends Worker {
@@ -46,8 +42,12 @@ public class NotificationWorker extends Worker {
 
         PushNotification pushNotification = new PushNotification(this.context);
 
+        Date dateMinusMonths = Date.from(LocalDate.now().minusMonths(6).atStartOfDay().toInstant(ZoneOffset.UTC));
+
         for (Account account: accounts) {
-            pushNotification.sendNotification(account.getAccountName());
+            if(account.getLastUpdate().toDate().compareTo(dateMinusMonths) < 0) {
+                pushNotification.sendNotification(account.getAccountName());
+            }
         }
 
         return Result.success();

@@ -25,9 +25,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.identitymanager.R;
 import com.identitymanager.database.firestore.queries.FirebaseAccountQuery;
 import com.identitymanager.database.firestore.queries.FirebaseCategoryQuery;
+import com.identitymanager.utilities.security.AES;
+import com.identitymanager.utilities.security.Cryptography;
 import com.identitymanager.utilities.security.PasswordStrength;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
@@ -37,6 +42,16 @@ public class NewAccountFragment extends Fragment {
     PasswordStrength strengthPassword;
     String authentication;
     String categorySelected;
+
+    private final String FK_USER_ID_KEY = "fkIdUser";
+    private final String NAME_ACCOUNT_KEY = "accountName";
+    private final String USERNAME_KEY = "username";
+    private final String EMAIL_KEY = "email";
+    private final String PASSWORD_KEY = "password";
+    private final String STRENGTH_KEY = "passwordStrength";
+    private final String AUTHENTICATION_KEY = "twoFactorAuthentication";
+    private final String CATEGORY_KEY = "category";
+    private final String TIME_KEY = "lastUpdate";
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -325,7 +340,28 @@ public class NewAccountFragment extends Fragment {
                 // Connection with the database
                 if (check == 1) {
 
-                    FirebaseAccountQuery.createAccount(db, account_name, username, email, password, strengthPassword, authentication, categorySelected, idUserLoggedIn);
+
+
+                    String account_name_text = account_name.getText().toString();
+                    String username_text = username.getText().toString();
+                    String email_text = email.getText().toString();
+                    String password_text = password.getText().toString();
+                    String AES256Password = AES.encrypt(password_text, idUserLoggedIn);
+
+                    Date last_updated = new Date(System.currentTimeMillis());
+
+                    Map<String, Object> accountToInsert = new HashMap<>();
+                    accountToInsert.put(FK_USER_ID_KEY, idUserLoggedIn);
+                    accountToInsert.put(NAME_ACCOUNT_KEY, account_name_text);
+                    accountToInsert.put(USERNAME_KEY, username_text);
+                    accountToInsert.put(EMAIL_KEY, email_text);
+                    accountToInsert.put(PASSWORD_KEY, AES256Password);
+                    accountToInsert.put(STRENGTH_KEY, strengthPassword);
+                    accountToInsert.put(AUTHENTICATION_KEY, authentication);
+                    accountToInsert.put(CATEGORY_KEY, categorySelected);
+                    accountToInsert.put(TIME_KEY, last_updated);
+
+                    FirebaseAccountQuery.createAccount(db, accountToInsert, getContext());
 
                 } else {
                     Toast.makeText(getContext(), "Error, fill in the fields correctly", Toast.LENGTH_SHORT).show();

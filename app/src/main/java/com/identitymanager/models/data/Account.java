@@ -61,7 +61,7 @@ public class Account {
 
     public void setcategory(String category) { this.category = category; }
 
-    public String getLastUpdate() { return lastUpdate.toDate().toString(); }
+    public Timestamp getLastUpdate() { return this.lastUpdate; }
 
     public void setLastUpdate(Timestamp lastUpdate) { this.lastUpdate = lastUpdate; }
 }

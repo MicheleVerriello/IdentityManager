@@ -1,4 +1,4 @@
-package com.identitymanager.activities;
+package com.identitymanager.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.identitymanager.R;
 import com.identitymanager.models.data.Account;
+import com.identitymanager.utilities.security.AES;
 
 import java.util.ArrayList;
 
@@ -41,7 +42,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
         holder.accountName.setText(account.getAccountName());
         holder.email.setText(account.getEmail());
         holder.username.setText(account.getUsername());
-        holder.password.setText(account.getPassword());
+        holder.password.setText(AES.decrypt(account.getPassword(), account.getFkIdUser()));
         holder.passwordStrength.setText(account.getPasswordStrength());
 
     }

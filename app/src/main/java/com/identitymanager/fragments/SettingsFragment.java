@@ -19,7 +19,7 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 
 import com.identitymanager.activities.ExpandableListDataPump;
-import com.identitymanager.activities.CustomExpandableListAdapter;
+import com.identitymanager.adapters.CustomExpandableListAdapter;
 import com.identitymanager.activities.MainActivity;
 import com.identitymanager.utilities.language.LanguageManager;
 import com.identitymanager.R;

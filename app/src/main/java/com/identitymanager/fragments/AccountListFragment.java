@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.identitymanager.R;
-import com.identitymanager.activities.RecyclerAdapter;
+import com.identitymanager.adapters.RecyclerAdapter;
 import com.identitymanager.models.data.Account;
 
 import java.util.ArrayList;
@@ -61,7 +61,7 @@ public class AccountListFragment extends Fragment {
                         if (task.getResult() != null) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Account account = document.toObject(Account.class);
-                                if ((account.getId().equals(idUserLoggedIn)) && (account.getcategory().equals(categoryValue))) {
+                                if ((account.getFkIdUser().equals(idUserLoggedIn)) && (account.getcategory().equals(categoryValue))) {
                                     list.add(account);
                                     recyclerAdapter.notifyDataSetChanged();
                                 }

@@ -1,4 +1,4 @@
-package com.identitymanager.activities;
+package com.identitymanager.adapters;
 
 import android.content.Context;
 import android.view.View;
