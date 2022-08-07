@@ -25,6 +25,7 @@ public class DashboardFragment extends Fragment {
 
     FirebaseFirestore db;
     RecyclerView recyclerView;
+    RecyclerAdapter.RecyclerViewClickListener listener;
     RecyclerAdapter recyclerAdapter;
     ArrayList<Account> list;
 
@@ -45,13 +46,35 @@ public class DashboardFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
         list = new ArrayList<Account>();
-        recyclerAdapter = new RecyclerAdapter(getContext(), list);
+
+        setOnClickListener();
+        recyclerAdapter = new RecyclerAdapter(getContext(), list, listener);
         recyclerView.setAdapter(recyclerAdapter);
 
         EventChangeListener(idUserLoggedIn);
         clickButton(settView);
 
         return settView;
+    }
+
+    private void setOnClickListener() {
+        listener = new RecyclerAdapter.RecyclerViewClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                Fragment fragment = new AccountDetailsFragment();
+
+                Bundle extra = new Bundle();
+                getActivity().getIntent().putExtra("id", list.get(position).getFkIdUser());
+                getActivity().getIntent().putExtra("accountName", list.get(position).getAccountName());
+                getActivity().getIntent().putExtra("email", list.get(position).getEmail());
+                getActivity().getIntent().putExtra("category", list.get(position).getcategory());
+                getActivity().getIntent().putExtra("username", list.get(position).getUsername());
+                getActivity().getIntent().putExtra("password", list.get(position).getPassword());
+                getActivity().getIntent().putExtra("passwordStrength", list.get(position).getPasswordStrength());
+
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+            }
+        };
     }
 
     private void clickButton(View settView) {
