@@ -7,6 +7,7 @@ import com.google.firebase.firestore.IgnoreExtraProperties;
 public class Account {
 
     private String id;
+    private String docId;
     private String fkIdUser;
     private String accountName;
     private String username;
@@ -25,6 +26,14 @@ public class Account {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getdocId() {
+        return docId;
+    }
+
+    public void setdocId(String id) {
+        this.docId = docId;
     }
 
     public String getFkIdUser() { return fkIdUser; }

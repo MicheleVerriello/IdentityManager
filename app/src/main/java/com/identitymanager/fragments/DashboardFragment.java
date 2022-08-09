@@ -63,7 +63,6 @@ public class DashboardFragment extends Fragment {
             public void onClick(View v, int position) {
                 Fragment fragment = new AccountDetailsFragment();
 
-                Bundle extra = new Bundle();
                 getActivity().getIntent().putExtra("id", list.get(position).getFkIdUser());
                 getActivity().getIntent().putExtra("accountName", list.get(position).getAccountName());
                 getActivity().getIntent().putExtra("email", list.get(position).getEmail());
