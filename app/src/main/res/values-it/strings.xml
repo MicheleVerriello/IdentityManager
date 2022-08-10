@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">IdentityManager</string>
-    <string name="login">LOGIN</string>
+    <string name="login">Benvenuto</string>
     <string name="change_language">Cambia Lingua</string>
     <string name="change_language_description">Imposta la tua lingua preferita</string>
     <string name="english_button">Inglese</string>
@@ -13,4 +13,5 @@
     <string name="profile_title">Profilo</string>
     <string name="settings_title">Impostazioni</string>
     <string name="fab_button">Fab button</string>
+    <string name="dont_have_account">Non hai un account?</string>
 </resources>
