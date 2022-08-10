@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,17 +28,14 @@ public class AccountDetailsFragment extends Fragment {
 
         String id, accountNameDetails, categoryDetails, emailDetails, usernameDetails, passwordDetails, passwordStrengthDetails;
 
-        TextView title, accountName, category, email, username, password, passwordStrength;
-        Button modify;
+        TextView accountName, category, email, username, password, passwordStrength;
 
-        title = settView.findViewById(R.id.account_details_title);
         accountName = settView.findViewById(R.id.account_name_details);
         email = settView.findViewById(R.id.account_email_details);
         category = settView.findViewById(R.id.account_category_details);
         username = settView.findViewById(R.id.account_username_details);
         password = settView.findViewById(R.id.account_password_details);
         passwordStrength = settView.findViewById(R.id.account_password_strength_details);
-        modify = settView.findViewById(R.id.button_modify);
 
         Bundle bundle = getActivity().getIntent().getExtras();
         id =  bundle.getString("id");
@@ -57,27 +53,38 @@ public class AccountDetailsFragment extends Fragment {
         password.setText(AES.decrypt(passwordDetails, id));
         passwordStrength.setText(passwordStrengthDetails);
 
-        deleteAccount(settView, accountNameDetails, getContext());
+        deleteAccount(settView, accountNameDetails);
+        modifyAccount(settView);
 
         return settView;
     }
 
-    public void deleteAccount(View settView, String accountNameDetails, Context context) {
+    public void deleteAccount(View settView, String accountNameDetails) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Button delete = settView.findViewById(R.id.button_delete);
 
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Fragment fragment = new DashboardFragment();
-                deleteAccount(db, fragment, accountNameDetails);
-
+                deleteProcess(db, fragment, accountNameDetails);
             }
         });
     }
 
-    public void deleteAccount(FirebaseFirestore db, Fragment fragment, String accountNameDetails) {
+    public void modifyAccount(View settView) {
+        Button modify = settView.findViewById(R.id.button_modify);
+
+        modify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment fragment = new ModifyAccountFragment();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+            }
+        });
+    }
+
+    public void deleteProcess(FirebaseFirestore db, Fragment fragment, String accountNameDetails) {
 
         db.collection("accounts")
                 .whereEqualTo("accountName", accountNameDetails)

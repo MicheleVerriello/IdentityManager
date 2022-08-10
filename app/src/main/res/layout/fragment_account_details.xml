@@ -6,19 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".fragments.AccountDetailsFragment">
 
-    <TextView
-        android:id="@+id/account_details_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="85dp"
-        android:layout_marginTop="41dp"
-        android:text="Account Details"
-        android:textColor="@color/black"
-        android:textSize="35dp"
-        android:textStyle="bold" />
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:title="Account Details">
+        </com.google.android.material.appbar.MaterialToolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
         android:layout_width="389dp"
