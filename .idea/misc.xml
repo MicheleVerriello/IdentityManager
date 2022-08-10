@@ -33,12 +33,14 @@
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/recycler_item.xml" value="0.29347826086956524" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/menu/bottom_navigation.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/menu/top_app_bar.xml" value="0.28055555555555556" />
+        <entry key="app/src/main/res/drawable/custom_button.xml" value="0.3095" />
+        <entry key="app/src/main/res/drawable/custom_input.xml" value="0.3095" />
         <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.26233698039434994" />
         <entry key="app/src/main/res/layout/activity_facebook_to_change_passwords.xml" value="0.14858728557013118" />
         <entry key="app/src/main/res/layout/activity_facebook_weak_passwords.xml" value="0.14858728557013118" />
         <entry key="app/src/main/res/layout/activity_instagram_to_change_passwords.xml" value="0.14858728557013118" />
         <entry key="app/src/main/res/layout/activity_instagram_weak_passwords.xml" value="0.14858728557013118" />
-        <entry key="app/src/main/res/layout/activity_login.xml" value="0.14858728557013118" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.35812507760684303" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.26903406291388116" />
         <entry key="app/src/main/res/layout/activity_new_account.xml" value="0.14858728557013118" />
         <entry key="app/src/main/res/layout/activity_profile.xml" value="0.14858728557013118" />
@@ -64,5 +66,12 @@
   </component>
   <component name="SuppressKotlinCodeStyleNotification">
     <option name="disableForAll" value="true" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.3968493094959125" />
+      </ProjectState>
+    </option>
   </component>
 </project>
