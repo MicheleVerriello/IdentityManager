@@ -18,12 +18,14 @@ import java.util.ArrayList;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.RecyclerHolder> {
 
+    static RecyclerViewClickListener listener;
     Context context;
     ArrayList<Account> list;
 
-    public RecyclerAdapter(Context context, ArrayList<Account> list) {
+    public RecyclerAdapter(Context context, ArrayList<Account> list, RecyclerViewClickListener listener) {
         this.context = context;
         this.list = list;
+        this.listener = listener;
     }
 
     @NonNull
@@ -53,7 +55,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
         return list.size();
     }
 
-    public static class RecyclerHolder extends RecyclerView.ViewHolder {
+    public static class RecyclerHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         TextView accountName, category, email, username, password, passwordStrength;
 
@@ -67,7 +69,17 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
             password = itemView.findViewById(R.id.account_password);
             passwordStrength = itemView.findViewById(R.id.account_password_strength);
 
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View view) {
+            listener.onClick(view, getAdapterPosition());
+        }
+    }
+
+    public interface RecyclerViewClickListener {
+        void onClick (View v, int position);
     }
 
 }

@@ -13,20 +13,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.IdentityManager">
 
-
         <receiver
             android:name=".receivers.NotificationReceiver"
             android:enabled="true"
-            android:exported="false"></receiver>
+            android:exported="false" />
 
         <service
             android:name=".services.NotificationService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
 
-        <activity
-            android:name=".fragments.AccountListFragment"
-            android:exported="false" />
         <activity
             android:name=".activities.InstagramToChangePasswordsActivity"
             android:exported="true" />
