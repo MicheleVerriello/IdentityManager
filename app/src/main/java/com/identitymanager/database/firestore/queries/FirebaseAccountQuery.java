@@ -11,7 +11,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.identitymanager.models.data.Account;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +21,7 @@ public class FirebaseAccountQuery extends Fragment {
     public static void createAccount(FirebaseFirestore db, Map<String, Object> accountToInsert, Context context) {
 
 
-        db.collection("accounts")
+        db.collection(ACCOUNTS_COLLECTION_PATH)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -34,14 +33,14 @@ public class FirebaseAccountQuery extends Fragment {
                         }
 
                         // Add a new document with a generated ID
-                        db.collection("accounts")
+                        db.collection(ACCOUNTS_COLLECTION_PATH)
                                 .add(accountToInsert)
                                 .addOnSuccessListener(documentReference -> {
                                     Log.d("SAVE", "DocumentSnapshot added with ID: " + documentReference.getId());
                                     Toast.makeText(context, "Account added", Toast.LENGTH_SHORT).show();
 
                                     String docId = documentReference.getId();
-                                    db.collection("accounts").document(documentReference.getId()).update("docId", docId);
+                                    db.collection(ACCOUNTS_COLLECTION_PATH).document(documentReference.getId()).update("docId", docId);
                                 })
                                 .addOnFailureListener(e -> {
                                     Log.w("SAVE", "Error adding document", e);
