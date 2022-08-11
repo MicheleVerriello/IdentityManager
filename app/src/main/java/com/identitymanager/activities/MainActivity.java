@@ -216,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
 
         // As per Documentation: The minimum repeat interval that can be defined is 15 minutes
         // (same as the JobScheduler API), but in practice 15 doesn't work. Using 16 here
-        PeriodicWorkRequest request = new PeriodicWorkRequest.Builder(NotificationWorker.class,16, TimeUnit.MINUTES).build();
+        PeriodicWorkRequest request = new PeriodicWorkRequest.Builder(NotificationWorker.class,1, TimeUnit.DAYS).build();
 
         // to schedule a unique work, no matter how many times app is opened i.e. startServiceViaWorker gets called
         // do check for AutoStart permission
