@@ -39,4 +39,5 @@
     <string name="account_details">Dettagli account</string>
     <string name="delete">Elimina</string>
     <string name="modify">Modifica</string>
+    <string name="bluetooth_not_supported">Bluetooth non supportato</string>
 </resources>

@@ -1,7 +1,12 @@
 package com.identitymanager.fragments;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +43,8 @@ public class SettingsFragment extends Fragment {
     SharedPreferences.Editor editorRestart;
     SharedPreferences.Editor editorMode;
 
+    private final Integer REQUEST_ENABLE_BT = 1;
+
     // New Trusted
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
@@ -59,7 +66,7 @@ public class SettingsFragment extends Fragment {
         changeLanguage(settView);
         darkMode(settView);
         trust(settView);
-        setup_newTrusted(settView);
+        createNewTrustedDialog(settView);
 
         return settView;
     }
@@ -218,46 +225,36 @@ public class SettingsFragment extends Fragment {
         });
     }
 
-    public void createNewTrustedDialog(){
+    public void createNewTrustedDialog(View view){
         dialogBuilder = new AlertDialog.Builder(getActivity());
         final View newTrusted_popupView = getLayoutInflater().inflate(R.layout.new_trusted_popup, null);
-        editTextNickname_newTrusted = (EditText) newTrusted_popupView.findViewById(R.id.editTextNickname_newTrusted);
-        editTextEmail_newTrusted = (EditText) newTrusted_popupView.findViewById(R.id.editTextEmail_newTrusted);
+        editTextNickname_newTrusted = newTrusted_popupView.findViewById(R.id.editTextNickname_newTrusted);
+        editTextEmail_newTrusted = newTrusted_popupView.findViewById(R.id.editTextEmail_newTrusted);
 
-        buttonAdd_newTrusted = (Button) newTrusted_popupView.findViewById(R.id.buttonAdd_newTrusted);
-        buttonCancel_newTrusted = (Button) newTrusted_popupView.findViewById(R.id.buttonCancel_newTrusted);
+        buttonAdd_newTrusted = newTrusted_popupView.findViewById(R.id.buttonAdd_newTrusted);
+        buttonCancel_newTrusted =  newTrusted_popupView.findViewById(R.id.buttonCancel_newTrusted);
 
         dialogBuilder.setView(newTrusted_popupView);
         dialog = dialogBuilder.create();
         dialog.show();
 
-        buttonAdd_newTrusted.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //salva su database
-            }
-        });
+        // activate bluetooth if not active
+        BluetoothManager bluetoothManager = getActivity().getSystemService(BluetoothManager.class);
+        BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
 
-        buttonCancel_newTrusted.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //salva su database
-            }
-        });
+        if (!bluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        }
 
+        // searching for nearby devices
 
-    }
+        // click on the device to connect
 
-    public void setup_newTrusted(View settView){
+        // send a trust request to connected device
 
-        Button newTrusted = settView.findViewById(R.id.button_newTrusted);
+        // wait for a response
 
-        newTrusted.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                createNewTrustedDialog();
-            }
-        });
-
+        // if response is OK save the trust into db
     }
 }
