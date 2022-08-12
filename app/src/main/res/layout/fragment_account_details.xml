@@ -14,7 +14,8 @@
             style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Account Details">
+            app:titleTextColor="?attr/topColorText"
+            app:title="@string/account_details">
         </com.google.android.material.appbar.MaterialToolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -39,10 +40,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="65dp"
-                android:text="accountName :"
-                android:textColor="@color/black"
+                android:text="@string/account_name"
+                android:textColor="?attr/insideText"
                 android:textSize="25dp"
-                android:textStyle="bold"></TextView>
+                android:textStyle="bold">
+            </TextView>
 
             <TextView
                 android:id="@+id/account_name_details"
@@ -50,8 +52,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="6dp"
                 android:text=" "
-                android:textColor="@color/black"
-                android:textSize="25dp"></TextView>
+                android:textColor="?attr/insideText"
+                android:textSize="25dp">
+            </TextView>
 
         </LinearLayout>
 
@@ -64,10 +67,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="65dp"
-                android:text="category :"
-                android:textColor="@color/black"
+                android:text="@string/category"
+                android:textColor="?attr/insideText"
                 android:textSize="25dp"
-                android:textStyle="bold"></TextView>
+                android:textStyle="bold">
+            </TextView>
 
             <TextView
                 android:id="@+id/account_category_details"
@@ -75,8 +79,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="6dp"
                 android:text=" "
-                android:textColor="@color/black"
-                android:textSize="25dp"></TextView>
+                android:textColor="?attr/insideText"
+                android:textSize="25dp">
+            </TextView>
 
         </LinearLayout>
 
@@ -89,10 +94,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="65dp"
-                android:text="email :"
-                android:textColor="@color/black"
+                android:text="@string/email"
+                android:textColor="?attr/insideText"
                 android:textSize="25dp"
-                android:textStyle="bold"></TextView>
+                android:textStyle="bold">
+            </TextView>
 
             <TextView
                 android:id="@+id/account_email_details"
@@ -100,8 +106,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="6dp"
                 android:text=" "
-                android:textColor="@color/black"
-                android:textSize="25dp"></TextView>
+                android:textColor="?attr/insideText"
+                android:textSize="25dp">
+            </TextView>
 
         </LinearLayout>
 
@@ -114,10 +121,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="65dp"
-                android:text="username :"
-                android:textColor="@color/black"
+                android:text="@string/username"
+                android:textColor="?attr/insideText"
                 android:textSize="25dp"
-                android:textStyle="bold"></TextView>
+                android:textStyle="bold">
+            </TextView>
 
             <TextView
                 android:id="@+id/account_username_details"
@@ -125,8 +133,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="6dp"
                 android:text=" "
-                android:textColor="@color/black"
-                android:textSize="25dp"></TextView>
+                android:textColor="?attr/insideText"
+                android:textSize="25dp">
+            </TextView>
 
         </LinearLayout>
 
@@ -139,10 +148,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="65dp"
-                android:text="password :"
-                android:textColor="@color/black"
+                android:text="@string/password"
+                android:textColor="?attr/insideText"
                 android:textSize="25dp"
-                android:textStyle="bold"></TextView>
+                android:textStyle="bold">
+            </TextView>
 
             <TextView
                 android:id="@+id/account_password_details"
@@ -150,8 +160,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="6dp"
                 android:text=" "
-                android:textColor="@color/black"
-                android:textSize="25dp"></TextView>
+                android:textColor="?attr/insideText"
+                android:textSize="25dp">
+            </TextView>
 
         </LinearLayout>
 
@@ -164,10 +175,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="65dp"
-                android:text="passwordStrength :"
-                android:textColor="@color/black"
+                android:text="@string/password_strength"
+                android:textColor="?attr/insideText"
                 android:textSize="25dp"
-                android:textStyle="bold"></TextView>
+                android:textStyle="bold">
+            </TextView>
 
             <TextView
                 android:id="@+id/account_password_strength_details"
@@ -175,8 +187,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="6dp"
                 android:text=" "
-                android:textColor="@color/black"
-                android:textSize="25dp"></TextView>
+                android:textColor="?attr/insideText"
+                android:textSize="25dp">
+            </TextView>
 
         </LinearLayout>
 
@@ -184,27 +197,29 @@
 
     <Button
         android:id="@+id/button_delete"
-        android:layout_width="119dp"
+        android:layout_width="135dp"
         android:layout_height="59dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="17dp"
         android:layout_marginBottom="40dp"
-        android:text="Delete"
+        android:text="@string/delete"
+        android:textColor="?attr/topColorText"
         android:textSize="18dp"
         android:textStyle="bold" />
 
     <Button
         android:id="@+id/button_modify"
-        android:layout_width="119dp"
+        android:layout_width="135dp"
         android:layout_height="59dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="267dp"
+        android:layout_marginStart="257dp"
         android:layout_marginBottom="40dp"
-        android:text="Modify"
+        android:text="@string/modify"
+        android:textColor="?attr/topColorText"
         android:textSize="18dp"
         android:textStyle="bold" />
 

@@ -9,7 +9,7 @@
         android:id="@+id/accounts_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="58dp">
+        android:layout_marginTop="80dp">
     </androidx.recyclerview.widget.RecyclerView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -18,13 +18,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="330dp"
         android:layout_marginTop="580dp"
-        android:backgroundTint="#FF6200EE"
+        android:backgroundTint="?attr/plusButtonColor"
         android:clickable="true"
         android:contentDescription="@string/fab_button"
         app:fabCustomSize="64dp"
         app:maxImageSize="32dp"
         app:srcCompat="@drawable/ic_baseline_add_circle_outline_24"
-        app:tint="@null"
+        app:tint="?attr/topColorText"
         tools:ignore="SpeakableTextPresentCheck,RedundantDescriptionCheck" />
 
     <com.google.android.material.appbar.AppBarLayout
@@ -34,6 +34,7 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            app:titleTextColor="?attr/topColorText"
             app:title="Dashboard"
             app:menu="@menu/top_app_bar"
             style="@style/Widget.MaterialComponents.Toolbar.Primary">

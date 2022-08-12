@@ -14,7 +14,8 @@
             style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Modify Account">
+            app:titleTextColor="?attr/topColorText"
+            app:title="@string/modify_account">
         </com.google.android.material.appbar.MaterialToolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -29,7 +30,8 @@
         android:layout_marginTop="111dp"
         android:layout_marginEnd="239dp"
         android:layout_marginBottom="534dp"
-        android:text="Account Name"
+        android:text="@string/account_name_text"
+        android:textColor="?attr/insideText"
         android:textSize="20sp"
         android:textStyle="bold" />
 
@@ -44,6 +46,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="526dp"
         android:background="@drawable/custom_input"
+        android:backgroundTint="?attr/insideText"
         android:ems="10"
         android:inputType="textPersonName"
         android:visibility="visible"
@@ -59,9 +62,10 @@
         android:layout_marginTop="193dp"
         android:layout_marginEnd="239dp"
         android:layout_marginBottom="453dp"
-        android:text="Username"
+        android:text="@string/username_text"
         android:textSize="20sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="?attr/insideText"/>
 
     <EditText
         android:id="@+id/editTextUsernameModify"
@@ -74,6 +78,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="444dp"
         android:background="@drawable/custom_input"
+        android:backgroundTint="?attr/insideText"
         android:ems="10"
         android:inputType="textPersonName"
         android:visibility="visible"
@@ -90,9 +95,10 @@
         android:layout_marginTop="272dp"
         android:layout_marginEnd="239dp"
         android:layout_marginBottom="377dp"
-        android:text="Email"
+        android:text="@string/email_text"
         android:textSize="20sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="?attr/insideText"/>
 
     <EditText
         android:id="@+id/editTextEmailModify"
@@ -105,6 +111,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="370dp"
         android:background="@drawable/custom_input"
+        android:backgroundTint="?attr/insideText"
         android:ems="10"
         android:inputType="textEmailAddress"
         android:visibility="visible"
@@ -118,9 +125,10 @@
         android:layout_alignParentBottom="true"
         android:layout_marginStart="28dp"
         android:layout_marginBottom="292dp"
-        android:text="Password"
+        android:text="@string/password_text"
         android:textSize="20sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="?attr/insideText"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="208dp"
@@ -131,7 +139,8 @@
         android:layout_marginTop="261dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="280dp"
-        android:hint="Enter your password"
+        android:hint="@string/enter_your_password"
+        android:textColorHint="?attr/insideText"
         app:boxStrokeWidth="0dp"
         app:boxStrokeWidthFocused="0dp"
         app:passwordToggleEnabled="true">
@@ -141,10 +150,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/custom_input"
+            android:backgroundTint="?attr/insideText"
             android:ems="5"
             android:inputType="textPassword"
             android:visibility="visible"
-            tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+            tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -158,7 +168,7 @@
         android:layout_marginBottom="327dp"
         android:textColor="#FF0000"
         android:textSize="16sp"
-        android:textStyle="normal" />
+        android:textStyle="normal"/>
 
     <TextView
         android:id="@+id/textViewStrenghtModify"
@@ -169,7 +179,7 @@
         android:layout_marginEnd="2dp"
         android:layout_marginBottom="240dp"
         android:textSize="16sp"
-        android:textStyle="normal" />
+        android:textStyle="normal"/>
 
     <Button
         android:id="@+id/buttonSuggestModify"
@@ -180,9 +190,10 @@
         android:layout_marginStart="182dp"
         android:layout_marginTop="398dp"
         android:layout_marginBottom="228dp"
-        android:text="Suggest"
+        android:text="@string/suggest"
         android:textSize="10dp"
-        tools:ignore="TouchTargetSizeCheck" />
+        android:textColor="?attr/topColorText"
+        tools:ignore="TouchTargetSizeCheck"/>
 
     <TextView
         android:id="@+id/textView2FAModify"
@@ -194,7 +205,8 @@
         android:layout_marginBottom="170dp"
         android:text="2FA?"
         android:textSize="20sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="?attr/insideText"/>
 
     <RadioGroup
         android:id="@+id/radioGroup2FAModify"
@@ -204,23 +216,26 @@
         android:layout_alignParentBottom="true"
         android:layout_marginStart="138dp"
         android:layout_marginBottom="170dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:textColor="?attr/insideText">
 
         <RadioButton
             android:id="@+id/radioButton2FA1Modify"
             android:layout_width="100dp"
             android:layout_height="30dp"
-            android:text="YES"
+            android:text="@string/yes"
             android:textSize="16sp"
-            tools:ignore="TouchTargetSizeCheck" />
+            android:textColor="?attr/insideText"
+            tools:ignore="TouchTargetSizeCheck"/>
 
         <RadioButton
             android:id="@+id/radioButton2FA2Modify"
             android:layout_width="100dp"
             android:layout_height="30dp"
-            android:text="NO"
+            android:text="@string/no"
             android:textSize="16sp"
-            tools:ignore="TouchTargetSizeCheck" />
+            android:textColor="?attr/insideText"
+            tools:ignore="TouchTargetSizeCheck"/>
     </RadioGroup>
 
     <TextView
@@ -231,9 +246,10 @@
         android:layout_alignParentBottom="true"
         android:layout_marginStart="28dp"
         android:layout_marginBottom="104dp"
-        android:text="Category"
+        android:text="@string/category_text"
         android:textSize="20sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="?attr/insideText"/>
 
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
@@ -244,13 +260,15 @@
         android:layout_marginStart="138dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="87dp"
-        android:hint="Select category">
+        android:hint="@string/select_category"
+        android:textColorHint="?attr/insideText">
 
         <AutoCompleteTextView
             android:id="@+id/autoCompleteTxtModify"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="none">
+            android:inputType="none"
+            android:textColor="?attr/insideText">
         </AutoCompleteTextView>
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -263,7 +281,8 @@
         android:layout_alignParentBottom="true"
         android:layout_marginStart="253dp"
         android:layout_marginBottom="13dp"
-        android:text="Save" />
+        android:text="@string/save"
+        android:textColor="?attr/topColorText"/>
 
     <Button
         android:id="@+id/buttonGoBack"
@@ -273,6 +292,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginStart="32dp"
         android:layout_marginBottom="13dp"
-        android:text="Go back" />
+        android:text="@string/go_back"
+        android:textColor="?attr/topColorText"/>
 
 </RelativeLayout>

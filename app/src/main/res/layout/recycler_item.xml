@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardElevation="8dp"
     app:cardCornerRadius="8dp"
+    app:cardBackgroundColor="?attr/listColor"
     android:layout_margin="16dp">
 
     <LinearLayout
@@ -22,10 +23,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="accountName :"
-                android:textColor="@color/black"
+                android:text="@string/account_name"
                 android:textSize="20dp"
-                android:textStyle="bold">
+                android:textStyle="bold"
+                android:textColor="?attr/insideText">>
             </TextView>
 
             <TextView
@@ -34,8 +35,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="6dp"
                 android:text=" "
-                android:textColor="@color/black"
-                android:textSize="20dp">
+                android:textSize="20dp"
+                android:textColor="?attr/insideText">>
             </TextView>
 
         </LinearLayout>
@@ -49,10 +50,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="category :"
-                android:textColor="@color/black"
+                android:text="@string/category"
                 android:textSize="20dp"
-                android:textStyle="bold">
+                android:textStyle="bold"
+                android:textColor="?attr/insideText">>
             </TextView>
 
             <TextView
@@ -61,8 +62,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="6dp"
                 android:text=" "
-                android:textColor="@color/black"
-                android:textSize="20dp">
+                android:textSize="20dp"
+                android:textColor="?attr/insideText">>
             </TextView>
 
         </LinearLayout>
@@ -76,10 +77,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="email :"
-                android:textColor="@color/black"
+                android:text="@string/email"
                 android:textSize="20dp"
-                android:textStyle="bold">
+                android:textStyle="bold"
+                android:textColor="?attr/insideText">>
             </TextView>
 
             <TextView
@@ -88,8 +89,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="6dp"
                 android:text=" "
-                android:textColor="@color/black"
-                android:textSize="20dp">
+                android:textSize="20dp"
+                android:textColor="?attr/insideText">>
             </TextView>
 
         </LinearLayout>
@@ -103,10 +104,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="username :"
-                android:textColor="@color/black"
+                android:text="@string/username"
                 android:textSize="20dp"
-                android:textStyle="bold">
+                android:textStyle="bold"
+                android:textColor="?attr/insideText">>
             </TextView>
 
             <TextView
@@ -115,8 +116,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="6dp"
                 android:text=" "
-                android:textColor="@color/black"
-                android:textSize="20dp">
+                android:textSize="20dp"
+                android:textColor="?attr/insideText">>
             </TextView>
 
         </LinearLayout>
@@ -130,10 +131,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="password :"
-                android:textColor="@color/black"
+                android:text="@string/password"
                 android:textSize="20dp"
-                android:textStyle="bold">
+                android:textStyle="bold"
+                android:textColor="?attr/insideText">>
             </TextView>
 
             <TextView
@@ -142,8 +143,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="6dp"
                 android:text=" "
-                android:textColor="@color/black"
-                android:textSize="20dp">
+                android:textSize="20dp"
+                android:textColor="?attr/insideText">>
             </TextView>
 
         </LinearLayout>
@@ -157,10 +158,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="passwordStrength :"
-                android:textColor="@color/black"
+                android:text="@string/password_strength"
                 android:textSize="20dp"
-                android:textStyle="bold">
+                android:textStyle="bold"
+                android:textColor="?attr/insideText">>
             </TextView>
 
             <TextView
@@ -169,8 +170,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="6dp"
                 android:text=" "
-                android:textColor="@color/black"
-                android:textSize="20dp">
+                android:textSize="20dp"
+                android:textColor="?attr/insideText">>
             </TextView>
 
         </LinearLayout>

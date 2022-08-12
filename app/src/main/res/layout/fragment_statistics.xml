@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <ScrollView
@@ -13,6 +14,20 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <com.google.android.material.appbar.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.appbar.MaterialToolbar
+                    style="@style/Widget.MaterialComponents.Toolbar.Primary"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:titleTextColor="?attr/topColorText"
+                    app:title="Statistics">
+                </com.google.android.material.appbar.MaterialToolbar>
+
+            </com.google.android.material.appbar.AppBarLayout>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -20,7 +35,8 @@
                 android:gravity="center"
                 android:text="Password security level"
                 android:textSize="30sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="?attr/insideText"/>
 
             <com.anychart.AnyChartView
                 android:id="@+id/any_chart_view"
@@ -28,7 +44,7 @@
                 android:layout_height="437dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="30dp"
-                android:layout_marginBottom="60dp" />
+                android:layout_marginBottom="60dp"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -38,13 +54,15 @@
                 android:gravity="center"
                 android:text="Weak passwords"
                 android:textSize="30sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="?attr/insideText"/>
 
             <ListView
                 android:id="@+id/category_weak_passwords"
                 android:layout_width="match_parent"
                 android:layout_height="188dp"
-                android:layout_marginBottom="5dp" />
+                android:layout_marginBottom="5dp"
+                android:textColor="?attr/insideText"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -54,13 +72,15 @@
                 android:gravity="center"
                 android:text="Recommended passwords to change"
                 android:textSize="30sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="?attr/insideText"/>
 
             <ListView
                 android:id="@+id/category_to_change_passwords"
                 android:layout_width="match_parent"
                 android:layout_height="184dp"
-                android:layout_marginBottom="5dp" />
+                android:layout_marginBottom="5dp"
+                android:textColor="?attr/insideText"/>
 
         </LinearLayout>
 
