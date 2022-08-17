@@ -87,31 +87,31 @@ public class AccountDetailsFragment extends Fragment {
     public void deleteProcess(FirebaseFirestore db, Fragment fragment, String accountNameDetails) {
 
         db.collection("accounts")
-                .whereEqualTo("accountName", accountNameDetails)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            db.collection("accounts").document(document.getId())
-                                    .delete()
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            Log.d("DELETE OK", "DocumentSnapshot successfully deleted!");
-                                            Toast.makeText(getContext(), "Account deleted", Toast.LENGTH_SHORT).show();
-                                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Log.d("DELETE FAILURE", "Error deleting document");
-                                            Toast.makeText(getActivity(), "Unable to delete account", Toast.LENGTH_SHORT).show();
-                                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
-                                        }
-                                    });
+        .whereEqualTo("accountName", accountNameDetails)
+        .get()
+        .addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    db.collection("accounts").document(document.getId())
+                    .delete()
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d("DELETE OK", "DocumentSnapshot successfully deleted!");
+                            Toast.makeText(getContext(), "Account deleted", Toast.LENGTH_SHORT).show();
+                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                         }
-                    }
-                });
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d("DELETE FAILURE", "Error deleting document");
+                            Toast.makeText(getActivity(), "Unable to delete account", Toast.LENGTH_SHORT).show();
+                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                        }
+                    });
+                }
+            }
+        });
     }
 }
