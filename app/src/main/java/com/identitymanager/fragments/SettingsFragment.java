@@ -46,16 +46,10 @@ public class SettingsFragment extends Fragment {
     private final Integer REQUEST_ENABLE_BT = 1;
 
     // New Trusted
-    private AlertDialog.Builder dialogBuilder;
-    private AlertDialog dialog;
-    private EditText editTextNickname_newTrusted, editTextEmail_newTrusted;
-    private Button buttonAdd_newTrusted, buttonCancel_newTrusted;
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Nullable
@@ -65,8 +59,6 @@ public class SettingsFragment extends Fragment {
 
         changeLanguage(settView);
         darkMode(settView);
-        trust(settView);
-        createNewTrustedDialog(settView);
 
         return settView;
     }
@@ -174,90 +166,40 @@ public class SettingsFragment extends Fragment {
         getActivity().recreate();
     }
 
-
-
-
-    public void trust(View settView){
-
-        ExpandableListView expandableListView;
-        ExpandableListAdapter expandableListAdapter;
-        List<String> expandableListTitle;
-        HashMap<String, List<String>> expandableListDetail;
-
-
-        expandableListView = (ExpandableListView) settView.findViewById(R.id.youTrust);
-        expandableListDetail = ExpandableListDataPump.getData();
-        expandableListTitle = new ArrayList<String>(expandableListDetail.keySet());
-        expandableListAdapter = new CustomExpandableListAdapter(getActivity(), expandableListTitle, expandableListDetail);
-        expandableListView.setAdapter(expandableListAdapter);
-        expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-
-            @Override
-            public void onGroupExpand(int groupPosition) {
-                Toast.makeText(getActivity().getApplicationContext(),
-                        expandableListTitle.get(groupPosition) + " List Expanded.",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        expandableListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
-
-            @Override
-            public void onGroupCollapse(int groupPosition) {
-                Toast.makeText(getActivity().getApplicationContext(),
-                        expandableListTitle.get(groupPosition) + " List Collapsed.",
-                        Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
-        expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v,
-                                        int groupPosition, int childPosition, long id) {
-                Toast.makeText(
-                        getActivity().getApplicationContext(),
-                        expandableListTitle.get(groupPosition)
-                                + " -> "
-                                + expandableListDetail.get(
-                                expandableListTitle.get(groupPosition)).get(
-                                childPosition), Toast.LENGTH_SHORT
-                ).show();
-                return false;
-            }
-        });
-    }
-
-    public void createNewTrustedDialog(View view){
-        dialogBuilder = new AlertDialog.Builder(getActivity());
-        final View newTrusted_popupView = getLayoutInflater().inflate(R.layout.new_trusted_popup, null);
-        editTextNickname_newTrusted = newTrusted_popupView.findViewById(R.id.editTextNickname_newTrusted);
-        editTextEmail_newTrusted = newTrusted_popupView.findViewById(R.id.editTextEmail_newTrusted);
-
-        buttonAdd_newTrusted = newTrusted_popupView.findViewById(R.id.buttonAdd_newTrusted);
-        buttonCancel_newTrusted =  newTrusted_popupView.findViewById(R.id.buttonCancel_newTrusted);
-
-        dialogBuilder.setView(newTrusted_popupView);
-        dialog = dialogBuilder.create();
-        dialog.show();
-
-        // activate bluetooth if not active
-        BluetoothManager bluetoothManager = getActivity().getSystemService(BluetoothManager.class);
-        BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
-
-        if (!bluetoothAdapter.isEnabled()) {
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-        }
-
-        // searching for nearby devices
-
-        // click on the device to connect
-
-        // send a trust request to connected device
-
-        // wait for a response
-
-        // if response is OK save the trust into db
-    }
+//    public void createNewTrustedDialog(View view){
+//
+//        dialogBuilder = new AlertDialog.Builder(getActivity());
+//        final View newTrusted_popupView = getLayoutInflater().inflate(R.layout.new_trusted_popup, null);
+//        editTextNickname_newTrusted = newTrusted_popupView.findViewById(R.id.editTextNickname_newTrusted);
+//        editTextEmail_newTrusted = newTrusted_popupView.findViewById(R.id.editTextEmail_newTrusted);
+//
+//        buttonAdd_newTrusted = newTrusted_popupView.findViewById(R.id.buttonAdd_newTrusted);
+//        buttonCancel_newTrusted =  newTrusted_popupView.findViewById(R.id.buttonCancel_newTrusted);
+//
+//        dialogBuilder.setView(newTrusted_popupView);
+//        dialog = dialogBuilder.create();
+//        dialog.show();
+//
+//        // activate bluetooth if not active
+//        bluetoothManager = getActivity().getSystemService(BluetoothManager.class);
+//
+//        System.out.println(bluetoothManager.toString());
+//
+//        bluetoothAdapter = bluetoothManager.getAdapter();
+//
+//        if (bluetoothAdapter != null && !bluetoothAdapter.isEnabled()) {
+//            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+//            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+//        }
+//
+//        // searching for nearby devices
+//
+//        // click on the device to connect
+//
+//        // send a trust request to connected device
+//
+//        // wait for a response
+//
+//        // if response is OK save the trust into db
+//    }
 }
