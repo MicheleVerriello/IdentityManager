@@ -21,8 +21,8 @@
     <string name="account_name">Nome account :</string>
     <string name="category">Categoria :</string>
     <string name="email">Email :</string>
-    <string name="username">Nome utente :</string>
-    <string name="password">Password :</string>
+    <string name="username_account_detail">Nome utente :</string>
+    <string name="password_account_password">Password :</string>
     <string name="password_strength">Sicurezza password :</string>
     <string name="account_name_text">Nome account</string>
     <string name="category_text">Categoria</string>
