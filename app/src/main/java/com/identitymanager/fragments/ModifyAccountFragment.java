@@ -32,6 +32,7 @@ import com.identitymanager.utilities.security.PasswordStrength;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -128,7 +129,11 @@ public class ModifyAccountFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 if (!EMAIL_PATTERN.matcher(s).matches()) {
-                    email.setError("Invalid email");
+                    if (Locale.getDefault().getLanguage().equals("it")) {
+                        email.setError("Email non valida");
+                    } else {
+                        email.setError("Invalid email");
+                    }
                 }
             }
         });
@@ -222,30 +227,52 @@ public class ModifyAccountFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 if (PASSWORD_PATTERN_MEDIUM_1.matcher(s).matches() || PASSWORD_PATTERN_MEDIUM_2.matcher(s).matches()) {
                     error.setText(" ");
-                    strength.setText("MEDIUM");
+                    if (Locale.getDefault().getLanguage().equals("it")) {
+                        strength.setText("MEDIA");
+                    } else {
+                        strength.setText("MEDIUM");
+                    }
                     strength.setTextColor(Color.parseColor("#FFA500"));
                     strengthPassword = PasswordStrength.MEDIUM;
                 }
                 if (PASSWORD_PATTERN_STRONG.matcher(s).matches()) {
                     error.setText(" ");
-                    strength.setText("STRONG");
+                    if (Locale.getDefault().getLanguage().equals("it")) {
+                        strength.setText("FORTE");
+                    } else {
+                        strength.setText("STRONG");
+                    }
                     strength.setTextColor(Color.GREEN);
                     strengthPassword = PasswordStrength.STRONG;
                 }
                 if (!PASSWORD_PATTERN_MEDIUM_1.matcher(s).matches() && !PASSWORD_PATTERN_MEDIUM_2.matcher(s).matches() && !PASSWORD_PATTERN_STRONG.matcher(s).matches()) {
                     error.setText(" ");
-                    strength.setText("WEAK");
+                    if (Locale.getDefault().getLanguage().equals("it")) {
+                        strength.setText("DEBOLE");
+                    } else {
+                        strength.setText("WEAK");
+                    }
                     strength.setTextColor(Color.RED);
                     strengthPassword = PasswordStrength.WEAK;
                 }
                 if (!PASSWORD_SPACES.matcher(s).matches()) {
-                    error.setText("No white spaces allowed");
-                    strength.setText("ERROR");
+                    if (Locale.getDefault().getLanguage().equals("it")) {
+                        error.setText("Gli spazi non sono ammessi");
+                        strength.setText("ERRORE");
+                    } else {
+                        error.setText("No white spaces allowed");
+                        strength.setText("ERROR");
+                    }
                     strength.setTextColor(Color.RED);
                 }
                 if (password.length() > 24) {
-                    error.setText("Password too long");
-                    strength.setText("ERROR");
+                    if (Locale.getDefault().getLanguage().equals("it")) {
+                        error.setText("Password troppo lunga");
+                        strength.setText("ERRORE");
+                    } else {
+                        error.setText("Password too long");
+                        strength.setText("ERROR");
+                    }
                     strength.setTextColor(Color.RED);
                 }
             }
@@ -364,7 +391,11 @@ public class ModifyAccountFragment extends Fragment {
                     modifyAccount(db, accountToUpdate, oldAccountNameDetails, getContext());
 
                 } else {
-                    Toast.makeText(getContext(), "Error, fill in the fields correctly", Toast.LENGTH_SHORT).show();
+                    if (Locale.getDefault().getLanguage().equals("it")) {
+                        Toast.makeText(getContext(), "Errore, riempi i campi correttamente", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), "Error, fill in the fields correctly", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -378,7 +409,11 @@ public class ModifyAccountFragment extends Fragment {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             if (document.getData().get("accountName").equals(accountToUpdate.get("accountName"))) {
-                                Toast.makeText(context, "Name account already exists ", Toast.LENGTH_SHORT).show();
+                                if (Locale.getDefault().getLanguage().equals("it")) {
+                                    Toast.makeText(context, "Nome dell'account già esistente", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(context, "Name account already exists", Toast.LENGTH_SHORT).show();
+                                }
                                 return;
 
                             }
@@ -400,7 +435,11 @@ public class ModifyAccountFragment extends Fragment {
                                                         "category", accountToUpdate.get("category"),
                                                         "lastUpdate", accountToUpdate.get("lastUpdate"));
 
-                                                Toast.makeText(context, "Account modified", Toast.LENGTH_SHORT).show();
+                                                if (Locale.getDefault().getLanguage().equals("it")) {
+                                                    Toast.makeText(context, "Account modificato", Toast.LENGTH_SHORT).show();
+                                                } else {
+                                                    Toast.makeText(context, "Account modified", Toast.LENGTH_SHORT).show();
+                                                }
                                                 Fragment fragment = new DashboardFragment();
                                                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                                             }

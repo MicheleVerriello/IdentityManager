@@ -79,7 +79,6 @@ public class SettingsFragment extends Fragment {
 
         if (count == 0) {
             enRb.setChecked(true);
-            ((MainActivity) getActivity()).setChangeLanguageItalian();
         }
 
         saveLanguagePreferences(sP, count, enRb, itRb, lang);
@@ -90,9 +89,11 @@ public class SettingsFragment extends Fragment {
                 if (i == R.id.radio_button1) {
                     lang.updateResources("en");
                     editor.putInt("sP", 1);
+                    ((MainActivity) getActivity()).setChangeLanguageEnglish();
                 } else {
                     lang.updateResources("it");
                     editor.putInt("sP", 2);
+                    ((MainActivity) getActivity()).setChangeLanguageItalian();
                 }
                 editor.commit();
 
@@ -131,8 +132,6 @@ public class SettingsFragment extends Fragment {
 
         if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES || check == 2) {
             aSwitch.setChecked(true);
-            ((MainActivity) getActivity()).darkModeActionBar();
-            ((MainActivity) getActivity()).setDarkTheme();
         }
 
         aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -140,11 +139,9 @@ public class SettingsFragment extends Fragment {
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (aSwitch.isChecked()) {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    ((MainActivity) getActivity()).setDarkTheme();
                     editorMode.putInt("check", 2);
                 } else {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    ((MainActivity) getActivity()).setLightTheme();
                     editorMode.putInt("check", 1);
                 }
                 editorMode.commit();

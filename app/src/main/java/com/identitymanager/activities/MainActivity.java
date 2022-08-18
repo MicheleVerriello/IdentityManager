@@ -3,15 +3,14 @@ package com.identitymanager.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.work.ExistingPeriodicWorkPolicy;
@@ -44,8 +43,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        getSupportActionBar().hide();
         startNotificationServiceViaWorker();
-
 
         Bundle bundle = getIntent().getExtras();
         int idFragment = bundle.getInt("fragment");
@@ -55,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sharedLanguage = getSharedPreferences("language", 0);
         int refresh = sharedLanguage.getInt("refresh", 0);
+        Log.d("refresh", "refresh " + refresh);
         editorLanguage = sharedLanguage.edit();
 
         SharedPreferences sharedTheme = getSharedPreferences("color", 0);
@@ -95,10 +95,6 @@ public class MainActivity extends AppCompatActivity {
                     identifyLanguagePreference(refresh);
                     getIntent().putExtra("load", 2);
                     recreate();
-                }
-
-                if (theme == 2) {
-                    darkModeActionBar();
                 }
 
                 break;
@@ -149,19 +145,17 @@ public class MainActivity extends AppCompatActivity {
         return theme;
     }
 
-    public void darkModeActionBar() {
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(getApplicationContext(), R.color.purple_500)));
-    }
-
     public void restoreChangeValue() {
         getIntent().putExtra("change_value", 0);
     }
 
     public void identifyLanguagePreference(int refresh) {
         if (refresh == 1) {
+            Log.d("ENTRATO ENG", "ENTRATO ENG");
             LanguageManager lang = new LanguageManager(getBaseContext());
             lang.updateResources("en");
         } else if (refresh == 2) {
+            Log.d("ENTRATO IT", "ENTRATO IT");
             LanguageManager lang = new LanguageManager(getBaseContext());
             lang.updateResources("it");
         }
@@ -184,16 +178,6 @@ public class MainActivity extends AppCompatActivity {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
             setTheme(R.style.DarkTheme);
         }
-    }
-
-    public void setLightTheme() {
-        editorTheme.putInt("theme", 1);
-        editorTheme.commit();
-    }
-
-    public void setDarkTheme() {
-        editorTheme.putInt("theme", 2);
-        editorTheme.commit();
     }
 
     public void startService() {

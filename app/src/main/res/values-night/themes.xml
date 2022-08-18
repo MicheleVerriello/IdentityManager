@@ -6,11 +6,16 @@
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
+        <item name="colorSecondary">@color/purple_500</item>
+        <item name="colorSecondaryVariant">@color/purple_500</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/purple_500</item>
         <!-- Customize your theme here. -->
+        <item name="topColorText">@color/white</item>
+        <item name="insideText">@color/white</item>
+        <item name="plusButtonColor">@color/purple_500</item>
+        <item name="listColor">#2E2E2E</item>
+        <item name="symbolsColor">@color/white</item>
     </style>
 </resources>

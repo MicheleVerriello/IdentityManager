@@ -20,6 +20,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.identitymanager.R;
 import com.identitymanager.utilities.security.AES;
 
+import java.util.Locale;
+
 public class AccountDetailsFragment extends Fragment {
 
     @Override
@@ -87,31 +89,39 @@ public class AccountDetailsFragment extends Fragment {
     public void deleteProcess(FirebaseFirestore db, Fragment fragment, String accountNameDetails) {
 
         db.collection("accounts")
-        .whereEqualTo("accountName", accountNameDetails)
-        .get()
-        .addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    db.collection("accounts").document(document.getId())
-                    .delete()
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d("DELETE OK", "DocumentSnapshot successfully deleted!");
-                            Toast.makeText(getContext(), "Account deleted", Toast.LENGTH_SHORT).show();
-                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                .whereEqualTo("accountName", accountNameDetails)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            db.collection("accounts").document(document.getId())
+                                    .delete()
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Log.d("DELETE OK", "DocumentSnapshot successfully deleted!");
+                                            if (Locale.getDefault().getLanguage().equals("it")) {
+                                                Toast.makeText(getContext(), "Account eliminato", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                Toast.makeText(getContext(), "Account deleted", Toast.LENGTH_SHORT).show();
+                                            }
+                                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.d("DELETE FAILURE", "Error deleting document");
+                                            if (Locale.getDefault().getLanguage().equals("it")) {
+                                                Toast.makeText(getActivity(), "Errore nell'eliminare l'account", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                Toast.makeText(getActivity(), "Unable to delete account", Toast.LENGTH_SHORT).show();
+                                            }
+                                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                                        }
+                                    });
                         }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d("DELETE FAILURE", "Error deleting document");
-                            Toast.makeText(getActivity(), "Unable to delete account", Toast.LENGTH_SHORT).show();
-                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
-                        }
-                    });
-                }
-            }
-        });
+                    }
+                });
     }
 }
