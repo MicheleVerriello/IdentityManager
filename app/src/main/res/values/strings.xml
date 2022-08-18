@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">IdentityManager</string>
-    <string name="login">Welcome</string>
+    <string name="login">Login</string>
+    <string name="welcome">Welcome</string>
     <string name="change_language">Change Language</string>
     <string name="change_language_description">Sets your preferred language</string>
     <string name="english_button">English</string>
@@ -14,6 +15,7 @@
     <string name="fab_button">Fab button</string>
     <string name="dont_have_account">Don\'t have an account?</string>
     <string name="bluetooth_not_supported">Bluetooth not supported</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="username" translatable="false">Username</string>
+    <string name="password" translatable="false">Password</string>
+    <string name="sign_up">Sign up</string>
 </resources>
