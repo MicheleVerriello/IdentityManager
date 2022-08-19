@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,11 +63,24 @@ public class ModifyAccountFragment extends Fragment {
         Bundle bundle = getActivity().getIntent().getExtras();
         String idUserLoggedIn =  bundle.getString("id");
         String oldAccountNameDetails = bundle.getString("accountName");
+        String oldAccountUsernameDetails = bundle.getString("username");
+        String oldAccountEmailDetails = bundle.getString("email");
+        String oldAccountPasswordDetails = bundle.getString("password");
+        String oldAccount2FADetails = bundle.getString("authentication");
+        String oldAccountCategoryDetails = bundle.getString("category");
 
         EditText account_name = settView.findViewById(R.id.editTextAccountNameModify);
         EditText username = settView.findViewById(R.id.editTextUsernameModify);
         EditText email = settView.findViewById(R.id.editTextEmailModify);
         EditText password = settView.findViewById(R.id.editTextPasswordModify);
+
+        // Shows the account data
+        account_name.setText(oldAccountNameDetails, TextView.BufferType.EDITABLE);
+        username.setText(oldAccountUsernameDetails, TextView.BufferType.EDITABLE);
+        email.setText(oldAccountEmailDetails, TextView.BufferType.EDITABLE);
+        password.setText(AES.decrypt(oldAccountPasswordDetails, idUserLoggedIn), TextView.BufferType.EDITABLE);
+
+        //account_name.setText(oldAccountCategoryDetails, TextView.BufferType.EDITABLE);
 
         // Methods for checking each field
         setupAccountName(settView, account_name);
@@ -74,11 +88,11 @@ public class ModifyAccountFragment extends Fragment {
         setupEmail(settView, email);
         setupPassword(settView, password);
         setupSuggest(settView, password);
-        setup2FA(settView);
-        setupCategory(settView);
+        setup2FA(settView, oldAccount2FADetails);
+        setupCategory(settView, oldAccountCategoryDetails);
 
         // Method to confirm the entry in the database
-        setupModify(settView, account_name, username, email, password, idUserLoggedIn, oldAccountNameDetails);
+        setupModify(settView, account_name, username, email, password, idUserLoggedIn, oldAccountNameDetails, oldAccountCategoryDetails);
         // Method to go back without modifications
         setupGoBack(settView);
 
@@ -285,8 +299,16 @@ public class ModifyAccountFragment extends Fragment {
         }
     }
 
-    public boolean setup2FA(View settView) {
+    public boolean setup2FA(View settView, String oldAccount2FADetails) {
         RadioGroup radioGroup2FA = settView.findViewById(R.id.radioGroup2FAModify);
+        RadioButton buttonYes = settView.findViewById(R.id.radioButton2FA1Modify);
+        RadioButton buttonNo = settView.findViewById(R.id.radioButton2FA2Modify);
+
+        if (oldAccount2FADetails.equals("Yes")) {
+            buttonYes.setChecked(true);
+        } else if (oldAccount2FADetails.equals("No")) {
+            buttonNo.setChecked(true);
+        }
 
         radioGroup2FA.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -306,7 +328,7 @@ public class ModifyAccountFragment extends Fragment {
         }
     }
 
-    public boolean setupCategory(View settView) {
+    public boolean setupCategory(View settView, String oldAccountCategoryDetails) {
 
         List<String> items = FirebaseCategoryQuery.getAllCategories(db);
 
@@ -314,6 +336,7 @@ public class ModifyAccountFragment extends Fragment {
         ArrayAdapter<String> adapterItems;
 
         auto_completeTxt = settView.findViewById(R.id.autoCompleteTxtModify);
+        auto_completeTxt.setText(oldAccountCategoryDetails);
         adapterItems = new ArrayAdapter<>(getContext(), R.layout.category_list, items);
         auto_completeTxt.setAdapter(adapterItems);
 
@@ -331,7 +354,7 @@ public class ModifyAccountFragment extends Fragment {
         }
     }
 
-    public void setupModify(View settView, EditText account_name, EditText username, EditText email, EditText password, String idUserLoggedIn, String oldAccountNameDetails) {
+    public void setupModify(View settView, EditText account_name, EditText username, EditText email, EditText password, String idUserLoggedIn, String oldAccountNameDetails, String oldAccountCategoryDetails) {
         Button save = settView.findViewById(R.id.buttonSaveModify);
 
         save.setOnClickListener(new View.OnClickListener() {
@@ -358,11 +381,11 @@ public class ModifyAccountFragment extends Fragment {
                     check = 0;
                 }
 
-                if (!setup2FA(settView)) {
+                if (!setup2FA(settView, oldAccountNameDetails)) {
                     check = 0;
                 }
 
-                if (!setupCategory(settView)) {
+                if (!setupCategory(settView, oldAccountCategoryDetails)) {
                     check = 0;
                 }
 

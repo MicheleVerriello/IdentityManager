@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d("refresh", "refresh " + refresh);
         editorLanguage = sharedLanguage.edit();
 
-        SharedPreferences sharedTheme = getSharedPreferences("color", 0);
+        SharedPreferences sharedTheme = getSharedPreferences("mode", 0);
         int theme = sharedTheme.getInt("theme", 0);
         editorTheme = sharedTheme.edit();
 
@@ -116,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                  case R.id.nav_dashboard:
                      selectedFragment = new DashboardFragment();
+                     getIntent().putExtra("textCheck", 1);
                      break;
                  case R.id.nav_newAccount:
                      selectedFragment = new StatisticsFragment();
@@ -151,11 +152,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void identifyLanguagePreference(int refresh) {
         if (refresh == 1) {
-            Log.d("ENTRATO ENG", "ENTRATO ENG");
             LanguageManager lang = new LanguageManager(getBaseContext());
             lang.updateResources("en");
         } else if (refresh == 2) {
-            Log.d("ENTRATO IT", "ENTRATO IT");
             LanguageManager lang = new LanguageManager(getBaseContext());
             lang.updateResources("it");
         }
@@ -172,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void identifyModePreference(int theme) {
+       Log.d("theme", "theme: " + theme);
         if (theme == 1) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         } else if (theme == 2) {

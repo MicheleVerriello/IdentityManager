@@ -1,41 +1,23 @@
 package com.identitymanager.fragments;
 
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothManager;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 
-import com.identitymanager.activities.ExpandableListDataPump;
-import com.identitymanager.adapters.CustomExpandableListAdapter;
 import com.identitymanager.activities.MainActivity;
 import com.identitymanager.utilities.language.LanguageManager;
 import com.identitymanager.R;
-import android.widget.ExpandableListAdapter;
-import android.widget.ExpandableListView;
-import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 
 public class SettingsFragment extends Fragment {
 
@@ -125,8 +107,9 @@ public class SettingsFragment extends Fragment {
 
     public void darkMode(View settView) {
         SharedPreferences sharedMode = getActivity().getSharedPreferences("mode", 0);
-        int check = sharedMode.getInt("check", 0);
         editorMode = sharedMode.edit();
+
+        int check = sharedMode.getInt("theme", 0);
 
         SwitchCompat aSwitch = settView.findViewById(R.id.s1);
 
@@ -139,10 +122,10 @@ public class SettingsFragment extends Fragment {
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (aSwitch.isChecked()) {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    editorMode.putInt("check", 2);
+                    editorMode.putInt("theme", 2).apply();
                 } else {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    editorMode.putInt("check", 1);
+                    editorMode.putInt("theme", 1).apply();
                 }
                 editorMode.commit();
 

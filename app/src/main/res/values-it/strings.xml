@@ -42,4 +42,6 @@
     <string name="modify">Modifica</string>
     <string name="bluetooth_not_supported">Bluetooth non supportato</string>
     <string name="sign_up">Registrati</string>
+    <string name="show_all">Mostra tutti</string>
+    <string name="show_favorites">Mostra preferiti</string>
 </resources>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,29 +7,36 @@
     tools:context=".fragments.AccountDetailsFragment">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.appbar.MaterialToolbar
             style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:titleTextColor="?attr/topColorText"
-            app:title="@string/account_details">
+            app:title="@string/account_details"
+            app:titleTextColor="?attr/topColorText">
         </com.google.android.material.appbar.MaterialToolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
-        android:layout_width="389dp"
-        android:layout_height="422dp"
+        android:id="@+id/linearLayout"
+        android:layout_width="392dp"
+        android:layout_height="391dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="13dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="131dp"
-        android:orientation="vertical">
+        android:layout_marginTop="36dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.473"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout2">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -121,7 +128,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="65dp"
-                android:text="@string/username"
+                android:text="@string/username_account_detail"
                 android:textColor="?attr/insideText"
                 android:textSize="25dp"
                 android:textStyle="bold">
@@ -148,7 +155,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="65dp"
-                android:text="@string/password"
+                android:text="@string/password_account_password"
                 android:textColor="?attr/insideText"
                 android:textSize="25dp"
                 android:textStyle="bold">
@@ -202,12 +209,14 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="17dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="8dp"
         android:text="@string/delete"
         android:textColor="?attr/topColorText"
         android:textSize="18dp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     <Button
         android:id="@+id/button_modify"
@@ -216,11 +225,13 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="257dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="28dp"
         android:text="@string/modify"
         android:textColor="?attr/topColorText"
         android:textSize="18dp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
