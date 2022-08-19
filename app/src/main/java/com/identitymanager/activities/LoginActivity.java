@@ -15,8 +15,10 @@ import android.widget.Toast;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.identitymanager.R;
+import com.identitymanager.utilities.files.FileManager;
 import com.identitymanager.utilities.security.Cryptography;
 
+import java.io.File;
 import java.util.concurrent.Executor;
 
 
@@ -26,6 +28,9 @@ public class LoginActivity extends AppCompatActivity {
     private static final String PASSWORD_KEY = "password";
     private static final String LOGIN = "login"; //for logs
     private String userId;
+
+    public static final String USER_PROPERTIES_FILENAME = "user_properties.txt"; //for app-internal storage values
+    File userFile = new File(this.getFilesDir() + this.USER_PROPERTIES_FILENAME);
 
     //Biometric prompt
     private Executor executor;
@@ -74,7 +79,9 @@ public class LoginActivity extends AppCompatActivity {
                 .setNegativeButtonText("Cancel")
                 .build();
 
-        biometricPrompt.authenticate(promptInfo);
+        if(userFile.exists()) {
+            biometricPrompt.authenticate(promptInfo);
+        }
     }
 
     public void login(View view) {
@@ -93,7 +100,19 @@ public class LoginActivity extends AppCompatActivity {
                     for (QueryDocumentSnapshot document : task.getResult()) { //check if the username and password exist into the db
                         if (document.getData().get(USERNAME_KEY).equals(login_username_value_text) && document.getData().get(PASSWORD_KEY).equals(hashedPassword)) {
                             this.userId = document.getId();
+
+                            String fileContent = "userId=" + document.getId();
+
+                            if(userFile.exists()) {
+                                FileManager.clearAppInternalStorageFile(this.USER_PROPERTIES_FILENAME, this);
+                            } else {
+                                FileManager.createAppInternalStorageFile(this.getFilesDir(), this.USER_PROPERTIES_FILENAME);
+                            }
+
+                            FileManager.writeToAppInternalStorageFile(this.USER_PROPERTIES_FILENAME, fileContent, this);
+
                             this.goToDashboardFragment();
+                            
                             return;
                         }
                     }
