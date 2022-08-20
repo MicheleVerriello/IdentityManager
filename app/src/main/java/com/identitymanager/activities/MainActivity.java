@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -53,8 +52,7 @@ public class MainActivity extends AppCompatActivity {
         int idLoad = bundle.getInt("load", 0);
 
         SharedPreferences sharedLanguage = getSharedPreferences("language", 0);
-        int refresh = sharedLanguage.getInt("refresh", 0);
-        Log.d("refresh", "refresh " + refresh);
+        int refresh = sharedLanguage.getInt("sP", 0);
         editorLanguage = sharedLanguage.edit();
 
         SharedPreferences sharedTheme = getSharedPreferences("mode", 0);
@@ -89,12 +87,14 @@ public class MainActivity extends AppCompatActivity {
                 if (idLoad == 0) {
                     identifyModePreference(theme);
                     getIntent().putExtra("load", 1);
-                    recreate();
+                    finish();
+                    startActivity(getIntent());
                 }
                 else if (idLoad == 1) {
                     identifyLanguagePreference(refresh);
                     getIntent().putExtra("load", 2);
-                    recreate();
+                    finish();
+                    startActivity(getIntent());
                 }
 
                 break;
@@ -131,6 +131,9 @@ public class MainActivity extends AppCompatActivity {
 
             if (idChange != 4) {
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+            } else {
+                getIntent().putExtra("change_value", 0);
+                recreate();
             }
 
             restoreChangeValue();
@@ -161,19 +164,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setChangeLanguageEnglish() {
+        LanguageManager lang = new LanguageManager(getBaseContext());
+        lang.updateResources("en");
         editorLanguage.putInt("refresh", 1);
         editorLanguage.commit();
     }
 
     public void setChangeLanguageItalian() {
+        LanguageManager lang = new LanguageManager(getBaseContext());
+        lang.updateResources("it");
         editorLanguage.putInt("refresh", 2);
         editorLanguage.commit();
     }
 
     public void identifyModePreference(int theme) {
-       Log.d("theme", "theme: " + theme);
         if (theme == 1) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            setTheme(R.style.Theme_IdentityManager);
         } else if (theme == 2) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
             setTheme(R.style.DarkTheme);

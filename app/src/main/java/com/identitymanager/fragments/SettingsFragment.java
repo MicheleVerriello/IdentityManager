@@ -46,7 +46,7 @@ public class SettingsFragment extends Fragment {
     }
 
     public void changeLanguage(View settView) {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("choose", 0);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("language", 0);
         int sP = sharedPreferences.getInt("sP", 1);
         editor = sharedPreferences.edit();
 
@@ -122,10 +122,10 @@ public class SettingsFragment extends Fragment {
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (aSwitch.isChecked()) {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    editorMode.putInt("theme", 2).apply();
+                    editorMode.putInt("theme", 2);
                 } else {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    editorMode.putInt("theme", 1).apply();
+                    editorMode.putInt("theme", 1);
                 }
                 editorMode.commit();
 
