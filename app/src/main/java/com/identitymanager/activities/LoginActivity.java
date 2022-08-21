@@ -30,7 +30,6 @@ public class LoginActivity extends AppCompatActivity {
     private String userId;
 
     public static final String USER_PROPERTIES_FILENAME = "user_properties.txt"; //for app-internal storage values
-    File userFile = new File(this.getFilesDir() + this.USER_PROPERTIES_FILENAME);
 
     //Biometric prompt
     private Executor executor;
@@ -79,6 +78,8 @@ public class LoginActivity extends AppCompatActivity {
                 .setNegativeButtonText("Cancel")
                 .build();
 
+        File userFile = new File(this.getFilesDir(), this.USER_PROPERTIES_FILENAME);
+        Log.w("BIO", String.valueOf(userFile.exists()));
         if(userFile.exists()) {
             biometricPrompt.authenticate(promptInfo);
         }
@@ -102,6 +103,7 @@ public class LoginActivity extends AppCompatActivity {
                             this.userId = document.getId();
 
                             String fileContent = "userId=" + document.getId();
+                            File userFile = new File(this.getFilesDir(), this.USER_PROPERTIES_FILENAME);
 
                             if(userFile.exists()) {
                                 FileManager.clearAppInternalStorageFile(this.USER_PROPERTIES_FILENAME, this);
@@ -112,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
                             FileManager.writeToAppInternalStorageFile(this.USER_PROPERTIES_FILENAME, fileContent, this);
 
                             this.goToDashboardFragment();
-                            
+
                             return;
                         }
                     }
