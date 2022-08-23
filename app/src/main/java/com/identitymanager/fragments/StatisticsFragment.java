@@ -2,6 +2,7 @@ package com.identitymanager.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.anychart.chart.common.dataentry.ValueDataEntry;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.identitymanager.R;
 
 import com.anychart.AnyChart;
@@ -27,11 +30,16 @@ import com.identitymanager.activities.FacebookWeakPasswordsActivity;
 import com.identitymanager.activities.FacebookToChangePasswordsActivity;
 import com.identitymanager.activities.YoutubeWeakPasswordsActivity;
 import com.identitymanager.activities.YoutubeToChangePasswordsActivity;
+import com.identitymanager.models.data.Account;
+import com.identitymanager.utilities.security.PasswordStrength;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class StatisticsFragment extends Fragment {
+
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    int strong = 0, medium = 0, weak = 0;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,18 +62,44 @@ public class StatisticsFragment extends Fragment {
         AnyChartView anyChartView;
         anyChartView = settView.findViewById(R.id.any_chart_view);
 
-        String[] levels = {"Strong", "Medium", "Weak"};
-        int[] totals = {30, 25, 10};
+        //Get the user ID
+        Bundle bundle = getActivity().getIntent().getExtras();
+        String idUserLoggedIn = bundle.getString("userDocumentId");
 
-        Pie pie = AnyChart.pie();
-        List<DataEntry> dataEntries = new ArrayList<>();
+        db.collection("accounts")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        if (task.getResult() != null) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Account account = document.toObject(Account.class);
+                                if ((account.getFkIdUser().equals(idUserLoggedIn)) && account.getPasswordStrength().equals("STRONG")) {
+                                    strong++;
+                                }
+                                if ((account.getFkIdUser().equals(idUserLoggedIn)) && account.getPasswordStrength().equals("MEDIUM")) {
+                                    medium++;
+                                }
+                                if ((account.getFkIdUser().equals(idUserLoggedIn)) && account.getPasswordStrength().equals("WEAK")) {
+                                    weak++;
+                                }
+                            }
+                            String[] levels = {"Strong", "Medium", "Weak"};
+                            int[] totals = {strong, medium, weak};
 
-        for (int i = 0; i < levels.length; i++){
-            dataEntries.add(new ValueDataEntry(levels[i], totals[i]));
-        }
+                            Pie pie = AnyChart.pie();
+                            List<DataEntry> dataEntries = new ArrayList<>();
 
-        pie.data(dataEntries);
-        anyChartView.setChart(pie);
+                            for (int i = 0; i < levels.length; i++){
+                                dataEntries.add(new ValueDataEntry(levels[i], totals[i]));
+                            }
+
+                            pie.data(dataEntries);
+                            anyChartView.setChart(pie);
+                        } else {
+                            Log.d("QUERY", "Error getting passwords strength: ", task.getException());
+                        }
+                    }
+                });
     }
 
     private void setupWeakList(View settView) {

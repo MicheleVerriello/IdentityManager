@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +42,7 @@ import java.util.regex.Pattern;
 
 public class ModifyAccountFragment extends Fragment {
 
-    PasswordStrength strengthPassword;
+    String strengthPassword;
     String authentication;
     String categorySelected;
 
@@ -68,6 +69,9 @@ public class ModifyAccountFragment extends Fragment {
         String oldAccountPasswordDetails = bundle.getString("password");
         String oldAccount2FADetails = bundle.getString("authentication");
         String oldAccountCategoryDetails = bundle.getString("category");
+
+        strengthPassword = bundle.getString("passwordStrength");
+        categorySelected = oldAccountCategoryDetails;
 
         EditText account_name = settView.findViewById(R.id.editTextAccountNameModify);
         EditText username = settView.findViewById(R.id.editTextUsernameModify);
@@ -247,7 +251,7 @@ public class ModifyAccountFragment extends Fragment {
                         strength.setText("MEDIUM");
                     }
                     strength.setTextColor(Color.parseColor("#FFA500"));
-                    strengthPassword = PasswordStrength.MEDIUM;
+                    strengthPassword = "MEDIUM";
                 }
                 if (PASSWORD_PATTERN_STRONG.matcher(s).matches()) {
                     error.setText(" ");
@@ -257,7 +261,7 @@ public class ModifyAccountFragment extends Fragment {
                         strength.setText("STRONG");
                     }
                     strength.setTextColor(Color.GREEN);
-                    strengthPassword = PasswordStrength.STRONG;
+                    strengthPassword = "STRONG";
                 }
                 if (!PASSWORD_PATTERN_MEDIUM_1.matcher(s).matches() && !PASSWORD_PATTERN_MEDIUM_2.matcher(s).matches() && !PASSWORD_PATTERN_STRONG.matcher(s).matches()) {
                     error.setText(" ");
@@ -267,7 +271,7 @@ public class ModifyAccountFragment extends Fragment {
                         strength.setText("WEAK");
                     }
                     strength.setTextColor(Color.RED);
-                    strengthPassword = PasswordStrength.WEAK;
+                    strengthPassword = "WEAK";
                 }
                 if (!PASSWORD_SPACES.matcher(s).matches()) {
                     if (Locale.getDefault().getLanguage().equals("it")) {
@@ -305,8 +309,10 @@ public class ModifyAccountFragment extends Fragment {
         RadioButton buttonNo = settView.findViewById(R.id.radioButton2FA2Modify);
 
         if (oldAccount2FADetails.equals("Yes")) {
+            authentication = "Yes";
             buttonYes.setChecked(true);
         } else if (oldAccount2FADetails.equals("No")) {
+            authentication = "No";
             buttonNo.setChecked(true);
         }
 
@@ -432,6 +438,9 @@ public class ModifyAccountFragment extends Fragment {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             if (document.getData().get("accountName").equals(accountToUpdate.get("accountName"))) {
+                                if (accountToUpdate.get("accountName").equals(oldAccountNameDetails)) {
+                                    break;
+                                }
                                 if (Locale.getDefault().getLanguage().equals("it")) {
                                     Toast.makeText(context, "Nome dell'account già esistente", Toast.LENGTH_SHORT).show();
                                 } else {
