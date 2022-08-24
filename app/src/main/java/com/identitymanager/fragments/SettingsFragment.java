@@ -19,6 +19,8 @@ import com.identitymanager.activities.MainActivity;
 import com.identitymanager.utilities.language.LanguageManager;
 import com.identitymanager.R;
 
+import java.util.Locale;
+
 public class SettingsFragment extends Fragment {
 
     SharedPreferences.Editor editor;
@@ -39,12 +41,21 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View settView = inflater.inflate(R.layout.fragment_settings, container, false);
 
+        SharedPreferences sharedLanguage = getActivity().getSharedPreferences("language", 0);
+        int refresh = sharedLanguage.getInt("sP", 0);
+
+        // Checks language
+        if (refresh == 2 && Locale.getDefault().getLanguage().equals("en")) {
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
+        }
+
         changeLanguage(settView);
         darkMode(settView);
 
         return settView;
     }
 
+    // Sets language selected by the user
     public void changeLanguage(View settView) {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("language", 0);
         int sP = sharedPreferences.getInt("sP", 1);
@@ -59,20 +70,25 @@ public class SettingsFragment extends Fragment {
         RadioButton itRb = settView.findViewById(R.id.radio_button2);
         LanguageManager lang = new LanguageManager(getContext());
 
+        // Sets default language to english
         if (count == 0) {
             enRb.setChecked(true);
         }
 
         saveLanguagePreferences(sP, count, enRb, itRb, lang);
 
+        // Sets language by checking the chosen option
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                // English case
                 if (i == R.id.radio_button1) {
                     lang.updateResources("en");
                     editor.putInt("sP", 1);
                     ((MainActivity) getActivity()).setChangeLanguageEnglish();
-                } else {
+                }
+                // Italian case
+                else {
                     lang.updateResources("it");
                     editor.putInt("sP", 2);
                     ((MainActivity) getActivity()).setChangeLanguageItalian();
@@ -87,7 +103,9 @@ public class SettingsFragment extends Fragment {
         });
     }
 
+    // Saves language chosen
     public void saveLanguagePreferences(int sP, int count, RadioButton enRb, RadioButton itRb, LanguageManager lang) {
+        // English case
         if (sP == 1 && count == 1) {
             enRb.setChecked(true);
             lang.updateResources("en");
@@ -95,7 +113,9 @@ public class SettingsFragment extends Fragment {
 
             editorRestart.putInt("count", 1);
             editorRestart.commit();
-        } else if (sP == 2 && count == 1) {
+        }
+        // Italian case
+        else if (sP == 2 && count == 1) {
             itRb.setChecked(true);
             lang.updateResources("it");
             ((MainActivity) getActivity()).setChangeLanguageItalian();
@@ -105,6 +125,7 @@ public class SettingsFragment extends Fragment {
         }
     }
 
+    // Changes app theme if selected
     public void darkMode(View settView) {
         SharedPreferences sharedMode = getActivity().getSharedPreferences("mode", 0);
         editorMode = sharedMode.edit();
@@ -113,17 +134,22 @@ public class SettingsFragment extends Fragment {
 
         SwitchCompat aSwitch = settView.findViewById(R.id.s1);
 
+        // If dark mode is already enabled the switch is checked
         if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES || check == 2) {
             aSwitch.setChecked(true);
         }
 
+        // Sets app theme by checking the corresponding switch
         aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                // Enables dark mode
                 if (aSwitch.isChecked()) {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                     editorMode.putInt("theme", 2);
-                } else {
+                }
+                // Disables dark mode
+                else {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                     editorMode.putInt("theme", 1);
                 }
@@ -134,12 +160,14 @@ public class SettingsFragment extends Fragment {
         });
     }
 
+    // Refresh remaining in settings
     public void remainInSettings() {
         getActivity().getIntent().putExtra("fragment", 4);
         getActivity().getIntent().putExtra("change_value", 4);
         getActivity().recreate();
     }
 
+    // Refresh remaining in settings and controls language and theme selected by the user
     public void remainInSettingsCoordinationLanguage() {
         getActivity().getIntent().putExtra("fragment", 4);
         getActivity().getIntent().putExtra("change_value", 0);

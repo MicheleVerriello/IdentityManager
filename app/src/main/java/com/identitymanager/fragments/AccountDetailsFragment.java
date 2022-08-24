@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.identitymanager.R;
@@ -105,6 +106,8 @@ public class AccountDetailsFragment extends Fragment {
                                             } else {
                                                 Toast.makeText(getContext(), "Account deleted", Toast.LENGTH_SHORT).show();
                                             }
+                                            BottomNavigationView bottomNav = getActivity().findViewById(R.id.bottom_navigation);
+                                            bottomNav.setSelectedItemId(R.id.nav_dashboard);
                                             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                                         }
                                     })
