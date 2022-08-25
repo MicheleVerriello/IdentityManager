@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,7 +20,14 @@ import com.identitymanager.R;
 import com.identitymanager.utilities.files.FileManager;
 import com.identitymanager.utilities.security.Cryptography;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 import java.util.concurrent.Executor;
 
 
@@ -47,28 +56,21 @@ public class LoginActivity extends AppCompatActivity {
         biometricPrompt = new BiometricPrompt(this, executor, new BiometricPrompt.AuthenticationCallback() {
 
             @Override
-            public void onAuthenticationError(int errorCode,
-                                              @NonNull CharSequence errString) {
+            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
                 super.onAuthenticationError(errorCode, errString);
-                Toast.makeText(getApplicationContext(),
-                                "Authentication error: " + errString, Toast.LENGTH_SHORT)
-                        .show();
+                Toast.makeText(getApplicationContext(), "Authentication error: " + errString, Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onAuthenticationSucceeded(
-                    @NonNull BiometricPrompt.AuthenticationResult result) {
+            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+                goToDashboardFragment();
                 super.onAuthenticationSucceeded(result);
-                Toast.makeText(getApplicationContext(),
-                        "Authentication succeeded!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onAuthenticationFailed() {
                 super.onAuthenticationFailed();
-                Toast.makeText(getApplicationContext(), "Authentication failed",
-                                Toast.LENGTH_SHORT)
-                        .show();
+                Toast.makeText(getApplicationContext(), "Authentication canceled", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -79,8 +81,9 @@ public class LoginActivity extends AppCompatActivity {
                 .build();
 
         File userFile = new File(this.getFilesDir(), this.USER_PROPERTIES_FILENAME);
-        Log.w("BIO", String.valueOf(userFile.exists()));
+
         if(userFile.exists()) {
+            this.userId = this.getUserId();
             biometricPrompt.authenticate(promptInfo);
         }
     }
@@ -99,19 +102,19 @@ public class LoginActivity extends AppCompatActivity {
             if (task.isSuccessful()) {
                 if(task.getResult() != null) {
                     for (QueryDocumentSnapshot document : task.getResult()) { //check if the username and password exist into the db
-                        if (document.getData().get(USERNAME_KEY).equals(login_username_value_text) && document.getData().get(PASSWORD_KEY).equals(hashedPassword)) {
+                        if (Objects.equals(document.getData().get(USERNAME_KEY), login_username_value_text) && Objects.equals(document.getData().get(PASSWORD_KEY), hashedPassword)) {
                             this.userId = document.getId();
 
                             String fileContent = "userId=" + document.getId();
-                            File userFile = new File(this.getFilesDir(), this.USER_PROPERTIES_FILENAME);
+                            File userFile = new File(this.getFilesDir(), USER_PROPERTIES_FILENAME);
 
                             if(userFile.exists()) {
-                                FileManager.clearAppInternalStorageFile(this.USER_PROPERTIES_FILENAME, this);
+                                FileManager.clearAppInternalStorageFile(USER_PROPERTIES_FILENAME);
                             } else {
-                                FileManager.createAppInternalStorageFile(this.getFilesDir(), this.USER_PROPERTIES_FILENAME);
+                                FileManager.createAppInternalStorageFile(this.getFilesDir(), USER_PROPERTIES_FILENAME);
                             }
 
-                            FileManager.writeToAppInternalStorageFile(this.USER_PROPERTIES_FILENAME, fileContent, this);
+                            FileManager.writeToAppInternalStorageFile(USER_PROPERTIES_FILENAME, fileContent, this);
 
                             this.goToDashboardFragment();
 
@@ -136,5 +139,36 @@ public class LoginActivity extends AppCompatActivity {
     public void goToSignUpActivity(View view) {
         Intent switchActivityIntent = new Intent(this, SignUpActivity.class);
         startActivity(switchActivityIntent);
+    }
+
+    public String getUserId() {
+
+        String result = null;
+        final String filename = "user_properties.txt";
+        FileInputStream fis = null;
+
+        try {
+            fis = getApplicationContext().openFileInput(filename);
+            InputStreamReader inputStreamReader = new InputStreamReader(fis, StandardCharsets.UTF_8);
+
+            try (BufferedReader reader = new BufferedReader(inputStreamReader)) {
+                String line = reader.readLine();
+                while (line != null) {
+                    if(line.contains("userId=")) {
+                        result = line.substring(line.indexOf("=") + 1);
+                        break;
+                    }
+                    else {
+                        line = reader.readLine();
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 }

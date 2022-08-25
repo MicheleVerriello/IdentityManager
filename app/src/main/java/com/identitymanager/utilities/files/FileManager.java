@@ -25,7 +25,7 @@ public class FileManager {
         }
     }
 
-    public static void clearAppInternalStorageFile(String filename, Context context) {
+    public static void clearAppInternalStorageFile(String filename) {
 
         PrintWriter printWriter = null;
         try {
