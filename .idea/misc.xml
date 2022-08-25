@@ -3,17 +3,23 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/drawable/custom_button.xml" value="0.179" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/drawable/custom_input.xml" value="0.187" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/drawable/ic_baseline_account_circle_24.xml" value="0.3828125" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/drawable/ic_baseline_add_circle_outline_24.xml" value="0.187" />
+        <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/drawable/ic_baseline_arrow_forward_ios_24.xml" value="0.156" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/drawable/ic_baseline_dashboard_24.xml" value="0.3828125" />
+        <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/drawable/ic_baseline_favorite_24.xml" value="0.179" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/drawable/ic_baseline_person_add_24.xml" value="0.3828125" />
+        <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.1" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/drawable/ic_baseline_settings_24.xml" value="0.3828125" />
+        <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/drawable/ic_launcher_background.xml" value="0.179" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/activity_account_list_fragment.xml" value="0.29347826086956524" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/activity_accountslist.xml" value="0.29347826086956524" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/activity_add_user.xml" value="0.2749094202898551" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/activity_dashboard.xml" value="0.33" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/activity_facebook_weak_passwords.xml" value="0.17831813576494426" />
+        <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/activity_instagram_to_change_passwords.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/activity_login.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/activity_new_account.xml" value="0.2884963768115942" />
@@ -21,15 +27,16 @@
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/activity_settings.xml" value="0.2749094202898551" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/activity_sign_up.xml" value="0.33" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/activity_user_details.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/activity_youtube_weak_passwords.xml" value="0.36666666666666664" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/category_list.xml" value="0.18854166666666666" />
-        <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/fragment_account_details.xml" value="0.29347826086956524" />
+        <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/fragment_account_details.xml" value="0.265625" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/fragment_account_entry.xml" value="0.29347826086956524" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/fragment_accounts_list.xml" value="0.29347826086956524" />
-        <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/fragment_dashboard.xml" value="0.25" />
-        <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/fragment_modify_account.xml" value="0.29347826086956524" />
+        <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/fragment_dashboard.xml" value="0.33" />
+        <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/fragment_modify_account.xml" value="0.33" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/fragment_new_account.xml" value="0.33" />
-        <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/fragment_settings.xml" value="0.23233695652173914" />
-        <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/fragment_statistics.xml" value="0.12681159420289856" />
+        <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/fragment_settings.xml" value="0.25" />
+        <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/fragment_statistics.xml" value="0.25" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/fragment_user_details_edit.xml" value="0.29347826086956524" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/fragment_user_details_view.xml" value="0.29347826086956524" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/fragment_view_accounts.xml" value="0.29347826086956524" />
@@ -51,14 +58,10 @@
         <entry key="app/src/main/res/layout/activity_sign_up.xml" value="0.3968493094959125" />
         <entry key="app/src/main/res/layout/activity_user_details.xml" value="0.3403856864490375" />
         <entry key="app/src/main/res/layout/activity_youtube_to_change_passwords.xml" value="0.14858728557013118" />
-        <entry key="app/src/main/res/layout/category_list.xml" value="0.3786231884057971" />
-        <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.32828394084356877" />
-        <entry key="app/src/main/res/layout/fragment_modify_account.xml" value="0.3786231884057971" />
+        <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.3968493094959125" />
         <entry key="app/src/main/res/layout/fragment_new_account.xml" value="0.296195652173913" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.16485507246376813" />
         <entry key="app/src/main/res/layout/fragment_settings.xml" value="0.4133697509765625" />
-        <entry key="app/src/main/res/layout/fragment_statistics.xml" value="0.20820668693009117" />
-        <entry key="app/src/main/res/layout/fragment_trust.xml" value="0.3786231884057971" />
         <entry key="app/src/main/res/layout/fragment_user_details.xml" value="0.3080080619373187" />
         <entry key="app/src/main/res/layout/fragment_user_details_edit.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_user_details_view.xml" value="0.29336042501158616" />

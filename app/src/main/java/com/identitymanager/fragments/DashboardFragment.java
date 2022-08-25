@@ -1,9 +1,12 @@
 package com.identitymanager.fragments;
+
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -52,6 +55,7 @@ public class DashboardFragment extends Fragment {
         recyclerView.setAdapter(recyclerAdapter);
 
         EventChangeListener(idUserLoggedIn);
+        clickText(settView);
         clickButton(settView);
 
         return settView;
@@ -70,10 +74,39 @@ public class DashboardFragment extends Fragment {
                 getActivity().getIntent().putExtra("username", list.get(position).getUsername());
                 getActivity().getIntent().putExtra("password", list.get(position).getPassword());
                 getActivity().getIntent().putExtra("passwordStrength", list.get(position).getPasswordStrength());
+                getActivity().getIntent().putExtra("authentication", list.get(position).getTwoFactorAuthentication());
 
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
             }
         };
+    }
+
+    private void clickText(View view) {
+        TextView show_all = view.findViewById(R.id.show_all_text);
+        TextView show_favorites = view.findViewById(R.id.show_favorites);
+
+        Bundle bundle = getActivity().getIntent().getExtras();
+        int text_check = bundle.getInt("textCheck");
+
+        if (text_check == 1) {
+            show_all.setTypeface(null, Typeface.BOLD);
+        }
+
+        show_all.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                show_favorites.setTypeface(null, Typeface.NORMAL);
+                show_all.setTypeface(null, Typeface.BOLD);
+            }
+        });
+
+        show_favorites.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                show_all.setTypeface(null, Typeface.NORMAL);
+                show_favorites.setTypeface(null, Typeface.BOLD);
+            }
+        });
     }
 
     private void clickButton(View settView) {

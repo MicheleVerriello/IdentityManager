@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -53,11 +52,10 @@ public class MainActivity extends AppCompatActivity {
         int idLoad = bundle.getInt("load", 0);
 
         SharedPreferences sharedLanguage = getSharedPreferences("language", 0);
-        int refresh = sharedLanguage.getInt("refresh", 0);
-        Log.d("refresh", "refresh " + refresh);
+        int refresh = sharedLanguage.getInt("sP", 0);
         editorLanguage = sharedLanguage.edit();
 
-        SharedPreferences sharedTheme = getSharedPreferences("color", 0);
+        SharedPreferences sharedTheme = getSharedPreferences("mode", 0);
         int theme = sharedTheme.getInt("theme", 0);
         editorTheme = sharedTheme.edit();
 
@@ -89,12 +87,14 @@ public class MainActivity extends AppCompatActivity {
                 if (idLoad == 0) {
                     identifyModePreference(theme);
                     getIntent().putExtra("load", 1);
-                    recreate();
+                    finish();
+                    startActivity(getIntent());
                 }
                 else if (idLoad == 1) {
                     identifyLanguagePreference(refresh);
                     getIntent().putExtra("load", 2);
-                    recreate();
+                    finish();
+                    startActivity(getIntent());
                 }
 
                 break;
@@ -116,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                  case R.id.nav_dashboard:
                      selectedFragment = new DashboardFragment();
+                     getIntent().putExtra("textCheck", 1);
                      break;
                  case R.id.nav_newAccount:
                      selectedFragment = new StatisticsFragment();
@@ -130,6 +131,9 @@ public class MainActivity extends AppCompatActivity {
 
             if (idChange != 4) {
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+            } else {
+                getIntent().putExtra("change_value", 0);
+                recreate();
             }
 
             restoreChangeValue();
@@ -151,22 +155,24 @@ public class MainActivity extends AppCompatActivity {
 
     public void identifyLanguagePreference(int refresh) {
         if (refresh == 1) {
-            Log.d("ENTRATO ENG", "ENTRATO ENG");
             LanguageManager lang = new LanguageManager(getBaseContext());
             lang.updateResources("en");
         } else if (refresh == 2) {
-            Log.d("ENTRATO IT", "ENTRATO IT");
             LanguageManager lang = new LanguageManager(getBaseContext());
             lang.updateResources("it");
         }
     }
 
     public void setChangeLanguageEnglish() {
+        LanguageManager lang = new LanguageManager(getBaseContext());
+        lang.updateResources("en");
         editorLanguage.putInt("refresh", 1);
         editorLanguage.commit();
     }
 
     public void setChangeLanguageItalian() {
+        LanguageManager lang = new LanguageManager(getBaseContext());
+        lang.updateResources("it");
         editorLanguage.putInt("refresh", 2);
         editorLanguage.commit();
     }
@@ -174,6 +180,7 @@ public class MainActivity extends AppCompatActivity {
     public void identifyModePreference(int theme) {
         if (theme == 1) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            setTheme(R.style.Theme_IdentityManager);
         } else if (theme == 2) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
             setTheme(R.style.DarkTheme);

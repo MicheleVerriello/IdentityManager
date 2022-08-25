@@ -42,8 +42,8 @@ public class AccountDetailsFragment extends Fragment {
         Bundle bundle = getActivity().getIntent().getExtras();
         id =  bundle.getString("id");
         accountNameDetails = bundle.getString("accountName");
-        categoryDetails = bundle.getString("email");
-        emailDetails = bundle.getString("category");
+        categoryDetails = bundle.getString("category");
+        emailDetails = bundle.getString("email");
         usernameDetails = bundle.getString("username");
         passwordDetails = bundle.getString("password");
         passwordStrengthDetails = bundle.getString("passwordStrength");
