@@ -38,24 +38,6 @@
             android:exported="true" />
 
         <activity
-            android:name=".activities.InstagramToChangePasswordsActivity"
-            android:exported="true" />
-        <activity
-            android:name=".activities.FacebookToChangePasswordsActivity"
-            android:exported="true" />
-        <activity
-            android:name=".activities.YoutubeToChangePasswordsActivity"
-            android:exported="true" />
-        <activity
-            android:name=".activities.InstagramWeakPasswordsActivity"
-            android:exported="true" />
-        <activity
-            android:name=".activities.FacebookWeakPasswordsActivity"
-            android:exported="true" />
-        <activity
-            android:name=".activities.YoutubeWeakPasswordsActivity"
-            android:exported="true" />
-        <activity
             android:name=".activities.LoginActivity"
             android:exported="true">
             <intent-filter>

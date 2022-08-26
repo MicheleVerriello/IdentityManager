@@ -33,6 +33,6 @@ public class FileManager {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        printWriter.close();
+        //printWriter.close();
     }
 }

@@ -23,12 +23,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     app:titleTextColor="?attr/topColorText"
-                    app:title="Statistics">
+                    app:title="@string/statistics_title">
                 </com.google.android.material.appbar.MaterialToolbar>
 
             </com.google.android.material.appbar.AppBarLayout>
 
             <TextView
+                android:id="@+id/password_security_level"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
@@ -44,9 +45,10 @@
                 android:layout_height="437dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="30dp"
-                android:layout_marginBottom="60dp"/>
+                android:layout_marginBottom="30dp"/>
 
             <TextView
+                android:id="@+id/weak_passwords"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
@@ -62,9 +64,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="188dp"
                 android:layout_marginBottom="5dp"
+                android:nestedScrollingEnabled="true"
                 android:textColor="?attr/insideText"/>
 
             <TextView
+                android:id="@+id/change_passwords"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
@@ -78,8 +82,9 @@
             <ListView
                 android:id="@+id/category_to_change_passwords"
                 android:layout_width="match_parent"
-                android:layout_height="184dp"
+                android:layout_height="188dp"
                 android:layout_marginBottom="5dp"
+                android:nestedScrollingEnabled="true"
                 android:textColor="?attr/insideText"/>
 
         </LinearLayout>
