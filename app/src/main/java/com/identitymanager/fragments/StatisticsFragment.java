@@ -26,6 +26,7 @@ import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.charts.Pie;
 
 import com.identitymanager.models.data.Account;
+import com.identitymanager.utilities.language.LanguageManager;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -57,6 +58,8 @@ public class StatisticsFragment extends Fragment {
 
         // Checks language
         if (refresh == 2) {
+            LanguageManager lang = new LanguageManager(getContext());
+            lang.updateResources("it");
             passwordSecurityLevel.setText("Livello di sicurezza password");
             weakPasswords.setText("Password deboli");
             changePasswords.setText("Password consigliate da cambiare");

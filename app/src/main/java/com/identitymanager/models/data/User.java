@@ -1,11 +1,7 @@
 package com.identitymanager.models.data;
 
-
-import java.util.Date;
-
 public class User {
 
-    private String id;
     private String username;
     private String name;
     private String surname;
@@ -13,10 +9,6 @@ public class User {
     private String email;
     private String phone;
     private String country;
-
-    public String getId() { return  id; }
-
-    public void setId (String id) { this.id = id; }
 
     public String getUsername() { return username; }
 

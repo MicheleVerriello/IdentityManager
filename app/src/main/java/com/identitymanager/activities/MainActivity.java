@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences.Editor editorLanguage;
     SharedPreferences.Editor editorTheme;
     String idUserLoggedIn;
+    String username;
     private final String CHANNEL_ID = "identityManagerNotification";
     private final String NOTIFICATION_CONTENT_TITLE = "Password need a change";
 
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         int idFragment = bundle.getInt("fragment");
         idUserLoggedIn = bundle.getString("userDocumentId");
+        username = bundle.getString("username");
 
         int idLoad = bundle.getInt("load", 0);
 
@@ -102,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (idFragment != 4) {
             getIntent().putExtra("userDocumentId", idUserLoggedIn);
+            getIntent().putExtra("username", username);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
         }
     }

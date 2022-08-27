@@ -45,4 +45,15 @@
     <string name="sign_up">Sign up</string>
     <string name="show_all">Show all</string>
     <string name="show_favorites">Show favorites</string>
+    <string name="name">Name :</string>
+    <string name="name_hint">Name</string>
+    <string name="surname">Surname :</string>
+    <string name="surname_hint">Surname</string>
+    <string name="birthday">Birthday :</string>
+    <string name="birthday_hint">Birthday</string>
+    <string name="country">Country :</string>
+    <string name="country_hint">Country</string>
+    <string name="phone">Phone :</string>
+    <string name="phone_hint">Phone</string>
+    <string name="edit_profile">Edit profile</string>
 </resources>

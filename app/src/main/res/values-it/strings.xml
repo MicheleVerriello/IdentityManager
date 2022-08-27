@@ -44,4 +44,15 @@
     <string name="sign_up">Registrati</string>
     <string name="show_all">Mostra tutti</string>
     <string name="show_favorites">Mostra preferiti</string>
+    <string name="name">Nome :</string>
+    <string name="name_hint">Nome</string>
+    <string name="surname">Cognome :</string>
+    <string name="surname_hint">Cognome</string>
+    <string name="birthday">Nascita :</string>
+    <string name="birthday_hint">Nascita</string>
+    <string name="country">Nazione :</string>
+    <string name="country_hint">Nazione</string>
+    <string name="phone">Telefono :</string>
+    <string name="phone_hint">Telefono</string>
+    <string name="edit_profile">Modifica profilo</string>
 </resources>

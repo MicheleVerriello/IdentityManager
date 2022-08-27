@@ -35,10 +35,11 @@
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/fragment_dashboard.xml" value="0.33" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/fragment_modify_account.xml" value="0.33" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/fragment_new_account.xml" value="0.33" />
-        <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/fragment_settings.xml" value="0.25" />
+        <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/fragment_settings.xml" value="0.2074074074074074" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/fragment_statistics.xml" value="0.25" />
-        <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/fragment_user_details_edit.xml" value="0.29347826086956524" />
-        <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/fragment_user_details_view.xml" value="0.29347826086956524" />
+        <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/fragment_user_details.xml" value="0.36666666666666664" />
+        <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/fragment_user_details_edit.xml" value="0.33" />
+        <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/fragment_user_details_view.xml" value="0.33" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/fragment_view_accounts.xml" value="0.29347826086956524" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/list_items.xml" value="0.23233695652173914" />
         <entry key="..\:/AndroidStudioApp/IdentityManager/app/src/main/res/layout/recycler_item.xml" value="0.29347826086956524" />

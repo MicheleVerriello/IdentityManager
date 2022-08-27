@@ -5,8 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String PASSWORD_KEY = "password";
     private static final String LOGIN = "login"; //for logs
     private String userId;
+    private String username;
 
     public static final String USER_PROPERTIES_FILENAME = "user_properties.txt"; //for app-internal storage values
 
@@ -104,6 +103,7 @@ public class LoginActivity extends AppCompatActivity {
                     for (QueryDocumentSnapshot document : task.getResult()) { //check if the username and password exist into the db
                         if (Objects.equals(document.getData().get(USERNAME_KEY), login_username_value_text) && Objects.equals(document.getData().get(PASSWORD_KEY), hashedPassword)) {
                             this.userId = document.getId();
+                            this.username = login_username_value_text;
 
                             String fileContent = "userId=" + document.getId();
                             File userFile = new File(this.getFilesDir(), USER_PROPERTIES_FILENAME);
@@ -133,6 +133,7 @@ public class LoginActivity extends AppCompatActivity {
         Intent switchActivityIntent = new Intent(this, MainActivity.class);
         switchActivityIntent.putExtra("fragment", 1);
         switchActivityIntent.putExtra("userDocumentId", this.userId);
+        switchActivityIntent.putExtra("usernameUser", this.username);
         startActivity(switchActivityIntent);
     }
 

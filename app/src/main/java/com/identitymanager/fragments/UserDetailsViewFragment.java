@@ -1,81 +1,89 @@
 package com.identitymanager.fragments;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.identitymanager.R;
 import com.identitymanager.models.data.User;
+import com.identitymanager.utilities.language.LanguageManager;
 
 public class UserDetailsViewFragment extends Fragment {
 
-    private static String USER_DOCUMENT_ID = "users";
-    private String userDocumentId;
-    private User user;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View settView = inflater.inflate(R.layout.fragment_user_details_view, container, false);
 
-        // Getting the userDocumentId
+        // Checks language
+        SharedPreferences sharedLanguage = getActivity().getSharedPreferences("language", 0);
+        int refresh = sharedLanguage.getInt("sP", 0);
+        if (refresh == 2) {
+            LanguageManager lang = new LanguageManager(getContext());
+            lang.updateResources("it");
+        }
+
+        // Gets the username
         Bundle bundle = getActivity().getIntent().getExtras();
-        userDocumentId = bundle.getString("userDocumentId");
+        String username = bundle.getString("usernameUser");
 
-        // Getting the user details by userDocumentId
-        DocumentReference docRef = db.collection(USER_DOCUMENT_ID).document(userDocumentId);
-        docRef.get().addOnCompleteListener( task ->  {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document.exists()) {
-                    user = document.toObject(User.class);
+        TextView nameText = settView.findViewById(R.id.name_text);
+        TextView surnameText = settView.findViewById(R.id.surname_text);
+        TextView usernameText = settView.findViewById(R.id.username_text);
+        TextView emailText = settView.findViewById(R.id.email_text);
+        TextView birthdayText = settView.findViewById(R.id.birthday_text);
+        TextView countryText = settView.findViewById(R.id.country_text);
+        TextView phoneText = settView.findViewById(R.id.phone_text);
 
-                    // Setting the view
-                    TextView nameTextView = settView.findViewById(R.id.name_text_view);
-                    nameTextView.setText(user.getName());
-                    TextView surnameTextView = settView.findViewById(R.id.surname_text_view);
-                    surnameTextView.setText(user.getSurname());
-                    TextView usernameTextView = settView.findViewById(R.id.username_text_view);
-                    usernameTextView.setText(user.getUsername());
-                    TextView emailTextView = settView.findViewById(R.id.email_text_view);
-                    emailTextView.setText(user.getEmail());
-                    TextView phoneTextView = settView.findViewById(R.id.phone_text_view);
-                    phoneTextView.setText(user.getPhone());
-                    TextView countryTextView = settView.findViewById(R.id.country_text_view);
-                    countryTextView.setText(user.getCountry());
-                    TextView birthdayTextView = settView.findViewById(R.id.birthday_text_view);
-                    birthdayTextView.setText(user.getBirthDate() != null ?user.getBirthDate().toString() : "");
+        // Shows user data
+        db.collection("users")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.getResult() != null) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            User user = document.toObject(User.class);
+                            if (user.getUsername().equals(username)) {
+                                nameText.setText(user.getName());
+                                surnameText.setText(user.getSurname());
+                                usernameText.setText(user.getUsername());
+                                emailText.setText(user.getEmail());
+                                birthdayText.setText(user.getBirthDate());
+                                countryText.setText(user.getCountry());
+                                phoneText.setText(user.getPhone());
 
-                } else {
-                    Log.d("GET_USER_DETAILS", "No such document");
-                }
-            } else {
-                Log.d("GET_USER_DETAILS", "get failed with ", task.getException());
+                                getActivity().getIntent().putExtra("nameUser", user.getName());
+                                getActivity().getIntent().putExtra("surnameUser", user.getSurname());
+                                getActivity().getIntent().putExtra("usernameUser", user.getUsername());
+                                getActivity().getIntent().putExtra("emailUser", user.getEmail());
+                                getActivity().getIntent().putExtra("birthdayUser", user.getBirthDate());
+                                getActivity().getIntent().putExtra("countryUser", user.getCountry());
+                                getActivity().getIntent().putExtra("phoneUser", user.getPhone());
+                            }
+                        }
+                    }
+                });
+
+        Button edit = settView.findViewById(R.id.button_edit);
+
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment fragment = new UserDetailsEditFragment();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
             }
         });
 
-        goToFragmenUserDetailsEdit(settView);
-
         return settView;
-    }
-
-    public void goToFragmenUserDetailsEdit(View view) {
-        Button editButton = view.findViewById(R.id.button_edit);
-
-        editButton.setOnClickListener(v -> {
-            Fragment fragment = new UserDetailsEditFragment();
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
-        });
     }
 }

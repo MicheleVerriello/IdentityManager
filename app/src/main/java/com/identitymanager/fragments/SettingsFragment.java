@@ -51,7 +51,6 @@ public class SettingsFragment extends Fragment {
 
         changeLanguage(settView);
         darkMode(settView);
-        goToTrustFragment(settView);
 
         return settView;
     }
@@ -211,9 +210,4 @@ public class SettingsFragment extends Fragment {
 //
 //        // if response is OK save the trust into db
 //    }
-
-    public void goToTrustFragment(View view) {
-        Fragment trustFragment = new TrustFragment();
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, trustFragment).commit();
-    }
 }
