@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -27,6 +28,8 @@ public class SettingsFragment extends Fragment {
     SharedPreferences.Editor editorRestart;
     SharedPreferences.Editor editorMode;
 
+    Button button_newTrusted;
+
     private final Integer REQUEST_ENABLE_BT = 1;
 
     // New Trusted
@@ -48,6 +51,12 @@ public class SettingsFragment extends Fragment {
         if (refresh == 2 && Locale.getDefault().getLanguage().equals("en")) {
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
         }
+
+        button_newTrusted = settView.findViewById(R.id.button_newTrusted);
+        button_newTrusted.setOnClickListener(view -> {
+            this.createNewTrustedDialog();
+        }
+        );
 
         changeLanguage(settView);
         darkMode(settView);
@@ -174,7 +183,10 @@ public class SettingsFragment extends Fragment {
         getActivity().recreate();
     }
 
-//    public void createNewTrustedDialog(View view){
+    public void createNewTrustedDialog(){
+
+        Fragment trustFragment = new TrustFragment();
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, trustFragment).commit();
 //
 //        dialogBuilder = new AlertDialog.Builder(getActivity());
 //        final View newTrusted_popupView = getLayoutInflater().inflate(R.layout.new_trusted_popup, null);
@@ -209,5 +221,5 @@ public class SettingsFragment extends Fragment {
 //        // wait for a response
 //
 //        // if response is OK save the trust into db
-//    }
+    }
 }

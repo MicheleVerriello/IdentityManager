@@ -1,8 +1,8 @@
 package com.identitymanager.fragments;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.identitymanager.R;
@@ -24,6 +25,8 @@ public class TrustFragment extends Fragment {
     private static final int REQUEST_DISCOVER_BT = 1;
     private static final int RESULT_OK = -1;
     BluetoothAdapter bluetoothAdapter = null;
+
+    Button trustButton;
 
     public TrustFragment() {
         // Required empty public constructor
@@ -36,10 +39,16 @@ public class TrustFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_trust, container, false);
+        View view = inflater.inflate(R.layout.fragment_trust, container, false);
+
+        trustButton = view.findViewById(R.id.trust_button);
+        trustButton.setOnClickListener(btnView -> {
+            this.trust();
+        });
+        return view;
     }
 
-    public void trust(View view) {
+    public void trust() {
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -47,17 +56,32 @@ public class TrustFragment extends Fragment {
 
             if (!bluetoothAdapter.isEnabled()) {//cheking bluetooth status
 
-                if ((ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.BLUETOOTH_CONNECT ) != PackageManager.PERMISSION_GRANTED)
-                        && (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.BLUETOOTH ) != PackageManager.PERMISSION_GRANTED)
-                        && (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.BLUETOOTH_ADMIN ) != PackageManager.PERMISSION_GRANTED)) { //cheking permission
+                if ((ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED)
+                        && (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED)
+                        && (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED)) { //cheking permission
                     Toast.makeText(this.getContext(), "Bluetooth permissions denied", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
-                    bluetoothAdapter.enable();
+                    Toast.makeText(this.getContext(), "Enabling bluetooth", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(bluetoothAdapter.ACTION_REQUEST_ENABLE);
+                    startActivityForResult(intent, REQUEST_ENABLE_BT);
                 }
             }
 
+            //bluetooth scan permissions for sdk 29+
+            if(ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+                
+            }
+            if (!bluetoothAdapter.isDiscovering()) {
+                Toast.makeText(this.getContext(), "Making your device discoverable", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(bluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+                startActivityForResult(intent, REQUEST_DISCOVER_BT);
+            }
+
             //start searching for devices
+            bluetoothAdapter.startDiscovery();
+            Toast.makeText(this.getContext(), "Searching for devices", Toast.LENGTH_SHORT).show();
+
         } else {
             Toast.makeText(this.getContext(), "Bluetooth not available", Toast.LENGTH_SHORT).show();
         }
@@ -71,9 +95,9 @@ public class TrustFragment extends Fragment {
 
             if (!bluetoothAdapter.isEnabled()) {//cheking bluetooth status
 
-                if ((ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.BLUETOOTH_CONNECT ) != PackageManager.PERMISSION_GRANTED)
-                        && (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.BLUETOOTH ) != PackageManager.PERMISSION_GRANTED)
-                        && (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.BLUETOOTH_ADMIN ) != PackageManager.PERMISSION_GRANTED)) { //cheking permission
+                if ((ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED)
+                        && (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED)
+                        && (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED)) { //cheking permission
                     Toast.makeText(this.getContext(), "Bluetooth permissions denied", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
@@ -84,7 +108,7 @@ public class TrustFragment extends Fragment {
             }
 
             //bluetooth discoverability
-            if(!bluetoothAdapter.isDiscovering()) {
+            if (!bluetoothAdapter.isDiscovering()) {
                 Toast.makeText(this.getContext(), "Making your device discoverable", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(bluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
                 startActivityForResult(intent, REQUEST_DISCOVER_BT);
@@ -99,7 +123,7 @@ public class TrustFragment extends Fragment {
 
         switch (requestCode) {
             case REQUEST_ENABLE_BT:
-                if(resultCode == RESULT_OK) {
+                if (resultCode == RESULT_OK) {
                     //bluetooth is on
                     Toast.makeText(this.getContext(), "Bluetooth enabled", Toast.LENGTH_SHORT).show();
                 } else {
@@ -107,7 +131,7 @@ public class TrustFragment extends Fragment {
                     Toast.makeText(this.getContext(), "Permission denied", Toast.LENGTH_SHORT).show();
                 }
             case REQUEST_DISCOVER_BT:
-                if(resultCode == RESULT_OK) {
+                if (resultCode == RESULT_OK) {
                     Toast.makeText(this.getContext(), "Device is discoverable", Toast.LENGTH_SHORT).show();
                 } else {
                     //user denied bluetooth permission
@@ -115,5 +139,8 @@ public class TrustFragment extends Fragment {
                 }
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void showBluetoothDevicesDialog() {
     }
 }
