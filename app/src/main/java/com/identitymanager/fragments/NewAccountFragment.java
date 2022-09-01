@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,12 +22,17 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.identitymanager.R;
+import com.identitymanager.database.firestore.queries.FirebaseAccountQuery;
+import com.identitymanager.database.firestore.queries.FirebaseCategoryQuery;
+import com.identitymanager.utilities.security.AES;
 import com.identitymanager.utilities.security.Cryptography;
+import com.identitymanager.utilities.security.PasswordStrength;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -36,20 +40,19 @@ import java.util.regex.Pattern;
 
 public class NewAccountFragment extends Fragment {
 
-    public static final String SAVE = "save";
-    public static final String ID_KEY = "id";
-    public static final String NAME_ACCOUNT_KEY = "accountName";
-    public static final String USERNAME_KEY = "username";
-    public static final String EMAIL_KEY = "email";
-    public static final String PASSWORD_KEY = "password";
-    public static final String STRENGTH_KEY = "passwordStrength";
-    public static final String AUTHENTICATION_KEY = "2fa";
-    public static final String CATEGORY_KEY = "category";
-    public static final String TIME_KEY = "lastUpdate";
-
-    String strengthPassword;
+    PasswordStrength strengthPassword;
     String authentication;
     String categorySelected;
+
+    private final String FK_USER_ID_KEY = "fkIdUser";
+    private final String NAME_ACCOUNT_KEY = "accountName";
+    private final String USERNAME_KEY = "username";
+    private final String EMAIL_KEY = "email";
+    private final String PASSWORD_KEY = "password";
+    private final String STRENGTH_KEY = "passwordStrength";
+    private final String AUTHENTICATION_KEY = "twoFactorAuthentication";
+    private final String CATEGORY_KEY = "category";
+    private final String TIME_KEY = "lastUpdate";
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -125,7 +128,11 @@ public class NewAccountFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 if (!EMAIL_PATTERN.matcher(s).matches()) {
-                    email.setError("Invalid email");
+                    if (Locale.getDefault().getLanguage().equals("it")) {
+                        email.setError("Email non valida");
+                    } else {
+                        email.setError("Invalid email");
+                    }
                 }
             }
         });
@@ -150,21 +157,21 @@ public class NewAccountFragment extends Fragment {
     }
 
     public String generatePassword(int lenght) {
-        char[] chars1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
-        char[] chars2 = "0123456789".toCharArray();
-        char[] chars3 = "@#$%^&+=_.?!".toCharArray();
+        char[] letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
+        char[] numbers = "0123456789".toCharArray();
+        char[] symbols = "@#$%^&+=_.?!".toCharArray();
         Random r = new Random();
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i<lenght; i++) {
-            char c1 = chars1[r.nextInt(chars1.length)];
+            char c1 = letters[r.nextInt(letters.length)];
             sb.append(c1);
             i++;
-            char c2 = chars2[r.nextInt(chars2.length)];
+            char c2 = numbers[r.nextInt(numbers.length)];
             sb.append(c2);
             i++;
             if (i<lenght) {
-                char c3 = chars3[r.nextInt(chars3.length)];
+                char c3 = symbols[r.nextInt(symbols.length)];
                 sb.append(c3);
             }
         }
@@ -207,42 +214,64 @@ public class NewAccountFragment extends Fragment {
         password.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
-
+                //Warning not required
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-
+                //Warning not required
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 if (PASSWORD_PATTERN_MEDIUM_1.matcher(s).matches() || PASSWORD_PATTERN_MEDIUM_2.matcher(s).matches()) {
                     error.setText(" ");
-                    strength.setText("MEDIUM");
+                    if (Locale.getDefault().getLanguage().equals("it")) {
+                        strength.setText("MEDIA");
+                    } else {
+                        strength.setText("MEDIUM");
+                    }
                     strength.setTextColor(Color.parseColor("#FFA500"));
-                    strengthPassword = "medium";
+                    strengthPassword = PasswordStrength.MEDIUM;
                 }
                 if (PASSWORD_PATTERN_STRONG.matcher(s).matches()) {
                     error.setText(" ");
-                    strength.setText("STRONG");
+                    if (Locale.getDefault().getLanguage().equals("it")) {
+                        strength.setText("FORTE");
+                    } else {
+                        strength.setText("STRONG");
+                    }
                     strength.setTextColor(Color.GREEN);
-                    strengthPassword = "strong";
+                    strengthPassword = PasswordStrength.STRONG;
                 }
                 if (!PASSWORD_PATTERN_MEDIUM_1.matcher(s).matches() && !PASSWORD_PATTERN_MEDIUM_2.matcher(s).matches() && !PASSWORD_PATTERN_STRONG.matcher(s).matches()) {
                     error.setText(" ");
-                    strength.setText("WEAK");
+                    if (Locale.getDefault().getLanguage().equals("it")) {
+                        strength.setText("DEBOLE");
+                    } else {
+                        strength.setText("WEAK");
+                    }
                     strength.setTextColor(Color.RED);
-                    strengthPassword = "weak";
+                    strengthPassword = PasswordStrength.WEAK;
                 }
                 if (!PASSWORD_SPACES.matcher(s).matches()) {
-                    error.setText("No white spaces allowed");
-                    strength.setText("ERROR");
+                    if (Locale.getDefault().getLanguage().equals("it")) {
+                        error.setText("Gli spazi non sono ammessi");
+                        strength.setText("ERRORE");
+                    } else {
+                        error.setText("No white spaces allowed");
+                        strength.setText("ERROR");
+                    }
                     strength.setTextColor(Color.RED);
                 }
                 if (password.length() > 24) {
-                    error.setText("Password too long");
-                    strength.setText("ERROR");
+                    if (Locale.getDefault().getLanguage().equals("it")) {
+                        error.setText("Password troppo lunga");
+                        strength.setText("ERRORE");
+                    } else {
+                        error.setText("Password too long");
+                        strength.setText("ERROR");
+                    }
                     strength.setTextColor(Color.RED);
                 }
             }
@@ -277,12 +306,14 @@ public class NewAccountFragment extends Fragment {
     }
 
     public boolean setupCategory(View settView) {
-        String[] items = {"Social", "Music", "Entertainment", "Sport", "Film"};
+
+        List<String> items = FirebaseCategoryQuery.getAllCategories(db);
+
         AutoCompleteTextView auto_completeTxt;
         ArrayAdapter<String> adapterItems;
 
         auto_completeTxt = settView.findViewById(R.id.autoCompleteTxt);
-        adapterItems = new ArrayAdapter<String>(getContext(), R.layout.category_list, items);
+        adapterItems = new ArrayAdapter<>(getContext(), R.layout.category_list, items);
         auto_completeTxt.setAdapter(adapterItems);
 
         auto_completeTxt.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -335,52 +366,36 @@ public class NewAccountFragment extends Fragment {
 
                 // Connection with the database
                 if (check == 1) {
+
+
+
                     String account_name_text = account_name.getText().toString();
                     String username_text = username.getText().toString();
                     String email_text = email.getText().toString();
                     String password_text = password.getText().toString();
+                    String AES256Password = AES.encrypt(password_text, idUserLoggedIn);
 
                     Date last_updated = new Date(System.currentTimeMillis());
 
-                    Map<String, Object> account = new HashMap<>();
-                    account.put(ID_KEY, idUserLoggedIn);
-                    account.put(NAME_ACCOUNT_KEY, account_name_text);
-                    account.put(USERNAME_KEY, username_text);
-                    account.put(EMAIL_KEY, email_text);
-                    account.put(PASSWORD_KEY, Cryptography.hashString(password_text));
-                    account.put(STRENGTH_KEY, strengthPassword);
-                    account.put(AUTHENTICATION_KEY, authentication);
-                    account.put(CATEGORY_KEY, categorySelected);
-                    account.put(TIME_KEY, last_updated);
+                    Map<String, Object> accountToInsert = new HashMap<>();
+                    accountToInsert.put(FK_USER_ID_KEY, idUserLoggedIn);
+                    accountToInsert.put(NAME_ACCOUNT_KEY, account_name_text);
+                    accountToInsert.put(USERNAME_KEY, username_text);
+                    accountToInsert.put(EMAIL_KEY, email_text);
+                    accountToInsert.put(PASSWORD_KEY, AES256Password);
+                    accountToInsert.put(STRENGTH_KEY, strengthPassword);
+                    accountToInsert.put(AUTHENTICATION_KEY, authentication);
+                    accountToInsert.put(CATEGORY_KEY, categorySelected);
+                    accountToInsert.put(TIME_KEY, last_updated);
 
-                    db.collection("accounts")
-                            .get()
-                            .addOnCompleteListener(task -> {
-                                if (task.isSuccessful()) {
-                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                        if (document.getData().get(NAME_ACCOUNT_KEY).equals(account_name_text)) {
-                                            Toast.makeText(getContext(), "Name account already exists ", Toast.LENGTH_SHORT).show();
-                                            return;
-                                        }
-                                    }
+                    FirebaseAccountQuery.createAccount(db, accountToInsert, getContext());
 
-                                // Add a new document with a generated ID
-                                db.collection("accounts")
-                                        .add(account)
-                                        .addOnSuccessListener(documentReference -> {
-                                            Log.d(SAVE, "DocumentSnapshot added with ID: " + documentReference.getId());
-                                            Toast.makeText(getContext(), "Account added", Toast.LENGTH_SHORT).show();
-                                        })
-                                        .addOnFailureListener(e -> {
-                                            Log.w(SAVE, "Error adding document", e);
-                                            Toast.makeText(getContext(), "Unable to create user", Toast.LENGTH_SHORT).show();
-                                        });
-                                } else {
-                                    Log.w(SAVE, "Error getting documents", task.getException());
-                                }
-                            });
                 } else {
-                    Toast.makeText(getContext(), "Error, fill in the fields correctly", Toast.LENGTH_SHORT).show();
+                    if (Locale.getDefault().getLanguage().equals("it")) {
+                        Toast.makeText(getContext(), "Errore, riempi i campi correttamente", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), "Error, fill in the fields correctly", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });

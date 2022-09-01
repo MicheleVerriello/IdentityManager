@@ -1,8 +1,8 @@
 package com.identitymanager.activities;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -20,30 +23,41 @@ import com.identitymanager.fragments.DashboardFragment;
 import com.identitymanager.fragments.StatisticsFragment;
 import com.identitymanager.fragments.SettingsFragment;
 import com.identitymanager.fragments.UserDetailsViewFragment;
+import com.identitymanager.services.NotificationService;
 import com.identitymanager.utilities.language.LanguageManager;
+import com.identitymanager.workers.NotificationWorker;
+
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
     SharedPreferences.Editor editorLanguage;
     SharedPreferences.Editor editorTheme;
     String idUserLoggedIn;
+    String username;
+    private final String CHANNEL_ID = "identityManagerNotification";
+    private final String NOTIFICATION_CONTENT_TITLE = "Password need a change";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        getSupportActionBar().hide();
+        startNotificationServiceViaWorker();
+
         Bundle bundle = getIntent().getExtras();
         int idFragment = bundle.getInt("fragment");
         idUserLoggedIn = bundle.getString("userDocumentId");
+        username = bundle.getString("username");
 
         int idLoad = bundle.getInt("load", 0);
 
         SharedPreferences sharedLanguage = getSharedPreferences("language", 0);
-        int refresh = sharedLanguage.getInt("refresh", 0);
+        int refresh = sharedLanguage.getInt("sP", 0);
         editorLanguage = sharedLanguage.edit();
 
-        SharedPreferences sharedTheme = getSharedPreferences("color", 0);
+        SharedPreferences sharedTheme = getSharedPreferences("mode", 0);
         int theme = sharedTheme.getInt("theme", 0);
         editorTheme = sharedTheme.edit();
 
@@ -75,16 +89,14 @@ public class MainActivity extends AppCompatActivity {
                 if (idLoad == 0) {
                     identifyModePreference(theme);
                     getIntent().putExtra("load", 1);
-                    recreate();
+                    finish();
+                    startActivity(getIntent());
                 }
                 else if (idLoad == 1) {
                     identifyLanguagePreference(refresh);
                     getIntent().putExtra("load", 2);
-                    recreate();
-                }
-
-                if (theme == 2) {
-                    darkModeActionBar();
+                    finish();
+                    startActivity(getIntent());
                 }
 
                 break;
@@ -92,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (idFragment != 4) {
             getIntent().putExtra("userDocumentId", idUserLoggedIn);
+            getIntent().putExtra("username", username);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
         }
     }
@@ -106,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                  case R.id.nav_dashboard:
                      selectedFragment = new DashboardFragment();
+                     getIntent().putExtra("textCheck", 1);
                      break;
                  case R.id.nav_newAccount:
                      selectedFragment = new StatisticsFragment();
@@ -120,6 +134,9 @@ public class MainActivity extends AppCompatActivity {
 
             if (idChange != 4) {
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+            } else {
+                getIntent().putExtra("change_value", 0);
+                recreate();
             }
 
             restoreChangeValue();
@@ -133,10 +150,6 @@ public class MainActivity extends AppCompatActivity {
         Resources.Theme theme = super.getTheme();
         theme.applyStyle(R.style.DarkTheme, true);
         return theme;
-    }
-
-    public void darkModeActionBar() {
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(getApplicationContext(), R.color.purple_500)));
     }
 
     public void restoreChangeValue() {
@@ -154,11 +167,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setChangeLanguageEnglish() {
+        LanguageManager lang = new LanguageManager(getBaseContext());
+        lang.updateResources("en");
         editorLanguage.putInt("refresh", 1);
         editorLanguage.commit();
     }
 
     public void setChangeLanguageItalian() {
+        LanguageManager lang = new LanguageManager(getBaseContext());
+        lang.updateResources("it");
         editorLanguage.putInt("refresh", 2);
         editorLanguage.commit();
     }
@@ -166,19 +183,37 @@ public class MainActivity extends AppCompatActivity {
     public void identifyModePreference(int theme) {
         if (theme == 1) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            setTheme(R.style.Theme_IdentityManager);
         } else if (theme == 2) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
             setTheme(R.style.DarkTheme);
         }
     }
 
-    public void setLightTheme() {
-        editorTheme.putInt("theme", 1);
-        editorTheme.commit();
+    public void startService() {
+        if (!NotificationService.isServiceRunning) {
+            Intent notificationServiceIntent = new Intent(this, NotificationService.class);
+            ContextCompat.startForegroundService(this, notificationServiceIntent);
+        }
     }
 
-    public void setDarkTheme() {
-        editorTheme.putInt("theme", 2);
-        editorTheme.commit();
+    public void stopService() {
+        if (NotificationService.isServiceRunning) {
+            Intent serviceIntent = new Intent(this, NotificationService.class);
+            stopService(serviceIntent);
+        }
+    }
+
+    public void startNotificationServiceViaWorker() {
+        String UNIQUE_WORK_NAME = "StartNotificationServiceViaWorker";
+        WorkManager workManager = WorkManager.getInstance();
+
+        // As per Documentation: The minimum repeat interval that can be defined is 15 minutes
+        // (same as the JobScheduler API), but in practice 15 doesn't work. Using 16 here
+        PeriodicWorkRequest request = new PeriodicWorkRequest.Builder(NotificationWorker.class,1, TimeUnit.DAYS).build();
+
+        // to schedule a unique work, no matter how many times app is opened i.e. startServiceViaWorker gets called
+        // do check for AutoStart permission
+        workManager.enqueueUniquePeriodicWork(UNIQUE_WORK_NAME, ExistingPeriodicWorkPolicy.KEEP, request);
     }
 }

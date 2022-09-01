@@ -1,86 +1,115 @@
 package com.identitymanager.fragments;
+
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.identitymanager.R;
-import com.identitymanager.models.Account;
+import com.identitymanager.adapters.RecyclerAdapter;
+import com.identitymanager.models.data.Account;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class DashboardFragment extends Fragment {
 
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseFirestore db;
+    RecyclerView recyclerView;
+    RecyclerAdapter.RecyclerViewClickListener listener;
+    RecyclerAdapter recyclerAdapter;
+    ArrayList<Account> list;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View settView = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
-        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
 
-        ListView accountsListView = settView.findViewById(R.id.accounts_list);
-
-        List<Account> accounts = new ArrayList<>();
-        List<String> accountsString = new ArrayList<>();
+        //Get the user ID
         Bundle bundle = getActivity().getIntent().getExtras();
         String idUserLoggedIn = bundle.getString("userDocumentId");
-        DocumentReference userDocRef = db.collection("users").document(idUserLoggedIn);
 
+        recyclerView = settView.findViewById(R.id.accounts_list);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        Log.d("INFO", "Getting documents");
-        db.collection("accounts")
-                .whereEqualTo("user", userDocRef)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                accounts.add(document.toObject(Account.class));
-                                Log.d("QUERY OK", document.getId() + " => " + document.getData());
-                            }
-                        } else {
-                            Log.d("QUERY", "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
+        db = FirebaseFirestore.getInstance();
+        list = new ArrayList<Account>();
 
-        for (Account account: accounts) {
-            accountsString.add(account.getAccountName());
-        }
+        setOnClickListener();
+        recyclerAdapter = new RecyclerAdapter(getContext(), list, listener);
+        recyclerView.setAdapter(recyclerAdapter);
 
-        ArrayAdapter<String> listViewAdapter = new ArrayAdapter<>(
-                getActivity(),
-                android.R.layout.simple_list_item_1,
-                accountsString
-        );
-
-        accountsListView.setAdapter(listViewAdapter);
-
-        clickbutton(settView);
+        EventChangeListener(idUserLoggedIn);
+        clickText(settView);
+        clickButton(settView);
 
         return settView;
     }
 
-    private void clickbutton(View settView) {
+    private void setOnClickListener() {
+        listener = new RecyclerAdapter.RecyclerViewClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                Fragment fragment = new AccountDetailsFragment();
+
+                getActivity().getIntent().putExtra("id", list.get(position).getFkIdUser());
+                getActivity().getIntent().putExtra("accountName", list.get(position).getAccountName());
+                getActivity().getIntent().putExtra("email", list.get(position).getEmail());
+                getActivity().getIntent().putExtra("category", list.get(position).getcategory());
+                getActivity().getIntent().putExtra("username", list.get(position).getUsername());
+                getActivity().getIntent().putExtra("password", list.get(position).getPassword());
+                getActivity().getIntent().putExtra("passwordStrength", list.get(position).getPasswordStrength());
+                getActivity().getIntent().putExtra("authentication", list.get(position).getTwoFactorAuthentication());
+
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+            }
+        };
+    }
+
+    private void clickText(View view) {
+        TextView show_all = view.findViewById(R.id.show_all_text);
+        TextView show_favorites = view.findViewById(R.id.show_favorites);
+
+        Bundle bundle = getActivity().getIntent().getExtras();
+        int text_check = bundle.getInt("textCheck");
+
+        if (text_check == 1) {
+            show_all.setTypeface(null, Typeface.BOLD);
+        }
+
+        show_all.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                show_favorites.setTypeface(null, Typeface.NORMAL);
+                show_all.setTypeface(null, Typeface.BOLD);
+            }
+        });
+
+        show_favorites.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                show_all.setTypeface(null, Typeface.NORMAL);
+                show_favorites.setTypeface(null, Typeface.BOLD);
+            }
+        });
+    }
+
+    private void clickButton(View settView) {
         FloatingActionButton fab;
         fab = settView.findViewById(R.id.add_button);
 
@@ -94,5 +123,25 @@ public class DashboardFragment extends Fragment {
         });
     }
 
+    private void EventChangeListener(String idUserLoggedIn) {
 
+        db.collection("accounts") //get all account details
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        if (task.getResult() != null) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Account account = document.toObject(Account.class);
+                                if ((account.getFkIdUser().equals(idUserLoggedIn))) {
+                                    list.add(account);
+                                    recyclerAdapter.notifyDataSetChanged();
+                                }
+                                Log.d("QUERY OK", document.getId() + " => " + document.getData());
+                            }
+                        } else {
+                            Log.d("QUERY", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
 }

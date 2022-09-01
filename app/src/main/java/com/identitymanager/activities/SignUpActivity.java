@@ -12,8 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.identitymanager.R;
+import com.identitymanager.utilities.files.FileManager;
 import com.identitymanager.utilities.security.Cryptography;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,6 +30,8 @@ public class SignUpActivity extends AppCompatActivity {
     public static final String NAME_KEY = "name";
     public static final String SURNAME_KEY = "surname";
     public static final String SIGN_UP = "sign_up"; //for logs
+
+    public static final String USER_PROPERTIES_FILENAME = "user_properties.txt"; //for app-internal storage values
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -78,6 +82,11 @@ public class SignUpActivity extends AppCompatActivity {
                     .addOnSuccessListener(documentReference -> {
                         Log.d(SIGN_UP, "DocumentSnapshot added with ID: " + documentReference.getId());
                         Toast.makeText(getApplicationContext(), "User created", Toast.LENGTH_SHORT).show();
+
+                        FileManager.createAppInternalStorageFile(this.getFilesDir(), this.USER_PROPERTIES_FILENAME);
+                        String fileContent = "userId=" + documentReference.getId();
+                        FileManager.writeToAppInternalStorageFile(this.USER_PROPERTIES_FILENAME, fileContent, this);
+
                         this.goToLoginActivity();
                     })
                     .addOnFailureListener(e -> {

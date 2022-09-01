@@ -1,6 +1,6 @@
 package com.identitymanager.database.firestore.callbacks;
 
-import com.identitymanager.models.Account;
+import com.identitymanager.models.data.Account;
 
 public interface GetAccountCallback {
 

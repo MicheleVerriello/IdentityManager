@@ -7,30 +7,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 
-import com.identitymanager.activities.ExpandableListDataPump;
-import com.identitymanager.activities.CustomExpandableListAdapter;
 import com.identitymanager.activities.MainActivity;
 import com.identitymanager.utilities.language.LanguageManager;
 import com.identitymanager.R;
-import android.widget.ExpandableListAdapter;
-import android.widget.ExpandableListView;
-import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
+import java.util.Locale;
 
 public class SettingsFragment extends Fragment {
 
@@ -38,17 +28,15 @@ public class SettingsFragment extends Fragment {
     SharedPreferences.Editor editorRestart;
     SharedPreferences.Editor editorMode;
 
-    // New Trusted
-    private AlertDialog.Builder dialogBuilder;
-    private AlertDialog dialog;
-    private EditText editTextNickname_newTrusted, editTextEmail_newTrusted;
-    private Button buttonAdd_newTrusted, buttonCancel_newTrusted;
+    Button button_newTrusted;
 
+    private final Integer REQUEST_ENABLE_BT = 1;
+
+    // New Trusted
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Nullable
@@ -56,16 +44,29 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View settView = inflater.inflate(R.layout.fragment_settings, container, false);
 
+        SharedPreferences sharedLanguage = getActivity().getSharedPreferences("language", 0);
+        int refresh = sharedLanguage.getInt("sP", 0);
+
+        // Checks language
+        if (refresh == 2 && Locale.getDefault().getLanguage().equals("en")) {
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
+        }
+
+        button_newTrusted = settView.findViewById(R.id.button_newTrusted);
+        button_newTrusted.setOnClickListener(view -> {
+            this.createNewTrustedDialog();
+        }
+        );
+
         changeLanguage(settView);
         darkMode(settView);
-        trust(settView);
-        setup_newTrusted(settView);
 
         return settView;
     }
 
+    // Sets language selected by the user
     public void changeLanguage(View settView) {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("choose", 0);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("language", 0);
         int sP = sharedPreferences.getInt("sP", 1);
         editor = sharedPreferences.edit();
 
@@ -78,22 +79,28 @@ public class SettingsFragment extends Fragment {
         RadioButton itRb = settView.findViewById(R.id.radio_button2);
         LanguageManager lang = new LanguageManager(getContext());
 
+        // Sets default language to english
         if (count == 0) {
             enRb.setChecked(true);
-            ((MainActivity) getActivity()).setChangeLanguageItalian();
         }
 
         saveLanguagePreferences(sP, count, enRb, itRb, lang);
 
+        // Sets language by checking the chosen option
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                // English case
                 if (i == R.id.radio_button1) {
                     lang.updateResources("en");
                     editor.putInt("sP", 1);
-                } else {
+                    ((MainActivity) getActivity()).setChangeLanguageEnglish();
+                }
+                // Italian case
+                else {
                     lang.updateResources("it");
                     editor.putInt("sP", 2);
+                    ((MainActivity) getActivity()).setChangeLanguageItalian();
                 }
                 editor.commit();
 
@@ -105,7 +112,9 @@ public class SettingsFragment extends Fragment {
         });
     }
 
+    // Saves language chosen
     public void saveLanguagePreferences(int sP, int count, RadioButton enRb, RadioButton itRb, LanguageManager lang) {
+        // English case
         if (sP == 1 && count == 1) {
             enRb.setChecked(true);
             lang.updateResources("en");
@@ -113,7 +122,9 @@ public class SettingsFragment extends Fragment {
 
             editorRestart.putInt("count", 1);
             editorRestart.commit();
-        } else if (sP == 2 && count == 1) {
+        }
+        // Italian case
+        else if (sP == 2 && count == 1) {
             itRb.setChecked(true);
             lang.updateResources("it");
             ((MainActivity) getActivity()).setChangeLanguageItalian();
@@ -123,30 +134,33 @@ public class SettingsFragment extends Fragment {
         }
     }
 
+    // Changes app theme if selected
     public void darkMode(View settView) {
         SharedPreferences sharedMode = getActivity().getSharedPreferences("mode", 0);
-        int check = sharedMode.getInt("check", 0);
         editorMode = sharedMode.edit();
+
+        int check = sharedMode.getInt("theme", 0);
 
         SwitchCompat aSwitch = settView.findViewById(R.id.s1);
 
+        // If dark mode is already enabled the switch is checked
         if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES || check == 2) {
             aSwitch.setChecked(true);
-            ((MainActivity) getActivity()).darkModeActionBar();
-            ((MainActivity) getActivity()).setDarkTheme();
         }
 
+        // Sets app theme by checking the corresponding switch
         aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                // Enables dark mode
                 if (aSwitch.isChecked()) {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    ((MainActivity) getActivity()).setDarkTheme();
-                    editorMode.putInt("check", 2);
-                } else {
+                    editorMode.putInt("theme", 2);
+                }
+                // Disables dark mode
+                else {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    ((MainActivity) getActivity()).setLightTheme();
-                    editorMode.putInt("check", 1);
+                    editorMode.putInt("theme", 1);
                 }
                 editorMode.commit();
 
@@ -155,112 +169,57 @@ public class SettingsFragment extends Fragment {
         });
     }
 
+    // Refresh remaining in settings
     public void remainInSettings() {
         getActivity().getIntent().putExtra("fragment", 4);
         getActivity().getIntent().putExtra("change_value", 4);
         getActivity().recreate();
     }
 
+    // Refresh remaining in settings and controls language and theme selected by the user
     public void remainInSettingsCoordinationLanguage() {
         getActivity().getIntent().putExtra("fragment", 4);
         getActivity().getIntent().putExtra("change_value", 0);
         getActivity().recreate();
     }
 
-
-
-
-    public void trust(View settView){
-
-        ExpandableListView expandableListView;
-        ExpandableListAdapter expandableListAdapter;
-        List<String> expandableListTitle;
-        HashMap<String, List<String>> expandableListDetail;
-
-
-        expandableListView = (ExpandableListView) settView.findViewById(R.id.youTrust);
-        expandableListDetail = ExpandableListDataPump.getData();
-        expandableListTitle = new ArrayList<String>(expandableListDetail.keySet());
-        expandableListAdapter = new CustomExpandableListAdapter(getActivity(), expandableListTitle, expandableListDetail);
-        expandableListView.setAdapter(expandableListAdapter);
-        expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-
-            @Override
-            public void onGroupExpand(int groupPosition) {
-                Toast.makeText(getActivity().getApplicationContext(),
-                        expandableListTitle.get(groupPosition) + " List Expanded.",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        expandableListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
-
-            @Override
-            public void onGroupCollapse(int groupPosition) {
-                Toast.makeText(getActivity().getApplicationContext(),
-                        expandableListTitle.get(groupPosition) + " List Collapsed.",
-                        Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
-        expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v,
-                                        int groupPosition, int childPosition, long id) {
-                Toast.makeText(
-                        getActivity().getApplicationContext(),
-                        expandableListTitle.get(groupPosition)
-                                + " -> "
-                                + expandableListDetail.get(
-                                expandableListTitle.get(groupPosition)).get(
-                                childPosition), Toast.LENGTH_SHORT
-                ).show();
-                return false;
-            }
-        });
-    }
-
     public void createNewTrustedDialog(){
-        dialogBuilder = new AlertDialog.Builder(getActivity());
-        final View newTrusted_popupView = getLayoutInflater().inflate(R.layout.new_trusted_popup, null);
-        editTextNickname_newTrusted = (EditText) newTrusted_popupView.findViewById(R.id.editTextNickname_newTrusted);
-        editTextEmail_newTrusted = (EditText) newTrusted_popupView.findViewById(R.id.editTextEmail_newTrusted);
 
-        buttonAdd_newTrusted = (Button) newTrusted_popupView.findViewById(R.id.buttonAdd_newTrusted);
-        buttonCancel_newTrusted = (Button) newTrusted_popupView.findViewById(R.id.buttonCancel_newTrusted);
-
-        dialogBuilder.setView(newTrusted_popupView);
-        dialog = dialogBuilder.create();
-        dialog.show();
-
-        buttonAdd_newTrusted.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //salva su database
-            }
-        });
-
-        buttonCancel_newTrusted.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //salva su database
-            }
-        });
-
-
-    }
-
-    public void setup_newTrusted(View settView){
-
-        Button newTrusted = settView.findViewById(R.id.button_newTrusted);
-
-        newTrusted.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                createNewTrustedDialog();
-            }
-        });
-
+        Fragment trustFragment = new TrustFragment();
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, trustFragment).commit();
+//
+//        dialogBuilder = new AlertDialog.Builder(getActivity());
+//        final View newTrusted_popupView = getLayoutInflater().inflate(R.layout.new_trusted_popup, null);
+//        editTextNickname_newTrusted = newTrusted_popupView.findViewById(R.id.editTextNickname_newTrusted);
+//        editTextEmail_newTrusted = newTrusted_popupView.findViewById(R.id.editTextEmail_newTrusted);
+//
+//        buttonAdd_newTrusted = newTrusted_popupView.findViewById(R.id.buttonAdd_newTrusted);
+//        buttonCancel_newTrusted =  newTrusted_popupView.findViewById(R.id.buttonCancel_newTrusted);
+//
+//        dialogBuilder.setView(newTrusted_popupView);
+//        dialog = dialogBuilder.create();
+//        dialog.show();
+//
+//        // activate bluetooth if not active
+//        bluetoothManager = getActivity().getSystemService(BluetoothManager.class);
+//
+//        System.out.println(bluetoothManager.toString());
+//
+//        bluetoothAdapter = bluetoothManager.getAdapter();
+//
+//        if (bluetoothAdapter != null && !bluetoothAdapter.isEnabled()) {
+//            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+//            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+//        }
+//
+//        // searching for nearby devices
+//
+//        // click on the device to connect
+//
+//        // send a trust request to connected device
+//
+//        // wait for a response
+//
+//        // if response is OK save the trust into db
     }
 }
