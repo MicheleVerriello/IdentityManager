@@ -80,11 +80,11 @@ public class StatisticsFragment extends Fragment {
     private void setupPieChart(View settView, int refresh) {
         AnyChartView anyChartView = settView.findViewById(R.id.any_chart_view);
 
-        // Get the user ID
+        // Gets the user ID
         Bundle bundle = getActivity().getIntent().getExtras();
         String idUserLoggedIn = bundle.getString("userDocumentId");
 
-        // Get password strength percentage of all user accounts
+        // Gets password strength percentage of all user accounts
         db.collection("accounts")
                 .get()
                 .addOnCompleteListener(task -> {

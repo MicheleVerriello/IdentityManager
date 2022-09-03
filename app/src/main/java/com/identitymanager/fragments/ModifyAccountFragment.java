@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +28,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.identitymanager.R;
 import com.identitymanager.database.firestore.queries.FirebaseCategoryQuery;
 import com.identitymanager.utilities.security.AES;
-import com.identitymanager.utilities.security.PasswordStrength;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -86,12 +84,10 @@ public class ModifyAccountFragment extends Fragment {
         email.setText(oldAccountEmailDetails, TextView.BufferType.EDITABLE);
         password.setText(AES.decrypt(oldAccountPasswordDetails, idUserLoggedIn), TextView.BufferType.EDITABLE);
 
-        //account_name.setText(oldAccountCategoryDetails, TextView.BufferType.EDITABLE);
-
         // Methods for checking each field
-        setupAccountName(settView, account_name);
-        setupUsername(settView, username);
-        setupEmail(settView, email);
+        setupAccountName(account_name);
+        setupUsername(username);
+        setupEmail(email);
         setupPassword(settView, password);
         setupSuggest(settView, password);
         setup2FA(settView, oldAccount2FADetails);
@@ -99,13 +95,14 @@ public class ModifyAccountFragment extends Fragment {
 
         // Method to confirm the entry in the database
         setupModify(settView, account_name, username, email, password, idUserLoggedIn, oldAccountNameDetails, oldAccountCategoryDetails);
+
         // Method to go back without modifications
         setupGoBack(settView);
 
         return settView;
     }
 
-    public boolean setupAccountName(View settView, EditText account_name) {
+    public boolean setupAccountName(EditText account_name) {
         String accountNameInput = account_name.getText().toString();
 
         if (!accountNameInput.isEmpty()) {
@@ -115,7 +112,7 @@ public class ModifyAccountFragment extends Fragment {
         }
     }
 
-    public boolean setupUsername(View settView, EditText username) {
+    public boolean setupUsername(EditText username) {
         String usernameInput = username.getText().toString();
 
         if (!usernameInput.isEmpty()) {
@@ -125,7 +122,7 @@ public class ModifyAccountFragment extends Fragment {
         }
     }
 
-    public boolean setupEmail(View settView, EditText email) {
+    public boolean setupEmail(EditText email) {
         String emailInput = email.getText().toString();
 
         Pattern EMAIL_PATTERN = Pattern.compile("^" +
@@ -373,15 +370,15 @@ public class ModifyAccountFragment extends Fragment {
 
                 int check = 1;
 
-                if (!setupAccountName(settView, account_name)) {
+                if (!setupAccountName(account_name)) {
                     check = 0;
                 }
 
-                if (!setupUsername(settView, username)) {
+                if (!setupUsername(username)) {
                     check = 0;
                 }
 
-                if (!setupEmail(settView, email)) {
+                if (!setupEmail(email)) {
                     check = 0;
                 }
 
@@ -454,7 +451,7 @@ public class ModifyAccountFragment extends Fragment {
                             }
                         }
 
-                        // Update the document with new data
+                        // Updates the document with new data
                         db.collection("accounts")
                                 .get()
                                 .addOnCompleteListener(operation -> {

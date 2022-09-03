@@ -143,4 +143,44 @@ public class TrustFragment extends Fragment {
 
     public void showBluetoothDevicesDialog() {
     }
+
+    public void createNewTrustedDialog(){
+
+        Fragment trustFragment = new TrustFragment();
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, trustFragment).commit();
+//
+//        dialogBuilder = new AlertDialog.Builder(getActivity());
+//        final View newTrusted_popupView = getLayoutInflater().inflate(R.layout.new_trusted_popup, null);
+//        editTextNickname_newTrusted = newTrusted_popupView.findViewById(R.id.editTextNickname_newTrusted);
+//        editTextEmail_newTrusted = newTrusted_popupView.findViewById(R.id.editTextEmail_newTrusted);
+//
+//        buttonAdd_newTrusted = newTrusted_popupView.findViewById(R.id.buttonAdd_newTrusted);
+//        buttonCancel_newTrusted =  newTrusted_popupView.findViewById(R.id.buttonCancel_newTrusted);
+//
+//        dialogBuilder.setView(newTrusted_popupView);
+//        dialog = dialogBuilder.create();
+//        dialog.show();
+//
+//        // activate bluetooth if not active
+//        bluetoothManager = getActivity().getSystemService(BluetoothManager.class);
+//
+//        System.out.println(bluetoothManager.toString());
+//
+//        bluetoothAdapter = bluetoothManager.getAdapter();
+//
+//        if (bluetoothAdapter != null && !bluetoothAdapter.isEnabled()) {
+//            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+//            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+//        }
+//
+//        // searching for nearby devices
+//
+//        // click on the device to connect
+//
+//        // send a trust request to connected device
+//
+//        // wait for a response
+//
+//        // if response is OK save the trust into db
+    }
 }

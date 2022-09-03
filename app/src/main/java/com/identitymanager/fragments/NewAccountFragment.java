@@ -26,7 +26,6 @@ import com.identitymanager.R;
 import com.identitymanager.database.firestore.queries.FirebaseAccountQuery;
 import com.identitymanager.database.firestore.queries.FirebaseCategoryQuery;
 import com.identitymanager.utilities.security.AES;
-import com.identitymanager.utilities.security.Cryptography;
 import com.identitymanager.utilities.security.PasswordStrength;
 
 import java.util.Date;
@@ -62,7 +61,7 @@ public class NewAccountFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View settView = inflater.inflate(R.layout.fragment_new_account, container, false);
 
-        // Getting the userDocumentId
+        // Gets the user ID
         Bundle bundle = getActivity().getIntent().getExtras();
         idUserLoggedIn = bundle.getString("userDocumentId");
 
@@ -72,9 +71,9 @@ public class NewAccountFragment extends Fragment {
         EditText password = settView.findViewById(R.id.editTextPassword);
 
         // Methods for checking each field
-        setupAccountName(settView, account_name);
-        setupUsername(settView, username);
-        setupEmail(settView, email);
+        setupAccountName(account_name);
+        setupUsername(username);
+        setupEmail(email);
         setupPassword(settView, password);
         setupSuggest(settView, password);
         setup2FA(settView);
@@ -86,7 +85,7 @@ public class NewAccountFragment extends Fragment {
         return settView;
     }
 
-    public boolean setupAccountName(View settView, EditText account_name) {
+    public boolean setupAccountName(EditText account_name) {
         String accountNameInput = account_name.getText().toString();
 
         if (!accountNameInput.isEmpty()) {
@@ -96,7 +95,7 @@ public class NewAccountFragment extends Fragment {
         }
     }
 
-    public boolean setupUsername(View settView, EditText username) {
+    public boolean setupUsername(EditText username) {
         String usernameInput = username.getText().toString();
 
         if (!usernameInput.isEmpty()) {
@@ -106,7 +105,7 @@ public class NewAccountFragment extends Fragment {
         }
     }
 
-    public boolean setupEmail(View settView, EditText email) {
+    public boolean setupEmail(EditText email) {
         String emailInput = email.getText().toString();
 
         Pattern EMAIL_PATTERN = Pattern.compile("^" +
@@ -342,15 +341,15 @@ public class NewAccountFragment extends Fragment {
                 // Check == 0 -> errors detected
                 int check = 1;
 
-                if (!setupAccountName(settView, account_name)) {
+                if (!setupAccountName(account_name)) {
                     check = 0;
                 }
 
-                if (!setupUsername(settView, username)) {
+                if (!setupUsername(username)) {
                     check = 0;
                 }
 
-                if (!setupEmail(settView, email)) {
+                if (!setupEmail(email)) {
                     check = 0;
                 }
 
@@ -368,8 +367,6 @@ public class NewAccountFragment extends Fragment {
 
                 // Connection with the database
                 if (check == 1) {
-
-
 
                     String account_name_text = account_name.getText().toString();
                     String username_text = username.getText().toString();
