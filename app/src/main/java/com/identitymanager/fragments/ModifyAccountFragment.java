@@ -56,13 +56,15 @@ public class ModifyAccountFragment extends Fragment {
     private final String CATEGORY_KEY = "category";
     private final String TIME_KEY = "lastUpdate";
 
+    String idUserLoggedIn;
+
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View settView = inflater.inflate(R.layout.fragment_modify_account, container, false);
 
         Bundle bundle = getActivity().getIntent().getExtras();
-        String idUserLoggedIn =  bundle.getString("id");
+        idUserLoggedIn =  bundle.getString("id");
         String oldAccountNameDetails = bundle.getString("accountName");
         String oldAccountUsernameDetails = bundle.getString("username");
         String oldAccountEmailDetails = bundle.getString("email");
@@ -433,6 +435,7 @@ public class ModifyAccountFragment extends Fragment {
     public void modifyAccount(FirebaseFirestore db, Map<String, Object> accountToUpdate, String oldAccountNameDetails, Context context) {
 
         db.collection("accounts")
+                .whereEqualTo("fkIdUser", idUserLoggedIn)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
