@@ -3,7 +3,7 @@
     package="com.identitymanager">
 
     <!-- START FEATURES -->
-    <uses-feature android:name="android.hardware.bluetooth" android:required="true"/>
+    <uses-feature android:name="android.hardware.bluetooth"/>
     <!-- END FEATURES -->
 
 
