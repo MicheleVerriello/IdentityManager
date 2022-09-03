@@ -19,10 +19,11 @@ public class FirebaseAccountQuery extends Fragment {
 
     static final String ACCOUNTS_COLLECTION_PATH = "accounts";
 
-    public static void createAccount(FirebaseFirestore db, Map<String, Object> accountToInsert, Context context) {
+    public static void createAccount(FirebaseFirestore db, Map<String, Object> accountToInsert, Context context, String userId) {
 
 
         db.collection(ACCOUNTS_COLLECTION_PATH)
+                .whereEqualTo("fkIdUser", userId)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -63,7 +64,6 @@ public class FirebaseAccountQuery extends Fragment {
                         Log.w("SAVE", "Error getting documents", task.getException());
                     }
                 });
-
     }
 
     public static List<Account> getAccountsByUserId(FirebaseFirestore db, String userId) {
