@@ -1,6 +1,5 @@
 package com.identitymanager.activities;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
@@ -23,7 +21,6 @@ import com.identitymanager.fragments.DashboardFragment;
 import com.identitymanager.fragments.StatisticsFragment;
 import com.identitymanager.fragments.SettingsFragment;
 import com.identitymanager.fragments.UserDetailsViewFragment;
-import com.identitymanager.services.NotificationService;
 import com.identitymanager.utilities.language.LanguageManager;
 import com.identitymanager.workers.NotificationWorker;
 
@@ -35,8 +32,6 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences.Editor editorTheme;
     String idUserLoggedIn;
     String username;
-    private final String CHANNEL_ID = "identityManagerNotification";
-    private final String NOTIFICATION_CONTENT_TITLE = "Password need a change";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,17 +41,23 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         startNotificationServiceViaWorker();
 
+        // Gets the idFragment
         Bundle bundle = getIntent().getExtras();
         int idFragment = bundle.getInt("fragment");
+
+        // Gets the user ID
         idUserLoggedIn = bundle.getString("userDocumentId");
         username = bundle.getString("username");
 
+        // First start
         int idLoad = bundle.getInt("load", 0);
 
+        // Gets the language
         SharedPreferences sharedLanguage = getSharedPreferences("language", 0);
         int refresh = sharedLanguage.getInt("sP", 0);
         editorLanguage = sharedLanguage.edit();
 
+        // Gets the theme
         SharedPreferences sharedTheme = getSharedPreferences("mode", 0);
         int theme = sharedTheme.getInt("theme", 0);
         editorTheme = sharedTheme.edit();
@@ -66,32 +67,39 @@ public class MainActivity extends AppCompatActivity {
         Fragment fragment = null;
         View view = null;
 
+        // Checks which item of BottomNavigationView is selected
         switch (idFragment) {
+            // Case Statistics
             case 2:
                 fragment = new StatisticsFragment();
                 view = bottomNav.findViewById(R.id.nav_newAccount);
                 view.performClick();
                 break;
+            // Case Profile
             case 3:
                 fragment = new UserDetailsViewFragment();
                 view = bottomNav.findViewById(R.id.nav_user_details);
                 view.performClick();
                 break;
+            // Case Settings
             case 4:
                 view = bottomNav.findViewById(R.id.nav_settings);
                 view.performClick();
                 break;
+            // Case Dashboard
             default:
                 fragment = new DashboardFragment();
                 view = bottomNav.findViewById(R.id.nav_dashboard);
                 view.performClick();
 
+                // Loads theme chosen and refresh
                 if (idLoad == 0) {
                     identifyModePreference(theme);
                     getIntent().putExtra("load", 1);
                     finish();
                     startActivity(getIntent());
                 }
+                // Loads language chosen and refresh
                 else if (idLoad == 1) {
                     identifyLanguagePreference(refresh);
                     getIntent().putExtra("load", 2);
@@ -109,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // User selects an item in the BottomNavigationView
     private  NavigationBarView.OnItemSelectedListener navListener = new NavigationBarView.OnItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -117,16 +126,20 @@ public class MainActivity extends AppCompatActivity {
             Fragment selectedFragment = null;
 
             switch (item.getItemId()) {
+                // Case Dashboard
                  case R.id.nav_dashboard:
                      selectedFragment = new DashboardFragment();
                      getIntent().putExtra("textCheck", 1);
                      break;
+                // Case Statistics
                  case R.id.nav_newAccount:
                      selectedFragment = new StatisticsFragment();
                      break;
+                // Case Profile
                  case R.id.nav_user_details:
                      selectedFragment = new UserDetailsViewFragment();
                      break;
+                // Case Settings
                  case R.id.nav_settings:
                      selectedFragment = new SettingsFragment();
                      break;
@@ -187,20 +200,6 @@ public class MainActivity extends AppCompatActivity {
         } else if (theme == 2) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
             setTheme(R.style.DarkTheme);
-        }
-    }
-
-    public void startService() {
-        if (!NotificationService.isServiceRunning) {
-            Intent notificationServiceIntent = new Intent(this, NotificationService.class);
-            ContextCompat.startForegroundService(this, notificationServiceIntent);
-        }
-    }
-
-    public void stopService() {
-        if (NotificationService.isServiceRunning) {
-            Intent serviceIntent = new Intent(this, NotificationService.class);
-            stopService(serviceIntent);
         }
     }
 

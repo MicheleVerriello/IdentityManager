@@ -40,6 +40,7 @@ public class AccountDetailsFragment extends Fragment {
         password = settView.findViewById(R.id.account_password_details);
         passwordStrength = settView.findViewById(R.id.account_password_strength_details);
 
+        // Gets data account
         Bundle bundle = getActivity().getIntent().getExtras();
         id =  bundle.getString("id");
         accountNameDetails = bundle.getString("accountName");
@@ -49,6 +50,7 @@ public class AccountDetailsFragment extends Fragment {
         passwordDetails = bundle.getString("password");
         passwordStrengthDetails = bundle.getString("passwordStrength");
 
+        // Sets data account
         accountName.setText(accountNameDetails);
         category.setText(categoryDetails);
         email.setText(emailDetails);

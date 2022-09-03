@@ -1,16 +1,13 @@
 package com.identitymanager.fragments;
 
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,9 +34,7 @@ public class DashboardFragment extends Fragment {
 
         View settView = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
-        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
-
-        //Get the user ID
+        //Gets the user ID
         Bundle bundle = getActivity().getIntent().getExtras();
         String idUserLoggedIn = bundle.getString("userDocumentId");
 
@@ -96,7 +91,8 @@ public class DashboardFragment extends Fragment {
 
     private void EventChangeListener(String idUserLoggedIn) {
 
-        db.collection("accounts") //get all account details
+        // Gets all account details
+        db.collection("accounts")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
