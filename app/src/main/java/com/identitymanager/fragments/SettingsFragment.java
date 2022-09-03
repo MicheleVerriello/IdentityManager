@@ -52,12 +52,6 @@ public class SettingsFragment extends Fragment {
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
         }
 
-        button_newTrusted = settView.findViewById(R.id.button_newTrusted);
-        button_newTrusted.setOnClickListener(view -> {
-            this.createNewTrustedDialog();
-        }
-        );
-
         changeLanguage(settView);
         darkMode(settView);
 

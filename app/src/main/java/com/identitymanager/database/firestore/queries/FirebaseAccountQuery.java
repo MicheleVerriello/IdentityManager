@@ -55,9 +55,9 @@ public class FirebaseAccountQuery extends Fragment {
                                 .addOnFailureListener(e -> {
                                     Log.w("SAVE", "Error adding document", e);
                                     if (Locale.getDefault().getLanguage().equals("it")) {
-                                        Toast.makeText(context, "Errore nel creare l'utente", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(context, "Errore nel creare l'account", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        Toast.makeText(context, "Unable to create user", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(context, "Unable to create account", Toast.LENGTH_SHORT).show();
                                     }
                                 });
                     } else {

@@ -361,6 +361,13 @@ public class UserDetailsEditFragment extends Fragment {
                                                    }
                                                }
                                            }
+                                           else {
+                                               if (Locale.getDefault().getLanguage().equals("it")) {
+                                                   Toast.makeText(context, "Errore nel modificare il profilo", Toast.LENGTH_SHORT).show();
+                                               } else {
+                                                   Toast.makeText(context, "Unable to modify profile", Toast.LENGTH_SHORT).show();
+                                               }
+                                           }
                                        });
                            }
                         });

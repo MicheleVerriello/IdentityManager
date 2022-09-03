@@ -55,7 +55,6 @@ public class DashboardFragment extends Fragment {
         recyclerView.setAdapter(recyclerAdapter);
 
         EventChangeListener(idUserLoggedIn);
-        clickText(settView);
         clickButton(settView);
 
         return settView;
@@ -79,34 +78,6 @@ public class DashboardFragment extends Fragment {
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
             }
         };
-    }
-
-    private void clickText(View view) {
-        TextView show_all = view.findViewById(R.id.show_all_text);
-        TextView show_favorites = view.findViewById(R.id.show_favorites);
-
-        Bundle bundle = getActivity().getIntent().getExtras();
-        int text_check = bundle.getInt("textCheck");
-
-        if (text_check == 1) {
-            show_all.setTypeface(null, Typeface.BOLD);
-        }
-
-        show_all.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                show_favorites.setTypeface(null, Typeface.NORMAL);
-                show_all.setTypeface(null, Typeface.BOLD);
-            }
-        });
-
-        show_favorites.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                show_all.setTypeface(null, Typeface.NORMAL);
-                show_favorites.setTypeface(null, Typeface.BOLD);
-            }
-        });
     }
 
     private void clickButton(View settView) {
