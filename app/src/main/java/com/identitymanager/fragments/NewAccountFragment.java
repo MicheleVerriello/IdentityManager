@@ -54,6 +54,8 @@ public class NewAccountFragment extends Fragment {
     private final String CATEGORY_KEY = "category";
     private final String TIME_KEY = "lastUpdate";
 
+    String idUserLoggedIn;
+
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
@@ -62,7 +64,7 @@ public class NewAccountFragment extends Fragment {
 
         // Getting the userDocumentId
         Bundle bundle = getActivity().getIntent().getExtras();
-        String idUserLoggedIn = bundle.getString("userDocumentId");
+        idUserLoggedIn = bundle.getString("userDocumentId");
 
         EditText account_name = settView.findViewById(R.id.editTextAccountName);
         EditText username = settView.findViewById(R.id.editTextUsername);
@@ -388,7 +390,7 @@ public class NewAccountFragment extends Fragment {
                     accountToInsert.put(CATEGORY_KEY, categorySelected);
                     accountToInsert.put(TIME_KEY, last_updated);
 
-                    FirebaseAccountQuery.createAccount(db, accountToInsert, getContext());
+                    FirebaseAccountQuery.createAccount(db, accountToInsert, getContext(), idUserLoggedIn);
 
                 } else {
                     if (Locale.getDefault().getLanguage().equals("it")) {
