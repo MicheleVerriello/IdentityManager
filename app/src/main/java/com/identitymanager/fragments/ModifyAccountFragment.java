@@ -477,6 +477,13 @@ public class ModifyAccountFragment extends Fragment {
                                             }
                                         }
                                     }
+                                    else {
+                                        if (Locale.getDefault().getLanguage().equals("it")) {
+                                            Toast.makeText(context, "Errore nel modificare l'account", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(context, "Unable to modify account", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
                                 });
                     }
                 });
