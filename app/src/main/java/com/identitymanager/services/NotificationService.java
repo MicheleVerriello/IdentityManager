@@ -41,7 +41,7 @@ public class NotificationService extends Service {
                 0, notificationIntent, flag);
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle("Service is Running")
-                .setContentText("Listening for Screen Off/On events")
+                .setContentText("Searching for expired passwords")
                 .setSmallIcon(R.drawable.common_google_signin_btn_icon_dark)
                 .setContentIntent(pendingIntent)
                 .setColor(getResources().getColor(R.color.purple_500, getTheme()))
